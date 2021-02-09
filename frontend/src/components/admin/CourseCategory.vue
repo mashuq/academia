@@ -102,17 +102,9 @@ export default {
     editedIndex: -1,
     editedItem: {
       name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
     },
     defaultItem: {
       name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
     },
   }),
 
@@ -140,7 +132,6 @@ export default {
   methods: {
     async initialize() {
       let response = await get("/course_categories/");
-      console.log(response);
       if (response.ok) {
         let data = await response.json();
         this.courseCateories = data.results;
