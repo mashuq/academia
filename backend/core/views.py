@@ -26,8 +26,20 @@ class CourseViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == 'list':
             return CourseListSerializer
-        return CourseRetrieveSerializer
+        return CourseRetrieveSerializer 
 
-    queryset = Course.objects.all().select_related('course_category').order_by('id')
+    queryset = Course.objects.all().select_related(
+        'course_category').order_by('id')
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class SectionViewSet(viewsets.ModelViewSet):
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return SectionListSerializer
+        return SectionRetrieveSerializer
+
+    queryset = Section.objects.all().select_related(
+        'course').order_by('id')
     permission_classes = [permissions.IsAuthenticated]
 

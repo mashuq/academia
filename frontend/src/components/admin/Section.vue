@@ -2,20 +2,20 @@
   <span>
     <v-data-table
       :headers="headers"
-      :items="courses"
+      :items="sections"
       sort-by="calories"
       class="elevation-1"
       hide-default-footer
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>Courses</v-toolbar-title>
+          <v-toolbar-title>Sections</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="800px">
             <template v-slot:activator="{ on, attrs }">
               <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-                New Course
+                New Section
               </v-btn>
             </template>
             <v-card>
@@ -27,69 +27,75 @@
                 <v-container>
                   <v-row>
                     <v-col>
+                      <v-autocomplete
+                        v-model="editedItem.course"
+                        :items="courses"
+                        label="Course"
+                        item-text="name"
+                        item-value="id"
+                      ></v-autocomplete>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col>
                       <v-text-field
                         v-model="editedItem.name"
-                        label="Course name"
+                        label="Section name"
                       ></v-text-field>
                     </v-col>
-                    <v-col>
-                      <v-text-field
-                        v-model="editedItem.code"
-                        label="Code"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col>
-                      <label class="v-label">Description</label>
-                      <tiptap-vuetify
-                        v-model="editedItem.description"
-                        label="Description"
-                        :extensions="extensions"
-                      ></tiptap-vuetify>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col>
-                      <label class="v-label">Curriculum</label>
-                      <tiptap-vuetify
-                        v-model="editedItem.curriculum"
-                        label="Description"
-                        :extensions="extensions"
-                      ></tiptap-vuetify>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col>
-                      <v-file-input
-                        show-size
-                        label="Course Image"
-                        v-model="editedItem.image"
-                        accept="image/*"
-                      ></v-file-input>
-                    </v-col>
-                    <v-col>
-                      <v-img
-                        :src="editedItem.image_url"
-                        max-width="250"
-                      ></v-img>
-                    </v-col>
-                  </v-row>
-                  <v-row>
                     <v-col>
                       <v-checkbox
                         v-model="editedItem.visible"
                         label="Visible"
                       ></v-checkbox>
                     </v-col>
+                  </v-row>
+                  <v-row>
                     <v-col>
-                      <v-select
-                        v-model="editedItem.course_category"
-                        :items="courseCategories"
-                        label="Category"
-                        item-text="name"
-                        item-value="id"
-                      ></v-select>
+                      <v-menu
+                        v-model="fromMenu"
+                        :close-on-content-click="false"
+                        max-width="290"
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            :value="computedFromDate"
+                            clearable
+                            label="Start Date"
+                            readonly
+                            v-bind="attrs"
+                            v-on="on"
+                            @click:clear="editedItem.start_date = null"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          v-model="editedItem.start_date"
+                          @change="fromMenu = false"
+                        ></v-date-picker>
+                      </v-menu>
+                    </v-col>
+                    <v-col>
+                      <v-menu
+                        v-model="toMenu"
+                        :close-on-content-click="false"
+                        max-width="290"
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            :value="computedToDate"
+                            clearable
+                            label="End Date"
+                            readonly
+                            v-bind="attrs"
+                            v-on="on"
+                            @click:clear="editedItem.end_date = null"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          v-model="editedItem.end_date"
+                          @change="toMenu = false"
+                        ></v-date-picker>
+                      </v-menu>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -141,35 +147,15 @@
 </template>
 
 <script>
-import { get, multipart_post, del, multipart_patch } from "@/service/service.js";
-import { TiptapVuetify, Heading, Bold, Italic, Strike, Underline, Code, Paragraph, BulletList, OrderedList, ListItem, Link, Blockquote, HardBreak, HorizontalRule, History } from 'tiptap-vuetify'
+import { get, post, del, put } from "@/service/service.js";
+import moment from "moment";
+import { format, parseISO } from 'date-fns'
+
 export default {
-  components: {
-    TiptapVuetify,
-  },
   data: () => ({
-    extensions: [
-      History,
-      Blockquote,
-      Link,
-      Underline,
-      Strike,
-      Italic,
-      ListItem,
-      BulletList,
-      OrderedList,
-      [Heading, {
-        options: {
-          levels: [1, 2, 3]
-        }
-      }],
-      Bold,
-      Code,
-      HorizontalRule,
-      Paragraph,
-      HardBreak
-    ],
-    courseCategories: [],
+    fromMenu: false,
+    toMenu: false,
+    courses: [],
     snackbar: false,
     dialog: false,
     dialogDelete: false,
@@ -180,38 +166,42 @@ export default {
         sortable: false,
         value: "id",
       },
-      { text: "Code", value: "code" },
       { text: "Name", value: "name" },
-      { text: "Category", value: "course_category" },
+      { text: "Course", value: "course" },
       { text: "Actions", value: "actions", sortable: false },
     ],
-    courses: [],
+    sections: [],
     editedIndex: -1,
     editedItem: {
       name: "",
-      code: "",
-      description: "",
-      curriculum: "",
-      image: "",
-      image_url: "",
+      start_date: format(parseISO(new Date().toISOString()), 'yyyy-MM-dd'),
+      end_date: format(parseISO(new Date().toISOString()), 'yyyy-MM-dd'),
       visible: true,
-      course_category: 0,
+      course: 0,
     },
     defaultItem: {
       name: "",
-      code: "",
-      description: "",
-      curriculum: "",
-      image: "",
+      start_date: format(parseISO(new Date().toISOString()), 'yyyy-MM-dd'),
+      end_date: format(parseISO(new Date().toISOString()), 'yyyy-MM-dd'),
       visible: true,
-      image_url: "",
-      course_category: 0,
+      course: 0,
     },
   }),
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Course" : "Edit Course";
+      return this.editedIndex === -1 ? "New Section" : "Edit Section";
+    },
+    computedFromDate() {
+      console.log(this.editedItem.start_date);
+      return this.editedItem.start_date
+        ? moment(this.editedItem.start_date).format("dddd, MMMM Do YYYY")
+        : "";
+    },
+    computedToDate() {
+      return this.editedItem.end_date
+        ? moment(this.editedItem.end_date).format("dddd, MMMM Do YYYY")
+        : "";
     },
   },
 
@@ -230,43 +220,45 @@ export default {
 
   methods: {
     async initialize() {
-      let response = await get("/courses/");
+      let response = await get("/sections/");
       if (response.ok) {
         let data = await response.json();
-        this.courses = data.results;
+        this.sections = data.results;
       } else {
         this.snackbar = true;
       }
 
-      response = await get("/course_categories/");
+      response = await get("/courses/");
       if (response.ok) {
         let data = await response.json();
-        this.courseCategories = data.results;
+        this.courses = data.results;
       }
     },
 
     async editItem(item) {
-      this.editedIndex = this.courses.indexOf(item);
-      let response = await get(`/courses/${item.id}/`);
+      this.editedIndex = this.sections.indexOf(item);
+      let response = await get(`/sections/${item.id}/`);
       if (!response.ok) {
         this.snackbar = true;
         return;
       }
       let data = await response.json();
       this.editedItem = data;
-      this.editedItem.image_url = data.image;
-      this.editedItem.image = "";
+      console.log(data);
+      this.editedItem.start_date = format(parseISO(data.start_date), 'yyyy-MM-dd');
+      this.editedItem.end_date = format(parseISO(data.end_date), 'yyyy-MM-dd');
+      console.log(2);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editedIndex = this.courses.indexOf(item);
+      this.editedIndex = this.sections.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
     async deleteItemConfirm() {
-      let response = await del(`/courses/${this.editedItem.id}/`);
+      let response = await del(`/sections/${this.editedItem.id}/`);
       if (!response.ok) {
         this.snackbar = true;
       }
@@ -291,12 +283,15 @@ export default {
     },
 
     async save() {
+      this.editedItem.start_date = moment(this.editedItem.start_date).toISOString();
+      this.editedItem.end_date = moment(this.editedItem.end_date).toISOString();
+
       if (this.editedItem.id) {
-        if(!this.editedItem.image){
+        if (!this.editedItem.image) {
           delete this.editedItem.image;
         }
-        let response = await multipart_patch(
-          `/courses/${this.editedItem.id}/`,
+        let response = await put(
+          `/sections/${this.editedItem.id}/`,
           this.editedItem
         );
         if (response.ok) {
@@ -305,7 +300,7 @@ export default {
           this.snackbar = true;
         }
       } else {
-        let response = await multipart_post("/courses/", this.editedItem);
+        let response = await post("/sections/", this.editedItem);
         if (response.ok) {
           this.initialize();
         } else {

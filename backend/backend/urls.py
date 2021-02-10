@@ -25,6 +25,7 @@ router = routers.DefaultRouter()
 router.register(r'testimonials', views.TestimonialViewSet)
 router.register(r'course_categories', views.CourseCategoryViewSet)
 router.register(r'courses', views.CourseViewSet)
+router.register(r'sections', views.SectionViewSet)
 
 
 urlpatterns = [

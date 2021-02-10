@@ -9,7 +9,9 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "date-fns": "^2.17.0",
     "lodash": "^4.17.20",
+    "moment": "^2.29.1",
     "tiptap-vuetify": "^2.24.0",
     "vee-validate": "^3.4.5",
     "vue": "^2.6.11",
