@@ -8,28 +8,17 @@
           </v-list-item-content>
         </v-list-item>
         <v-list dense nav>
-          <v-list-item link v-on:click="listAction('courseCategory')">
+          <v-list-item
+            v-for="link in links"
+            :key="link.name"
+            link
+            v-on:click="listAction(link.link)"
+          >
             <v-list-item-icon>
               <v-icon>mdi-view-dashboard</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>Course Categories</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item link v-on:click="listAction('course')">
-            <v-list-item-icon>
-              <v-icon>mdi-view-dashboard</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>Courses</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item link v-on:click="listAction('section')">
-            <v-list-item-icon>
-              <v-icon>mdi-view-dashboard</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>Sections</v-list-item-title>
+              <v-list-item-title>{{ link.label }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -39,6 +28,7 @@
       <CourseCategory v-if="showCourseCategory" />
       <Course v-if="showCourse" />
       <Section v-if="showSection" />
+      <Session v-if="showSession" />
     </v-col>
   </v-row>
 </template>
@@ -47,36 +37,53 @@
 import CourseCategory from "@/components/admin/CourseCategory.vue";
 import Course from "@/components/admin/Course.vue";
 import Section from "@/components/admin/Section.vue";
+import Session from "@/components/admin/Session.vue";
 
 export default {
   components: {
     CourseCategory,
     Course,
     Section,
+    Session,
   },
   data: () => ({
+    links: [
+      { label: "Course Categories", link: "courseCategory" },
+      { label: "Courses", link: "course" },
+      { label: "Sections", link: "section" },
+      { label: "Sessions", link: "session" },
+    ],
     showCourseCategory: false,
     showCourse: false,
     showSection: false,
+    showSession: false,
   }),
   methods: {
     listAction(value) {
-      this.hideAll()
-      if (value == "courseCategory") {
-        this.showCourseCategory = true;
-      }
-      else if (value == "course") {
-        this.showCourse = true;
-      }
-      else if (value == "section") {
-        this.showSection = true;
+      this.hideAll();
+      switch (value) {
+        case "courseCategory":
+          this.showCourseCategory = true;
+          break;
+        case "course":
+          this.showCourse = true;
+          break;
+        case "section":
+          this.showSection = true;
+          break;
+        case "session":
+          this.showSession = true;
+          break;
+        default:
+          console.log(value);
       }
     },
-    hideAll(){
+    hideAll() {
       this.showCourseCategory = false;
       this.showCourse = false;
       this.showSection = false;
-    }
+      this.showSession = false;
+    },
   },
 };
 </script>
