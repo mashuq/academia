@@ -6,21 +6,29 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: "/",
+    name: "Home",
+    component: Home,
   },
   {
-    path: '/about',
-    name: 'About',
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: "/about",
+    name: "About",
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/About.vue"),
   },
   {
-    path: '/admin',
-    name: 'Admin',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Admin.vue')
-  }
-]
+    path: "/admin",
+    name: "Admin",
+    component: () =>
+      import(/* webpackChunkName: "admin" */ "../views/Admin.vue"),
+  },
+  {
+    path: "/Student",
+    name: "Student",
+    component: () =>
+      import(/* webpackChunkName: "student" */ "../views/Student.vue"),
+  },
+];
 
 const router = new VueRouter({
   routes

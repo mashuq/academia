@@ -41,6 +41,8 @@ urlpatterns = [
     path('sessions_by_course/', views.list_sessions_by_course),
     path('audio_lessons_by_session/', views.list_audio_lessons_by_session),
     path('video_lessons_by_session/', views.list_video_lessons_by_session),
-    path('note_lessons_by_session/', views.list_note_lessons_by_session)
+    path('note_lessons_by_session/', views.list_note_lessons_by_session),
+    path('register/', views.register)
+
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

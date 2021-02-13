@@ -12,6 +12,29 @@ export const login = async (username, password) => {
   });
 };
 
+export const register = async (
+  username,
+  password,
+  name,
+  email,
+  gender,
+  date_of_birth
+) => {
+  let formData = new FormData();
+  formData.append("username", username);
+  formData.append("password", password);
+  formData.append("name", name);
+  formData.append("email", email);
+  formData.append("gender", gender);
+  formData.append("date_of_birth", date_of_birth);
+
+  return await fetch(`${process.env.VUE_APP_API_BASE_URL}/register/`, {
+    method: "POST",
+    body: formData,
+    mode: "cors",
+  });
+};
+
 export const get = async (api_url) => {
   let credentials = store.getters["global/getCredentials"];
   let response = await fetch(`${process.env.VUE_APP_API_BASE_URL}${api_url}`, {

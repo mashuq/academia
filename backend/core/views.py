@@ -9,7 +9,8 @@ from rest_framework_simplejwt import views as jwt_views
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes, renderer_classes
 from rest_framework.response import Response
-from rest_framework.renderers import JSONRenderer
+from django.db import transaction
+from django.contrib.auth.hashers import make_password
 
 
 class CustomTokenObtainPairView(jwt_views.TokenObtainPairView):
@@ -114,3 +115,20 @@ def list_note_lessons_by_session(request):
         session=request.data['session'])
     serialized_data = NoteLessonSerializer(lessons, many=True)
     return Response(serialized_data.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+@transaction.atomic
+def register(request):
+    serializer = RegistrationSerializer(
+        data=request.data)
+    serializer.is_valid(raise_exception=True)
+    password = make_password(request.data['password'])
+    user = User(is_superuser=False, password=password,
+                email=request.data['email'], username=request.data['username'], is_active=True, is_staff=False)
+    user.save()
+    student = Student(date_of_birth=request.data['date_of_birth'],
+                      user=user, name=request.data['name'], gender=request.data['gender'])
+    student.save()
+    return HttpResponse(status=200)
