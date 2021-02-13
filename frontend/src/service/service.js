@@ -180,6 +180,36 @@ export const put = async (api_url, data) => {
   return response;
 };
 
+export const patch = async (api_url, data) => {
+  let credentials = store.getters["global/getCredentials"];
+  let response = await fetch(`${process.env.VUE_APP_API_BASE_URL}${api_url}`, {
+    body: JSON.stringify(data),
+    method: "PATCH",
+    mode: "cors",
+    headers: {
+      Authorization: `Bearer ${credentials.access_token}`,
+      "Content-Type": "application/json",
+    },
+  });
+  if (response.status == 401) {
+    await store.dispatch("global/extendLogin");
+    credentials = store.getters["global/getCredentials"];
+    response = await fetch(`${process.env.VUE_APP_API_BASE_URL}${api_url}`, {
+      body: JSON.stringify(data),
+      method: "PATCH",
+      mode: "cors",
+      headers: {
+        Authorization: `Bearer ${credentials.access_token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    if (response.status == 401) {
+      await store.dispatch("global/logout");
+    }
+  }
+  return response;
+};
+
 export const extendLogin = async (refresh) => {
   let formData = new FormData();
   formData.append("refresh", refresh);

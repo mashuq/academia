@@ -27,6 +27,10 @@ router.register(r'course_categories', views.CourseCategoryViewSet)
 router.register(r'courses', views.CourseViewSet)
 router.register(r'sections', views.SectionViewSet)
 router.register(r'sessions', views.SessionViewSet)
+router.register(r'audio_lessons', views.AudioLessonViewSet)
+router.register(r'video_lessons', views.VideoLessonViewSet)
+router.register(r'note_lessons', views.NoteLessonViewSet)
+router.register(r'lessons', views.LessonViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,6 +38,9 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/token/', views.CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-    path('sessions_by_course/', views.list_sessions_by_course)
+    path('sessions_by_course/', views.list_sessions_by_course),
+    path('audio_lessons_by_session/', views.list_audio_lessons_by_session),
+    path('video_lessons_by_session/', views.list_video_lessons_by_session),
+    path('note_lessons_by_session/', views.list_note_lessons_by_session)
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -56,9 +56,61 @@ class SessionViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAdminUser]
 
 
+class AudioLessonViewSet(viewsets.ModelViewSet):
+    queryset = AudioLesson.objects.all().order_by('id')
+    serializer_class = AudioLessonSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+
+class VideoLessonViewSet(viewsets.ModelViewSet):
+    queryset = VideoLesson.objects.all().order_by('id')
+    serializer_class = VideoLessonSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+
+class NoteLessonViewSet(viewsets.ModelViewSet):
+    queryset = NoteLesson.objects.all().order_by('id')
+    serializer_class = NoteLessonSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+
+class LessonViewSet(viewsets.ModelViewSet):
+    queryset = Lesson.objects.all().order_by('id')
+    serializer_class = LessonSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+
 @api_view(['POST'])
 @permission_classes([permissions.IsAdminUser])
 def list_sessions_by_course(request):
-    sessions = Session.objects.filter(course=request.data['course'])
+    sessions = Session.objects.filter(
+        course=request.data['course']).order_by('serial')
     serialized_data = SessionSerializer(sessions, many=True)
+    return Response(serialized_data.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAdminUser])
+def list_audio_lessons_by_session(request):
+    lessons = AudioLesson.objects.filter(
+        session=request.data['session'])
+    serialized_data = AudioLessonSerializer(lessons, many=True)
+    return Response(serialized_data.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAdminUser])
+def list_video_lessons_by_session(request):
+    lessons = VideoLesson.objects.filter(
+        session=request.data['session'])
+    serialized_data = VideoLessonSerializer(lessons, many=True)
+    return Response(serialized_data.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAdminUser])
+def list_note_lessons_by_session(request):
+    lessons = NoteLesson.objects.filter(
+        session=request.data['session'])
+    serialized_data = NoteLessonSerializer(lessons, many=True)
     return Response(serialized_data.data)

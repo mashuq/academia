@@ -51,16 +51,12 @@
                 session.name
               }}</v-expansion-panel-header>
               <v-expansion-panel-content>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
+                <Lessons v-bind:sessionId="session.id" />
               </v-expansion-panel-content>
             </v-expansion-panel>
           </draggable>
-        </v-expansion-panels>
-      </v-col></v-row
-    >
+        </v-expansion-panels> </v-col
+    ></v-row>
     <v-dialog v-model="dialogDeleteSession" max-width="500px">
       <v-card>
         <v-card-title class="headline"
@@ -83,7 +79,8 @@
 
 <script>
 import draggable from "vuedraggable";
-import { get, post, put, del } from "@/service/service.js";
+import { get, post, put, del, patch } from "@/service/service.js";
+import Lessons from "@/components/admin/Lessons.vue";
 
 export default {
   computed: {
@@ -103,14 +100,13 @@ export default {
     },
   },
   methods: {
-    async deleteSessionConfirm(){
+    async deleteSessionConfirm() {
       let response = await del(`/sessions/${this.sessionId}/`);
-      if(response.ok){
+      if (response.ok) {
         await this.initSessions();
       }
       this.closeDeleteSession();
-      
-    }, 
+    },
     showSessionDeleteDialog() {
       this.dialogDeleteSession = true;
     },
@@ -183,6 +179,7 @@ export default {
   },
   components: {
     draggable,
+    Lessons,
   },
   data: () => ({
     showForm: false,
@@ -199,7 +196,9 @@ export default {
   },
   watch: {
     sessions: function(val) {
-      console.log(val);
+      val.forEach(function(item, index) {
+        patch(`/sessions/${item.id}/`, {id: item.id, serial: (index+1)})
+      });
     },
     panel: function(val) {
       if (val >= 0) {

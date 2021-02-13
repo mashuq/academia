@@ -6,6 +6,7 @@ import vuetify from './plugins/vuetify';
 import { TiptapVuetifyPlugin } from "tiptap-vuetify";
 import "tiptap-vuetify/dist/main.css";
 import "vuetify/dist/vuetify.min.css";
+import VueYouTubeEmbed from "vue-youtube-embed";
 Vue.config.productionTip = false
 
 new Vue({
@@ -16,3 +17,4 @@ new Vue({
 }).$mount('#app')
 
 Vue.use(TiptapVuetifyPlugin, { vuetify, iconsGroup: "mdi" }); 
+Vue.use(VueYouTubeEmbed);

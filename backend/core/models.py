@@ -22,7 +22,7 @@ class Course(models.Model):
     code = models.CharField(max_length=10)
     description = models.TextField()
     curriculum = models.TextField(null=True, blank=True)
-    image = models.ImageField(upload_to='images/')
+    image = models.ImageField(upload_to='course_images/')
     visible = models.BooleanField()
     course_category = models.ForeignKey(
         'CourseCategory', on_delete=models.PROTECT)
@@ -56,7 +56,7 @@ class SessionSection(models.Model):
 
 class Lesson(models.Model):
     name = models.CharField(max_length=512)
-    session = models.ForeignKey('Lesson', on_delete=models.CASCADE)
+    session = models.ForeignKey('Session', on_delete=models.CASCADE)
 
 
 class VideoLesson(Lesson):
@@ -70,9 +70,13 @@ class VideoLesson(Lesson):
 class AudioLesson(Lesson):
     class AudioType(models.TextChoices):
         SOUNDCLOUD = 'SOUNDCLOUD', _('SoundCloud')
-    link = models.CharField(max_length=512)
+    embed = models.TextField()
     audio_type = models.CharField(
         choices=AudioType.choices, default=AudioType.SOUNDCLOUD, max_length=32)
+
+
+class NoteLesson(Lesson):
+    note = models.FileField(upload_to="course_files/")
 
 
 class Assessment(models.Model):

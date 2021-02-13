@@ -59,3 +59,27 @@ class SessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Session
         fields = '__all__'
+
+
+class LessonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lesson
+        fields = ['id', 'name', 'session']
+
+
+class AudioLessonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AudioLesson
+        fields = ['embed', 'audio_type'] + LessonSerializer.Meta.fields
+
+
+class VideoLessonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VideoLesson
+        fields = ['link', 'video_type'] + LessonSerializer.Meta.fields
+
+
+class NoteLessonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NoteLesson
+        fields = ['note'] + LessonSerializer.Meta.fields
