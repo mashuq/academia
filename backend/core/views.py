@@ -118,6 +118,32 @@ def list_note_lessons_by_session(request):
 
 
 @api_view(['POST'])
+@permission_classes([permissions.IsAdminUser])
+def list_mcq_by_session(request):
+    mcqs = MultipleChoiceQuestion.objects.filter(
+        session=request.data['session']).order_by('id')
+    serialized_data = MultipleChoiceQuestionSerializer(mcqs, many=True)
+    return Response(serialized_data.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAdminUser])
+def list_sq_by_session(request):
+    mcqs = ShortQuestion.objects.filter(
+        session=request.data['session']).order_by('id')
+    serialized_data = ShortQuestionSerializer(mcqs, many=True)
+    return Response(serialized_data.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAdminUser])
+def list_bq_by_session(request):
+    mcqs = BroadQuestion.objects.filter(
+        session=request.data['session']).order_by('id')
+    serialized_data = BroadQuestionSerializer(mcqs, many=True)
+    return Response(serialized_data.data)
+
+@api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 @transaction.atomic
 def register(request):
@@ -132,3 +158,21 @@ def register(request):
                       user=user, name=request.data['name'], gender=request.data['gender'])
     student.save()
     return HttpResponse(status=200)
+
+
+class MultipleChoiceQuestionViewSet(viewsets.ModelViewSet):
+    queryset = MultipleChoiceQuestion.objects.all().order_by('id')
+    serializer_class = MultipleChoiceQuestionSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+
+class ShortQuestionViewSet(viewsets.ModelViewSet):
+    queryset = ShortQuestion.objects.all().order_by('id')
+    serializer_class = ShortQuestionSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+
+class BroadQuestionViewSet(viewsets.ModelViewSet):
+    queryset = BroadQuestion.objects.all().order_by('id')
+    serializer_class = BroadQuestionSerializer
+    permission_classes = [permissions.IsAdminUser]

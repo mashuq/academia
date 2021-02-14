@@ -29,6 +29,7 @@
       <Course v-if="showCourse" />
       <Section v-if="showSection" />
       <Session v-if="showSession" />
+      <QuestionBank v-if="showQuestionBank" />
     </v-col>
   </v-row>
 </template>
@@ -38,6 +39,7 @@ import CourseCategory from "@/components/admin/CourseCategory.vue";
 import Course from "@/components/admin/Course.vue";
 import Section from "@/components/admin/Section.vue";
 import Session from "@/components/admin/Session.vue";
+import QuestionBank from "@/components/admin/QuestionBank.vue";
 
 export default {
   components: {
@@ -45,6 +47,7 @@ export default {
     Course,
     Section,
     Session,
+    QuestionBank
   },
   data: () => ({
     links: [
@@ -52,11 +55,13 @@ export default {
       { label: "Courses", link: "course" },
       { label: "Sections", link: "section" },
       { label: "Sessions", link: "session" },
+      { label: "Question Bank", link: "questionBank" },
     ],
     showCourseCategory: false,
     showCourse: false,
     showSection: false,
     showSession: false,
+    showQuestionBank: false,
   }),
   methods: {
     listAction(value) {
@@ -74,6 +79,9 @@ export default {
         case "session":
           this.showSession = true;
           break;
+        case "questionBank":
+          this.showQuestionBank = true;
+          break;
         default:
           console.log(value);
       }
@@ -83,6 +91,7 @@ export default {
       this.showCourse = false;
       this.showSection = false;
       this.showSession = false;
+      this.showQuestionBank = false;
     },
   },
 };

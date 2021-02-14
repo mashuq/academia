@@ -94,6 +94,7 @@ class Assessment(models.Model):
 
 
 class Question(models.Model):
+    session = models.ForeignKey('Session', on_delete=models.CASCADE)
     mark = models.FloatField()
 
 

@@ -31,6 +31,9 @@ router.register(r'audio_lessons', views.AudioLessonViewSet)
 router.register(r'video_lessons', views.VideoLessonViewSet)
 router.register(r'note_lessons', views.NoteLessonViewSet)
 router.register(r'lessons', views.LessonViewSet)
+router.register(r'mcq', views.MultipleChoiceQuestionViewSet)
+router.register(r'bq', views.BroadQuestionViewSet)
+router.register(r'sq', views.ShortQuestionViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -42,6 +45,9 @@ urlpatterns = [
     path('audio_lessons_by_session/', views.list_audio_lessons_by_session),
     path('video_lessons_by_session/', views.list_video_lessons_by_session),
     path('note_lessons_by_session/', views.list_note_lessons_by_session),
+    path('list_mcq_by_session/', views.list_mcq_by_session),
+    path('list_sq_by_session/', views.list_sq_by_session),
+    path('list_bq_by_session/', views.list_bq_by_session),
     path('register/', views.register)
 
 ]

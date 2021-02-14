@@ -101,3 +101,21 @@ class RegistrationSerializer(serializers.Serializer):
     gender = serializers.ChoiceField(
         choices=['MALE', 'FEMALE'], allow_blank=False)
     date_of_birth = serializers.DateTimeField()
+
+
+class MultipleChoiceQuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MultipleChoiceQuestion
+        fields = '__all__'
+
+
+class ShortQuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ShortQuestion
+        fields = '__all__'
+
+
+class BroadQuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BroadQuestion
+        fields = '__all__'
