@@ -65,6 +65,12 @@ class SessionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class SessionSectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SessionSection
+        fields = '__all__'
+
+
 class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson

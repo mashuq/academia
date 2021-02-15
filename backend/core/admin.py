@@ -10,7 +10,8 @@ registered_models = [
     models.Session,
     models.AudioLesson,
     models.VideoLesson,
-    models.NoteLesson
+    models.NoteLesson,
+    models.SessionSection,
 ]
 
 admin.site.register(registered_models)

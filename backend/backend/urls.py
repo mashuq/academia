@@ -42,13 +42,16 @@ urlpatterns = [
     path('api/token/', views.CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('sessions_by_course/', views.list_sessions_by_course),
+    path('sections_by_course/', views.list_sections_by_course),
     path('audio_lessons_by_session/', views.list_audio_lessons_by_session),
     path('video_lessons_by_session/', views.list_video_lessons_by_session),
     path('note_lessons_by_session/', views.list_note_lessons_by_session),
     path('list_mcq_by_session/', views.list_mcq_by_session),
     path('list_sq_by_session/', views.list_sq_by_session),
     path('list_bq_by_session/', views.list_bq_by_session),
+    path('list_session_section/', views.list_session_section),
+    path('save_session_section_visibility/',
+         views.save_session_section_visibility),
     path('register/', views.register)
-
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

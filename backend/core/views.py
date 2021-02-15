@@ -92,6 +92,15 @@ def list_sessions_by_course(request):
 
 @api_view(['POST'])
 @permission_classes([permissions.IsAdminUser])
+def list_sections_by_course(request):
+    sections = Section.objects.filter(
+        course=request.data['course']).order_by('id')
+    serialized_data = SectionListSerializer(sections, many=True)
+    return Response(serialized_data.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAdminUser])
 def list_audio_lessons_by_session(request):
     lessons = AudioLesson.objects.filter(
         session=request.data['session'])
@@ -143,6 +152,7 @@ def list_bq_by_session(request):
     serialized_data = BroadQuestionSerializer(mcqs, many=True)
     return Response(serialized_data.data)
 
+
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 @transaction.atomic
@@ -157,6 +167,41 @@ def register(request):
     student = Student(date_of_birth=request.data['date_of_birth'],
                       user=user, name=request.data['name'], gender=request.data['gender'])
     student.save()
+    return HttpResponse(status=200)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAdminUser])
+def list_session_section(request):
+    session_sections = SessionSection.objects.filter(
+        section=request.data['section']).order_by('id')
+    serialized_data = SessionSectionSerializer(session_sections, many=True)
+    return Response(serialized_data.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+@transaction.atomic
+def save_session_section_visibility(request):
+    SessionSection.objects.filter(
+        section=request.data['section']).update(visible=False)
+
+    for session_section_data in request.data['visible_list']:
+        try:
+            serializer = SessionSectionSerializer(data=session_section_data)
+            serializer.is_valid(raise_exception=True)
+            session_section = SessionSection(
+                session=Session.objects.get(
+                    pk=session_section_data['session']),
+                section=Section.objects.get(
+                    pk=session_section_data['section']),
+                visible=True)
+            session_section.save()
+        except Exception as e:
+            print(e)
+            SessionSection.objects.filter(
+                section=session_section_data['section'], session=session_section_data['session']).update(visible=True)
+
     return HttpResponse(status=200)
 
 
