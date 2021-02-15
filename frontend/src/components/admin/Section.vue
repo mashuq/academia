@@ -231,7 +231,7 @@ export default {
       response = await get("/courses/");
       if (response.ok) {
         let data = await response.json();
-        this.courses = data.results;
+        this.courses = data;
       }
     },
 

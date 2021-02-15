@@ -3,9 +3,13 @@
     <v-data-table
       :headers="headers"
       :items="courses"
-      sort-by="calories"
+      :options.sync="options"
+      :server-items-length="totalCourses"
+      :loading="loading"
       class="elevation-1"
-      hide-default-footer
+      :footer-props="{
+        disableItemsPerPage: true
+      }"
     >
       <template v-slot:top>
         <v-toolbar flat>
@@ -169,6 +173,9 @@ export default {
       Paragraph,
       HardBreak
     ],
+    totalCourses: 0,
+    loading: true,
+    options: {},
     courseCategories: [],
     snackbar: false,
     dialog: false,
@@ -222,26 +229,37 @@ export default {
     dialogDelete(val) {
       val || this.closeDelete();
     },
+    options: {
+        handler () {
+          this.initialize()
+        },
+        deep: true,
+    },
   },
 
   created() {
+    this.initCourseCategory();
     this.initialize();
   },
 
   methods: {
     async initialize() {
-      let response = await get("/courses/");
+      let response = await get(`/courses/?page=${this.options.page}`);
       if (response.ok) {
         let data = await response.json();
         this.courses = data.results;
+        this.totalCourses = data.count;
       } else {
         this.snackbar = true;
-      }
+      }      
+      this.loading = false;
+    },
 
-      response = await get("/course_categories/");
+    async initCourseCategory(){
+      let response = await get("/course_categories/");
       if (response.ok) {
         let data = await response.json();
-        this.courseCategories = data.results;
+        this.courseCategories = data;
       }
     },
 

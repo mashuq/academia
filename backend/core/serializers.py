@@ -125,3 +125,9 @@ class BroadQuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = BroadQuestion
         fields = '__all__'
+
+
+class StudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = '__all__'

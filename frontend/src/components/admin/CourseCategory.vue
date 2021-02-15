@@ -3,9 +3,13 @@
     <v-data-table
       :headers="headers"
       :items="courseCateories"
-      sort-by="calories"
+      :options.sync="options"
+      :server-items-length="totalCourseCategories"
+      :loading="loading"
       class="elevation-1"
-      hide-default-footer
+      :footer-props="{
+        disableItemsPerPage: true,
+      }"
     >
       <template v-slot:top>
         <v-toolbar flat>
@@ -85,6 +89,9 @@
 import { get, post, del, put } from "@/service/service.js";
 export default {
   data: () => ({
+    totalCourseCategories: 0,
+    loading: true,
+    options: {},
     snackbar: false,
     dialog: false,
     dialogDelete: false,
@@ -123,6 +130,12 @@ export default {
     dialogDelete(val) {
       val || this.closeDelete();
     },
+    options: {
+      handler() {
+        this.initialize();
+      },
+      deep: true,
+    },
   },
 
   created() {
@@ -131,13 +144,15 @@ export default {
 
   methods: {
     async initialize() {
-      let response = await get("/course_categories/");
+      let response = await get(`/course_categories/?page=${this.options.page}`);
       if (response.ok) {
         let data = await response.json();
         this.courseCateories = data.results;
-      }else{
+        this.totalCourseCategories = data.count;
+      } else {
         this.snackbar = true;
       }
+      this.loading = false;
     },
 
     editItem(item) {

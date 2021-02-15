@@ -34,6 +34,7 @@ router.register(r'lessons', views.LessonViewSet)
 router.register(r'mcq', views.MultipleChoiceQuestionViewSet)
 router.register(r'bq', views.BroadQuestionViewSet)
 router.register(r'sq', views.ShortQuestionViewSet)
+router.register(r'students', views.StudentViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

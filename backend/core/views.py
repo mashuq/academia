@@ -11,7 +11,25 @@ from rest_framework.decorators import api_view, permission_classes, renderer_cla
 from rest_framework.response import Response
 from django.db import transaction
 from django.contrib.auth.hashers import make_password
+from rest_framework import pagination
+from rest_framework.pagination import PageNumberPagination
 
+
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 10
+
+    def paginate_queryset(self, queryset, request, view=None):
+        if 'page' not in request.query_params:
+            return None
+        return super().paginate_queryset(queryset, request, view)
+
+
+class LargeResultsSetPagination(PageNumberPagination):
+    page_size = 100
+    page_size_query_param = 'page_size'
+    max_page_size = 100
 
 class CustomTokenObtainPairView(jwt_views.TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
@@ -24,9 +42,10 @@ class TestimonialViewSet(viewsets.ModelViewSet):
 
 
 class CourseCategoryViewSet(viewsets.ModelViewSet):
-    queryset = CourseCategory.objects.all().order_by('id')
+    queryset = CourseCategory.objects.all().order_by('name')
     serializer_class = CourseCategorySerializer
     permission_classes = [permissions.IsAdminUser]
+    pagination_class = StandardResultsSetPagination
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -36,8 +55,9 @@ class CourseViewSet(viewsets.ModelViewSet):
         return CourseRetrieveSerializer
 
     queryset = Course.objects.all().select_related(
-        'course_category').order_by('id')
+        'course_category').order_by('name')
     permission_classes = [permissions.IsAdminUser]
+    pagination_class = StandardResultsSetPagination
 
 
 class SectionViewSet(viewsets.ModelViewSet):
@@ -221,3 +241,10 @@ class BroadQuestionViewSet(viewsets.ModelViewSet):
     queryset = BroadQuestion.objects.all().order_by('id')
     serializer_class = BroadQuestionSerializer
     permission_classes = [permissions.IsAdminUser]
+
+
+class StudentViewSet(viewsets.ModelViewSet):
+    queryset = Student.objects.all().order_by('id')
+    serializer_class = StudentSerializer
+    permission_classes = [permissions.IsAdminUser]
+    pagination.PageNumberPagination.page_size = 100
