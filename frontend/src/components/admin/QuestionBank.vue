@@ -191,125 +191,81 @@
     </v-dialog>
 
     <template v-if="showQuestions">
-      <h4>Multiple Choice Questions</h4>
-      <v-simple-table fixed-header height="300px">
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-left">
-                ID
-              </th>
-              <th class="text-left">
-                Question
-              </th>
-              <th class="text-left">
-                Choice 1
-              </th>
-              <th class="text-left">
-                Choice 2
-              </th>
-              <th class="text-left">
-                Choice 3
-              </th>
-              <th class="text-left">
-                Choice 4
-              </th>
-              <th class="text-left">
-                Correct Choice
-              </th>
-              <th class="text-left">
-                Mark
-              </th>
-              <th class="text-left"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in mcqs" :key="item.id">
-              <td>{{ item.id }}</td>
-              <td>{{ item.question }}</td>
-              <td>{{ item.choice1 }}</td>
-              <td>{{ item.choice2 }}</td>
-              <td>{{ item.choice3 }}</td>
-              <td>{{ item.choice4 }}</td>
-              <td>{{ item.correct_choice }}</td>
-              <td>{{ item.mark }}</td>
-              <td>
-                <v-btn icon @click="deleteMcq(item.id)">
-                  <v-icon color="red darken-2">mdi-delete</v-icon>
-                </v-btn>
-              </td>
-            </tr>
-          </tbody>
+      <v-data-table
+        items-per-page=5
+        :headers="mcqHeaders"
+        :items="mcqs"
+        :options.sync="optionsMcq"
+        :server-items-length="totalMcq"
+        :loading="loadingMcq"
+        class="elevation-1"
+        :footer-props="{
+          disableItemsPerPage: true,
+        }"
+      >
+        <template v-slot:top>
+        <v-toolbar flat>
+          <v-toolbar-title>Multiple Choice Questions</v-toolbar-title>
+           <v-divider class="mx-4" inset vertical></v-divider>
+          <v-spacer></v-spacer>
+        </v-toolbar>
         </template>
-      </v-simple-table>
+        <template v-slot:item.actions="{ item }">
+          <v-icon small @click="deleteMcq(item.id)"> mdi-delete </v-icon>
+        </template>
+      </v-data-table>
     </template>
 
     <template v-if="showQuestions">
-      <h4>Short Questions</h4>
-      <v-simple-table fixed-header height="300px">
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-left">
-                ID
-              </th>
-              <th class="text-left">
-                Question
-              </th>
-              <th class="text-left">
-                Mark
-              </th>
-              <th class="text-left"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in sqs" :key="item.id">
-              <td>{{ item.id }}</td>
-              <td>{{ item.question }}</td>
-              <td>{{ item.mark }}</td>
-              <td>
-                <v-btn icon @click="deleteSq(item.id)">
-                  <v-icon color="red darken-2">mdi-delete</v-icon>
-                </v-btn>
-              </td>
-            </tr>
-          </tbody>
+      <v-data-table
+        items-per-page=5
+        :headers="sqHeaders"
+        :items="sqs"
+        :options.sync="optionsSq"
+        :server-items-length="totalSq"
+        :loading="loadingSq"
+        class="elevation-1"
+        :footer-props="{
+          disableItemsPerPage: true,
+        }"
+      >
+        <template v-slot:top>
+        <v-toolbar flat>
+          <v-toolbar-title>Short Questions</v-toolbar-title>
+           <v-divider class="mx-4" inset vertical></v-divider>
+          <v-spacer></v-spacer>
+        </v-toolbar>
         </template>
-      </v-simple-table>
+        <template v-slot:item.actions="{ item }">
+          <v-icon small @click="deleteSq(item.id)"> mdi-delete </v-icon>
+        </template>
+      </v-data-table>
     </template>
 
     <template v-if="showQuestions">
-      <h4>Broad Questions</h4>
-      <v-simple-table fixed-header height="300px">
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-left">
-                ID
-              </th>
-              <th class="text-left">
-                Question
-              </th>
-              <th class="text-left">
-                Mark
-              </th>
-              <th class="text-left"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in bqs" :key="item.id">
-              <td>{{ item.id }}</td>
-              <td>{{ item.question }}</td>
-              <td>{{ item.mark }}</td>
-              <td>
-                <v-btn icon @click="deleteBq(item.id)">
-                  <v-icon color="red darken-2">mdi-delete</v-icon>
-                </v-btn>
-              </td>
-            </tr>
-          </tbody>
+      <v-data-table
+        items-per-page=5
+        :headers="bqHeaders"
+        :items="bqs"
+        :options.sync="optionsBq"
+        :server-items-length="totalBq"
+        :loading="loadingBq"
+        class="elevation-1"
+        :footer-props="{
+          disableItemsPerPage: true,
+        }"
+      >
+        <template v-slot:top>
+        <v-toolbar flat>
+          <v-toolbar-title>Broad Questions</v-toolbar-title>
+           <v-divider class="mx-4" inset vertical></v-divider>
+          <v-spacer></v-spacer>
+        </v-toolbar>
         </template>
-      </v-simple-table>
+        <template v-slot:item.actions="{ item }">
+          <v-icon small @click="deleteBq(item.id)"> mdi-delete </v-icon>
+        </template>
+      </v-data-table>
     </template>
   </span>
 </template>
@@ -352,30 +308,42 @@ export default {
       }
     },
     async initMcq() {
-      let response = await post("/list_mcq_by_session/", {
-        session: this.session,
-      });
+      let response = await post(
+        `/list_mcq_by_session/`,
+        {
+          session: this.session,
+          page: this.optionsMcq.page,
+        }
+      );
       if (response.ok) {
         let data = await response.json();
-        this.mcqs = data;
+        this.mcqs = data.result;
+        this.totalMcq = data.count;
+        this.loadingMcq = false;
       }
     },
     async initSq() {
       let response = await post("/list_sq_by_session/", {
         session: this.session,
+        page: this.optionsSq.page,
       });
       if (response.ok) {
         let data = await response.json();
-        this.sqs = data;
+        this.sqs = data.result;
+        this.totalSq = data.count;
+        this.loadingSq = false;
       }
     },
     async initBq() {
       let response = await post("/list_bq_by_session/", {
         session: this.session,
+        page: this.optionsBq.page,
       });
       if (response.ok) {
         let data = await response.json();
-        this.bqs = data;
+        this.bqs = data.result;
+        this.totalBq = data.count;
+        this.loadingBq = false;
       }
     },
     async initSessions() {
@@ -391,7 +359,7 @@ export default {
       let response = await get("/courses/");
       if (response.ok) {
         let data = await response.json();
-        this.courses = data.results;
+        this.courses = data;
       }
     },
     async saveMcq() {
@@ -462,6 +430,53 @@ export default {
   },
   components: {},
   data: () => ({
+    mcqHeaders: [
+      {
+        text: "ID",
+        align: "start",
+        sortable: false,
+        value: "id",
+      },
+      { text: "Question", value: "question" },
+      { text: "Choice 1", value: "choice1" },
+      { text: "Choice 2", value: "choice2" },
+      { text: "Choice 3", value: "choice3" },
+      { text: "Choice 4", value: "choice4" },
+      { text: "Correct Choice", value: "correct_choice" },
+      { text: "Mark", value: "mark" },
+      { text: "Actions", value: "actions", sortable: false },
+    ],
+    sqHeaders: [
+      {
+        text: "ID",
+        align: "start",
+        sortable: false,
+        value: "id",
+      },
+      { text: "Question", value: "question" },
+      { text: "Mark", value: "mark" },
+      { text: "Actions", value: "actions", sortable: false },
+    ],
+    bqHeaders: [
+      {
+        text: "ID",
+        align: "start",
+        sortable: false,
+        value: "id",
+      },
+      { text: "Question", value: "question" },
+      { text: "Mark", value: "mark" },
+      { text: "Actions", value: "actions", sortable: false },
+    ],
+    totalMcq: 0,
+    loadingMcq: true,
+    optionsMcq: {},
+    totalSq: 0,
+    loadingSq: true,
+    optionsSq: {},
+    totalBq: 0,
+    loadingBq: true,
+    optionsBq: {},
     course: null,
     courses: [],
     session: 0,
@@ -506,6 +521,24 @@ export default {
         this.initSq();
         this.initBq();
       }
+    },
+    optionsMcq: {
+      handler() {
+        this.initMcq();
+      },
+      deep: true,
+    },
+    optionsSq: {
+      handler() {
+        this.initSq();
+      },
+      deep: true,
+    },
+    optionsBq: {
+      handler() {
+        this.initBq();
+      },
+      deep: true,
     },
   },
 };

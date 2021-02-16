@@ -13,6 +13,7 @@ from django.db import transaction
 from django.contrib.auth.hashers import make_password
 from rest_framework import pagination
 from rest_framework.pagination import PageNumberPagination
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -67,8 +68,9 @@ class SectionViewSet(viewsets.ModelViewSet):
         return SectionRetrieveSerializer
 
     queryset = Section.objects.all().select_related(
-        'course').order_by('id')
+        'course').order_by('name')
     permission_classes = [permissions.IsAdminUser]
+    pagination_class = StandardResultsSetPagination
 
 
 class SessionViewSet(viewsets.ModelViewSet):
@@ -149,28 +151,55 @@ def list_note_lessons_by_session(request):
 @api_view(['POST'])
 @permission_classes([permissions.IsAdminUser])
 def list_mcq_by_session(request):
-    mcqs = MultipleChoiceQuestion.objects.filter(
+    mcq_list = MultipleChoiceQuestion.objects.filter(
         session=request.data['session']).order_by('id')
+    page = request.data['page']
+    paginator = Paginator(mcq_list, 5)
+    try:
+        mcqs = paginator.page(page)
+    except PageNotAnInteger:
+        mcqs = paginator.page(1)
+    except EmptyPage:
+        mcqs = paginator.page(paginator.num_pages)
     serialized_data = MultipleChoiceQuestionSerializer(mcqs, many=True)
-    return Response(serialized_data.data)
+    result = {'result': serialized_data.data, 'count': mcq_list.count()}
+    return Response(result)
 
 
 @api_view(['POST'])
 @permission_classes([permissions.IsAdminUser])
 def list_sq_by_session(request):
-    mcqs = ShortQuestion.objects.filter(
+    sq_list = ShortQuestion.objects.filter(
         session=request.data['session']).order_by('id')
-    serialized_data = ShortQuestionSerializer(mcqs, many=True)
-    return Response(serialized_data.data)
+    page = request.data['page']
+    paginator = Paginator(sq_list, 5)
+    try:
+        sqs = paginator.page(page)
+    except PageNotAnInteger:
+        sqs = paginator.page(1)
+    except EmptyPage:
+        sqs = paginator.page(paginator.num_pages)
+    serialized_data = ShortQuestionSerializer(sqs, many=True)
+    result = {'result': serialized_data.data, 'count': sq_list.count()}
+    return Response(result)
 
 
 @api_view(['POST'])
 @permission_classes([permissions.IsAdminUser])
 def list_bq_by_session(request):
-    mcqs = BroadQuestion.objects.filter(
+    bq_list = BroadQuestion.objects.filter(
         session=request.data['session']).order_by('id')
-    serialized_data = BroadQuestionSerializer(mcqs, many=True)
-    return Response(serialized_data.data)
+    page = request.data['page']
+    paginator = Paginator(bq_list, 5)
+    try:
+        bqs = paginator.page(page)
+    except PageNotAnInteger:
+        bqs = paginator.page(1)
+    except EmptyPage:
+        bqs = paginator.page(paginator.num_pages)
+    serialized_data = BroadQuestionSerializer(bqs, many=True)
+    result = {'result': serialized_data.data, 'count': bq_list.count()}
+    return Response(result)
 
 
 @api_view(['POST'])
@@ -226,25 +255,28 @@ def save_session_section_visibility(request):
 
 
 class MultipleChoiceQuestionViewSet(viewsets.ModelViewSet):
-    queryset = MultipleChoiceQuestion.objects.all().order_by('id')
+    queryset = MultipleChoiceQuestion.objects.all().order_by('question')
     serializer_class = MultipleChoiceQuestionSerializer
     permission_classes = [permissions.IsAdminUser]
+    pagination_class = StandardResultsSetPagination
 
 
 class ShortQuestionViewSet(viewsets.ModelViewSet):
-    queryset = ShortQuestion.objects.all().order_by('id')
+    queryset = ShortQuestion.objects.all().order_by('question')
     serializer_class = ShortQuestionSerializer
     permission_classes = [permissions.IsAdminUser]
+    pagination_class = StandardResultsSetPagination
 
 
 class BroadQuestionViewSet(viewsets.ModelViewSet):
-    queryset = BroadQuestion.objects.all().order_by('id')
+    queryset = BroadQuestion.objects.all().order_by('question')
     serializer_class = BroadQuestionSerializer
     permission_classes = [permissions.IsAdminUser]
+    pagination_class = StandardResultsSetPagination
 
 
 class StudentViewSet(viewsets.ModelViewSet):
-    queryset = Student.objects.all().order_by('id')
+    queryset = Student.objects.all().order_by('name')
     serializer_class = StudentSerializer
     permission_classes = [permissions.IsAdminUser]
-    pagination.PageNumberPagination.page_size = 100
+    pagination_class = StandardResultsSetPagination

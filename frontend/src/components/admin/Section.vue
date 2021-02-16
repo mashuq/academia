@@ -3,9 +3,13 @@
     <v-data-table
       :headers="headers"
       :items="sections"
-      sort-by="calories"
+      :options.sync="options"
+      :server-items-length="totalSections"
+      :loading="loading"
       class="elevation-1"
-      hide-default-footer
+      :footer-props="{
+        disableItemsPerPage: true,
+      }"
     >
       <template v-slot:top>
         <v-toolbar flat>
@@ -149,10 +153,13 @@
 <script>
 import { get, post, del, put } from "@/service/service.js";
 import moment from "moment";
-import { format, parseISO } from 'date-fns'
+import { format, parseISO } from "date-fns";
 
 export default {
   data: () => ({
+    totalSections: 0,
+    loading: true,
+    options: {},
     fromMenu: false,
     toMenu: false,
     courses: [],
@@ -174,15 +181,15 @@ export default {
     editedIndex: -1,
     editedItem: {
       name: "",
-      start_date: format(parseISO(new Date().toISOString()), 'yyyy-MM-dd'),
-      end_date: format(parseISO(new Date().toISOString()), 'yyyy-MM-dd'),
+      start_date: format(parseISO(new Date().toISOString()), "yyyy-MM-dd"),
+      end_date: format(parseISO(new Date().toISOString()), "yyyy-MM-dd"),
       visible: true,
       course: 0,
     },
     defaultItem: {
       name: "",
-      start_date: format(parseISO(new Date().toISOString()), 'yyyy-MM-dd'),
-      end_date: format(parseISO(new Date().toISOString()), 'yyyy-MM-dd'),
+      start_date: format(parseISO(new Date().toISOString()), "yyyy-MM-dd"),
+      end_date: format(parseISO(new Date().toISOString()), "yyyy-MM-dd"),
       visible: true,
       course: 0,
     },
@@ -212,23 +219,34 @@ export default {
     dialogDelete(val) {
       val || this.closeDelete();
     },
+    options: {
+      handler() {
+        this.initialize();
+      },
+      deep: true,
+    },
   },
 
   created() {
     this.initialize();
+    this.initCourses();
   },
 
   methods: {
     async initialize() {
-      let response = await get("/sections/");
+      let response = await get(`/sections/?page=${this.options.page}`);
       if (response.ok) {
         let data = await response.json();
         this.sections = data.results;
+        this.totalSections = data.count;
       } else {
         this.snackbar = true;
       }
+      this.loading = false;
+    },
 
-      response = await get("/courses/");
+    async initCourses() {
+      let response = await get("/courses/");
       if (response.ok) {
         let data = await response.json();
         this.courses = data;
@@ -245,8 +263,11 @@ export default {
       let data = await response.json();
       this.editedItem = data;
       console.log(data);
-      this.editedItem.start_date = format(parseISO(data.start_date), 'yyyy-MM-dd');
-      this.editedItem.end_date = format(parseISO(data.end_date), 'yyyy-MM-dd');
+      this.editedItem.start_date = format(
+        parseISO(data.start_date),
+        "yyyy-MM-dd"
+      );
+      this.editedItem.end_date = format(parseISO(data.end_date), "yyyy-MM-dd");
       console.log(2);
       this.dialog = true;
     },
@@ -283,7 +304,9 @@ export default {
     },
 
     async save() {
-      this.editedItem.start_date = moment(this.editedItem.start_date).toISOString();
+      this.editedItem.start_date = moment(
+        this.editedItem.start_date
+      ).toISOString();
       this.editedItem.end_date = moment(this.editedItem.end_date).toISOString();
 
       if (this.editedItem.id) {
