@@ -31,6 +31,7 @@
       <Session v-if="showSession" />
       <QuestionBank v-if="showQuestionBank" />
       <SessionVisibility v-if="showSessionVisibility" />
+      <Student v-if="showStudent" />
     </v-col>
   </v-row>
 </template>
@@ -42,6 +43,7 @@ import Section from "@/components/admin/Section.vue";
 import Session from "@/components/admin/Session.vue";
 import QuestionBank from "@/components/admin/QuestionBank.vue";
 import SessionVisibility from "@/components/admin/SessionVisibility.vue";
+import Student from "@/components/admin/Student.vue";
 
 export default {
   components: {
@@ -50,7 +52,8 @@ export default {
     Section,
     Session,
     QuestionBank,
-    SessionVisibility
+    SessionVisibility,
+    Student
   },
   data: () => ({
     links: [
@@ -60,6 +63,7 @@ export default {
       { label: "Sessions", link: "session" },
       { label: "Question Bank", link: "questionBank" },
       { label: "Section Visibility", link: "sessionVisibility" },
+      { label: "Student", link: "student" },
     ],
     showCourseCategory: false,
     showCourse: false,
@@ -67,6 +71,7 @@ export default {
     showSession: false,
     showQuestionBank: false,
     showSessionVisibility: false,
+    showStudent: false,
   }),
   methods: {
     listAction(value) {
@@ -90,6 +95,9 @@ export default {
         case "sessionVisibility":
           this.showSessionVisibility = true;
           break;
+        case "student":
+          this.showStudent = true;
+          break;
         default:
           console.log(value);
       }
@@ -101,6 +109,7 @@ export default {
       this.showSession = false;
       this.showQuestionBank = false;
       this.showSessionVisibility = false;
+      this.showStudent = false;
     },
   },
 };

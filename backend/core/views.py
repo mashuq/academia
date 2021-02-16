@@ -14,6 +14,7 @@ from django.contrib.auth.hashers import make_password
 from rest_framework import pagination
 from rest_framework.pagination import PageNumberPagination
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from rest_framework import status
 
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -276,7 +277,17 @@ class BroadQuestionViewSet(viewsets.ModelViewSet):
 
 
 class StudentViewSet(viewsets.ModelViewSet):
-    queryset = Student.objects.all().order_by('name')
+    queryset = Student.objects.select_related('user').order_by('name')
     serializer_class = StudentSerializer
     permission_classes = [permissions.IsAdminUser]
     pagination_class = StandardResultsSetPagination
+
+    def destroy(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+            instance.user.delete()
+            self.perform_destroy(instance)
+        except Http404:
+            pass
+
+        return Response(status=status.HTTP_204_NO_CONTENT)

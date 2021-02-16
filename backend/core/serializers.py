@@ -127,7 +127,14 @@ class BroadQuestionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['email', 'date_joined']
+
 class StudentSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
     class Meta:
         model = Student
-        fields = '__all__'
+        fields = ['id', 'name', 'gender', 'date_of_birth', 'user'] 
