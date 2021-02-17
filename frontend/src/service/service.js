@@ -35,6 +35,36 @@ export const register = async (
   });
 };
 
+export const appoint = async (
+  username,
+  password,
+  name,
+  email,
+  gender,
+  date_of_birth,
+  biography,
+  profile_picture,
+  teacher_type
+) => {
+  let formData = new FormData();
+  formData.append("username", username);
+  formData.append("password", password);
+  formData.append("name", name);
+  formData.append("email", email);
+  formData.append("gender", gender);
+  formData.append("date_of_birth", date_of_birth);
+  formData.append("biography", biography);
+  formData.append("profile_picture", profile_picture);
+  formData.append("teacher_type", teacher_type);
+
+  return await fetch(`${process.env.VUE_APP_API_BASE_URL}/appoint/`, {
+    method: "POST",
+    body: formData,
+    mode: "cors",
+  });
+};
+
+
 export const get = async (api_url) => {
   let credentials = store.getters["global/getCredentials"];
   let response = await fetch(`${process.env.VUE_APP_API_BASE_URL}${api_url}`, {

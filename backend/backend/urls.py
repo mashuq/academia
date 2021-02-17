@@ -35,6 +35,7 @@ router.register(r'mcq', views.MultipleChoiceQuestionViewSet)
 router.register(r'bq', views.BroadQuestionViewSet)
 router.register(r'sq', views.ShortQuestionViewSet)
 router.register(r'students', views.StudentViewSet)
+router.register(r'teachers', views.TeacherViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -53,6 +54,7 @@ urlpatterns = [
     path('list_session_section/', views.list_session_section),
     path('save_session_section_visibility/',
          views.save_session_section_visibility),
-    path('register/', views.register)
+    path('register/', views.register),
+    path('appoint/', views.appoint)
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -221,6 +221,25 @@ def register(request):
 
 
 @api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+@transaction.atomic
+def appoint(request):
+    serializer = RegistrationSerializer(
+        data=request.data)
+    serializer.is_valid(raise_exception=True)
+    password = make_password(request.data['password'])
+    user = User(is_superuser=False, password=password,
+                email=request.data['email'], username=request.data['username'], is_active=True, is_staff=False)
+    user.save()
+    teacher = Teacher(date_of_birth=request.data['date_of_birth'],
+                      user=user, name=request.data['name'], gender=request.data['gender'],
+                      biography=request.data['biography'], teacher_type=request.data['teacher_type'],
+                      profile_picture=request.data['profile_picture'])
+    teacher.save()
+    return HttpResponse(status=200)
+
+
+@api_view(['POST'])
 @permission_classes([permissions.IsAdminUser])
 def list_session_section(request):
     session_sections = SessionSection.objects.filter(
@@ -279,6 +298,23 @@ class BroadQuestionViewSet(viewsets.ModelViewSet):
 class StudentViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.select_related('user').order_by('name')
     serializer_class = StudentSerializer
+    permission_classes = [permissions.IsAdminUser]
+    pagination_class = StandardResultsSetPagination
+
+    def destroy(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+            instance.user.delete()
+            self.perform_destroy(instance)
+        except Http404:
+            pass
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class TeacherViewSet(viewsets.ModelViewSet):
+    queryset = Teacher.objects.select_related('user').order_by('name')
+    serializer_class = TeacherSerializer
     permission_classes = [permissions.IsAdminUser]
     pagination_class = StandardResultsSetPagination
 

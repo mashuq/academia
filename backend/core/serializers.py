@@ -138,3 +138,12 @@ class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = ['id', 'name', 'gender', 'date_of_birth', 'user'] 
+
+
+class TeacherSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = Teacher
+        fields = ['id', 'name', 'gender', 'date_of_birth',
+                  'user', 'biography', 'profile_picture', 'teacher_type']
