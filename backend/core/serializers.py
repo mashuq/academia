@@ -147,3 +147,26 @@ class TeacherSerializer(serializers.ModelSerializer):
         model = Teacher
         fields = ['id', 'name', 'gender', 'date_of_birth',
                   'user', 'biography', 'profile_picture', 'teacher_type']
+
+
+class TeacherListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Teacher
+        fields = ['id', 'name']
+
+
+class SectionTeacherSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SectionTeacher
+        fields = ['section', 'teacher']
+
+
+class SectionTeacherListSerializer(serializers.ModelSerializer):
+    section = SectionListSerializer()
+    teacher = TeacherListSerializer()
+
+    class Meta:
+        model = SectionTeacher
+        fields = ['id', 'section', 'teacher']

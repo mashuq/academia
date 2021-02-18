@@ -175,14 +175,12 @@ class Teacher(models.Model):
     teacher_type = models.CharField(choices=TeacherType.choices, max_length=32)
 
 
-class CourseTeacher(models.Model):
-    course = models.OneToOneField('Course', on_delete=models.CASCADE)
-    teacher = models.OneToOneField('Teacher', on_delete=models.CASCADE)
-
-
 class SectionTeacher(models.Model):
-    section = models.OneToOneField('Section', on_delete=models.CASCADE)
-    teacher = models.OneToOneField('Teacher', on_delete=models.CASCADE)
+    section = models.ForeignKey('Section', on_delete=models.CASCADE)
+    teacher = models.ForeignKey('Teacher', on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = [['section', 'teacher']]
 
 
 class Admin(models.Model):

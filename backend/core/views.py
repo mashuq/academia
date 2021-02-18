@@ -327,3 +327,15 @@ class TeacherViewSet(viewsets.ModelViewSet):
             pass
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class SectionTeacherViewSet(viewsets.ModelViewSet):
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return SectionTeacherListSerializer
+        return SectionTeacherSerializer
+
+    queryset = SectionTeacher.objects.select_related(
+        'section', 'teacher', 'section__course').order_by('section')
+    permission_classes = [permissions.IsAdminUser]
+    pagination_class = StandardResultsSetPagination

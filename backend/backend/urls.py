@@ -36,6 +36,7 @@ router.register(r'bq', views.BroadQuestionViewSet)
 router.register(r'sq', views.ShortQuestionViewSet)
 router.register(r'students', views.StudentViewSet)
 router.register(r'teachers', views.TeacherViewSet)
+router.register(r'section_teachers', views.SectionTeacherViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
