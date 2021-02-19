@@ -13,13 +13,13 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>Course Categories</v-toolbar-title>
+          <v-toolbar-title>কোর্স ক্যাটেগরি</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
               <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-                New Course Category
+                নতুন কোর্স ক্যাটেগরি
               </v-btn>
             </template>
             <v-card>
@@ -33,7 +33,7 @@
                     <v-col>
                       <v-text-field
                         v-model="editedItem.name"
-                        label="Course Category name"
+                        label="ক্যাটেগরির নাম"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -42,25 +42,25 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">
-                  Cancel
+                <v-btn color="red darken-1" text @click="close">
+                  বাতিল
                 </v-btn>
-                <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
+                <v-btn color="blue darken-1" text @click="save">
+                  সংরক্ষণ
+                </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
           <v-dialog v-model="dialogDelete" max-width="500px">
             <v-card>
               <v-card-title class="headline"
-                >Are you sure you want to delete this item?</v-card-title
+                >এটি আসলেই মুছে ফেলতে চান?</v-card-title
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="closeDelete"
-                  >Cancel</v-btn
-                >
+                <v-btn color="red darken-1" text @click="closeDelete">না</v-btn>
                 <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-                  >OK</v-btn
+                  >জী</v-btn
                 >
                 <v-spacer></v-spacer>
               </v-card-actions>
@@ -74,7 +74,7 @@
       </template>
     </v-data-table>
     <v-snackbar v-model="snackbar">
-      An error occurred. Please try again.
+      একটি সমস্যা হয়েছে, পুনরায় চেষ্টা করুন 
 
       <template v-slot:action="{ attrs }">
         <v-btn color="red" text v-bind="attrs" @click="snackbar = false">
@@ -97,13 +97,13 @@ export default {
     dialogDelete: false,
     headers: [
       {
-        text: "ID",
+        text: "আইডি",
         align: "start",
         sortable: false,
         value: "id",
       },
-      { text: "Category", value: "name" },
-      { text: "Actions", value: "actions", sortable: false },
+      { text: "ক্যাটেগরি", value: "name" },
+      { text: "একশন", value: "actions", sortable: false },
     ],
     courseCateories: [],
     editedIndex: -1,
@@ -118,8 +118,8 @@ export default {
   computed: {
     formTitle() {
       return this.editedIndex === -1
-        ? "New Course Category"
-        : "Edit Course Category";
+        ? "নতুন কোর্স ক্যাটেগরি"
+        : "কোর্স ক্যাটেগরি সম্পাদনা";
     },
   },
 
@@ -144,15 +144,19 @@ export default {
 
   methods: {
     async initialize() {
-      let response = await get(`/course_categories/?page=${this.options.page}`);
-      if (response.ok) {
-        let data = await response.json();
-        this.courseCateories = data.results;
-        this.totalCourseCategories = data.count;
-      } else {
-        this.snackbar = true;
+      if (this.options && this.options.page) {
+        let response = await get(
+          `/course_categories/?page=${this.options.page}`
+        );
+        if (response.ok) {
+          let data = await response.json();
+          this.courseCateories = data.results;
+          this.totalCourseCategories = data.count;
+        } else {
+          this.snackbar = true;
+        }
+        this.loading = false;
       }
-      this.loading = false;
     },
 
     editItem(item) {

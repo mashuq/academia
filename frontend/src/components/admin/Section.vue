@@ -13,13 +13,13 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>Sections</v-toolbar-title>
+          <v-toolbar-title>সেকশন</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="800px">
             <template v-slot:activator="{ on, attrs }">
               <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-                New Section
+                নতুন সেকশন
               </v-btn>
             </template>
             <v-card>
@@ -34,7 +34,7 @@
                       <v-autocomplete
                         v-model="editedItem.course"
                         :items="courses"
-                        label="Course"
+                        label="কোর্স"
                         item-text="name"
                         item-value="id"
                       ></v-autocomplete>
@@ -44,13 +44,13 @@
                     <v-col>
                       <v-text-field
                         v-model="editedItem.name"
-                        label="Section name"
+                        label="সেকশনের নাম"
                       ></v-text-field>
                     </v-col>
                     <v-col>
                       <v-checkbox
                         v-model="editedItem.visible"
-                        label="Visible"
+                        label="দৃশ্যমান"
                       ></v-checkbox>
                     </v-col>
                   </v-row>
@@ -65,7 +65,7 @@
                           <v-text-field
                             :value="computedFromDate"
                             clearable
-                            label="Start Date"
+                            label="শুরু"
                             readonly
                             v-bind="attrs"
                             v-on="on"
@@ -88,7 +88,7 @@
                           <v-text-field
                             :value="computedToDate"
                             clearable
-                            label="End Date"
+                            label="শেষ"
                             readonly
                             v-bind="attrs"
                             v-on="on"
@@ -107,25 +107,25 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">
-                  Cancel
+                <v-btn color="red darken-1" text @click="close">
+                  বাতিল 
                 </v-btn>
-                <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
+                <v-btn color="blue darken-1" text @click="save"> সংরক্ষণ  </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
           <v-dialog v-model="dialogDelete" max-width="500px">
             <v-card>
               <v-card-title class="headline"
-                >Are you sure you want to delete this item?</v-card-title
+                >এটি আসলেই মুছে ফেলতে চান?</v-card-title
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="closeDelete"
-                  >Cancel</v-btn
+                <v-btn color="red darken-1" text @click="closeDelete"
+                  >না</v-btn
                 >
                 <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-                  >OK</v-btn
+                  >জী</v-btn
                 >
                 <v-spacer></v-spacer>
               </v-card-actions>
@@ -139,11 +139,11 @@
       </template>
     </v-data-table>
     <v-snackbar v-model="snackbar">
-      An error occurred. Please try again.
+      একটি সমস্যা হয়েছে, পুনরায় চেষ্টা করুন 
 
       <template v-slot:action="{ attrs }">
         <v-btn color="red" text v-bind="attrs" @click="snackbar = false">
-          Close
+          বন্ধ করুন
         </v-btn>
       </template>
     </v-snackbar>
@@ -168,14 +168,14 @@ export default {
     dialogDelete: false,
     headers: [
       {
-        text: "ID",
+        text: "আইডি",
         align: "start",
         sortable: false,
         value: "id",
       },
-      { text: "Name", value: "name" },
-      { text: "Course", value: "course" },
-      { text: "Actions", value: "actions", sortable: false },
+      { text: "নাম", value: "name" },
+      { text: "কোর্স", value: "course" },
+      { text: "সম্পাদনা", value: "actions", sortable: false },
     ],
     sections: [],
     editedIndex: -1,
@@ -234,15 +234,17 @@ export default {
 
   methods: {
     async initialize() {
-      let response = await get(`/sections/?page=${this.options.page}`);
-      if (response.ok) {
-        let data = await response.json();
-        this.sections = data.results;
-        this.totalSections = data.count;
-      } else {
-        this.snackbar = true;
+      if (this.options && this.options.page) {
+        let response = await get(`/sections/?page=${this.options.page}`);
+        if (response.ok) {
+          let data = await response.json();
+          this.sections = data.results;
+          this.totalSections = data.count;
+        } else {
+          this.snackbar = true;
+        }
+        this.loading = false;
       }
-      this.loading = false;
     },
 
     async initCourses() {

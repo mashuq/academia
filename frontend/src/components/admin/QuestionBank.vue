@@ -3,14 +3,14 @@
     <v-row>
       <v-col>
         <v-toolbar dense>
-          <v-toolbar-title>Question Bank </v-toolbar-title>
+          <v-toolbar-title>প্রশ্ন সম্ভার</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-btn
             :disabled="disableAddButtons"
             @click="showMcqDialog"
             text
             color="primary"
-            ><v-icon dark> mdi-plus </v-icon>Multiple Choice Question</v-btn
+            ><v-icon dark> mdi-plus </v-icon>বহুনির্বাচনি প্রশ্ন</v-btn
           >
 
           <v-btn
@@ -18,7 +18,7 @@
             @click="showSqDialog"
             text
             color="primary"
-            ><v-icon dark> mdi-plus </v-icon>Short Question
+            ><v-icon dark> mdi-plus </v-icon>সংক্ষিপ্ত প্রশ্ন
           </v-btn>
 
           <v-btn
@@ -26,7 +26,7 @@
             @click="showBqDialog"
             text
             color="primary"
-            ><v-icon dark> mdi-plus </v-icon>Broad Question</v-btn
+            ><v-icon dark> mdi-plus </v-icon>রচনামূলক প্রশ্ন</v-btn
           >
         </v-toolbar>
       </v-col>
@@ -36,7 +36,7 @@
         <v-autocomplete
           v-model="course"
           :items="courses"
-          label="Course"
+          label="কোর্স"
           item-text="name"
           item-value="id"
         ></v-autocomplete>
@@ -45,7 +45,7 @@
         <v-autocomplete
           v-model="session"
           :items="sessions"
-          label="Session"
+          label="সেশন"
           item-text="name"
           item-value="id"
         ></v-autocomplete>
@@ -55,7 +55,7 @@
     <v-dialog v-model="mcqDialog" max-width="500px">
       <v-card>
         <v-card-title>
-          <span class="headline">New Multiple Choice Question</span>
+          <span class="headline">নতুন বহুনির্বাচনি প্রশ্ন</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -63,7 +63,7 @@
               <v-col>
                 <v-text-field
                   v-model="mcq.question"
-                  label="Question"
+                  label="প্রশ্ন"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -71,13 +71,13 @@
               <v-col>
                 <v-text-field
                   v-model="mcq.choice1"
-                  label="Choice 1"
+                  label="উত্তর ১"
                 ></v-text-field>
               </v-col>
               <v-col>
                 <v-text-field
                   v-model="mcq.choice2"
-                  label="Choice 2"
+                  label="উত্তর ২"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -85,13 +85,13 @@
               <v-col>
                 <v-text-field
                   v-model="mcq.choice3"
-                  label="Choice 1"
+                  label="উত্তর ৩"
                 ></v-text-field>
               </v-col>
               <v-col>
                 <v-text-field
                   v-model="mcq.choice4"
-                  label="Choice 2"
+                  label="উত্তর ৪"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -99,11 +99,11 @@
               <v-col>
                 <v-text-field
                   v-model="mcq.correct_choice"
-                  label="Correct Choice"
+                  label="সঠিক উত্তর"
                 ></v-text-field>
               </v-col>
               <v-col>
-                <v-text-field v-model="mcq.mark" label="Mark"></v-text-field>
+                <v-text-field v-model="mcq.mark" label="নম্বর"></v-text-field>
               </v-col>
             </v-row>
           </v-container>
@@ -111,10 +111,10 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="red darken-1" text @click="hideMcqDialog">
-            Cancel
+            বাতিল
           </v-btn>
           <v-btn color="blue darken-1" text @click="saveMcq">
-            Save
+            সংরক্ষণ
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -123,7 +123,7 @@
     <v-dialog v-model="sqDialog" max-width="500px">
       <v-card>
         <v-card-title>
-          <span class="headline">New Short Question</span>
+          <span class="headline">নতুন সংক্ষিপ্ত প্রশ্ন</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -131,13 +131,13 @@
               <v-col>
                 <v-text-field
                   v-model="sq.question"
-                  label="Question"
+                  label="প্রশ্ন"
                 ></v-text-field>
               </v-col>
             </v-row>
             <v-row>
               <v-col>
-                <v-text-field v-model="sq.mark" label="Mark"></v-text-field>
+                <v-text-field v-model="sq.mark" label="নম্বর"></v-text-field>
               </v-col>
               <v-col> </v-col>
             </v-row>
@@ -146,10 +146,10 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="red darken-1" text @click="hideSqDialog">
-            Cancel
+            বাতিল
           </v-btn>
           <v-btn color="blue darken-1" text @click="saveSq">
-            Save
+            সংরক্ষণ
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -158,7 +158,7 @@
     <v-dialog v-model="bqDialog" max-width="500px">
       <v-card>
         <v-card-title>
-          <span class="headline">New Broad Question</span>
+          <span class="headline">নতুন রচনামূলক প্রশ্ন</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -166,13 +166,13 @@
               <v-col>
                 <v-text-field
                   v-model="bq.question"
-                  label="Question"
+                  label="প্রশ্ন"
                 ></v-text-field>
               </v-col>
             </v-row>
             <v-row>
               <v-col>
-                <v-text-field v-model="bq.mark" label="Mark"></v-text-field>
+                <v-text-field v-model="bq.mark" label="নম্বর"></v-text-field>
               </v-col>
               <v-col> </v-col>
             </v-row>
@@ -181,10 +181,10 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="red darken-1" text @click="hideBqDialog">
-            Cancel
+            বাতিল
           </v-btn>
           <v-btn color="blue darken-1" text @click="saveBq">
-            Save
+            সংরক্ষণ
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -205,7 +205,7 @@
       >
         <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>Multiple Choice Questions</v-toolbar-title>
+          <v-toolbar-title>বহুনির্বাচনি প্রশ্ন সম্ভার</v-toolbar-title>
            <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
         </v-toolbar>
@@ -231,7 +231,7 @@
       >
         <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>Short Questions</v-toolbar-title>
+          <v-toolbar-title>সংক্ষিপ্ত প্রশ্ন সম্ভার</v-toolbar-title>
            <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
         </v-toolbar>
@@ -257,7 +257,7 @@
       >
         <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>Broad Questions</v-toolbar-title>
+          <v-toolbar-title>রচনামূলক প্রশ্ন সম্ভার</v-toolbar-title>
            <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
         </v-toolbar>
@@ -432,41 +432,41 @@ export default {
   data: () => ({
     mcqHeaders: [
       {
-        text: "ID",
+        text: "আইডি ",
         align: "start",
         sortable: false,
         value: "id",
       },
-      { text: "Question", value: "question" },
-      { text: "Choice 1", value: "choice1" },
-      { text: "Choice 2", value: "choice2" },
-      { text: "Choice 3", value: "choice3" },
-      { text: "Choice 4", value: "choice4" },
-      { text: "Correct Choice", value: "correct_choice" },
-      { text: "Mark", value: "mark" },
-      { text: "Actions", value: "actions", sortable: false },
+      { text: "প্রশ্ন", value: "question" },
+      { text: "উত্তর ১", value: "choice1" },
+      { text: "উত্তর ২", value: "choice2" },
+      { text: "উত্তর ৩", value: "choice3" },
+      { text: "উত্তর ৪", value: "choice4" },
+      { text: "সঠিক উত্তর", value: "correct_choice" },
+      { text: "নম্বর", value: "mark" },
+      { text: "সম্পাদনা", value: "actions", sortable: false },
     ],
     sqHeaders: [
       {
-        text: "ID",
+        text: "আইডি ",
         align: "start",
         sortable: false,
         value: "id",
       },
-      { text: "Question", value: "question" },
-      { text: "Mark", value: "mark" },
-      { text: "Actions", value: "actions", sortable: false },
+      { text: "প্রশ্ন", value: "question" },
+      { text: "নম্বর", value: "mark" },
+      { text: "সম্পাদনা", value: "actions", sortable: false },
     ],
     bqHeaders: [
       {
-        text: "ID",
+        text: "আইডি ",
         align: "start",
         sortable: false,
         value: "id",
       },
-      { text: "Question", value: "question" },
-      { text: "Mark", value: "mark" },
-      { text: "Actions", value: "actions", sortable: false },
+      { text: "প্রশ্ন", value: "question" },
+      { text: "নম্বর", value: "mark" },
+      { text: "সম্পাদনা", value: "actions", sortable: false },
     ],
     totalMcq: 0,
     loadingMcq: true,

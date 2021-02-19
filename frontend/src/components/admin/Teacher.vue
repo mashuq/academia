@@ -48,7 +48,7 @@
       </template>
     </v-data-table>
     <v-snackbar v-model="snackbar">
-      An error occurred. Please try again.
+      একটি সমস্যা হয়েছে, পুনরায় চেষ্টা করুন 
 
       <template v-slot:action="{ attrs }">
         <v-btn color="red" text v-bind="attrs" @click="snackbar = false">

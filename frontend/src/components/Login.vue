@@ -2,38 +2,38 @@
   <span>
     <v-card elevation="5">
       <validation-observer ref="observer" v-slot="{ invalid }">
-        <v-card-title>Login</v-card-title>
+        <h3>লগ ইন করুন</h3>
         <form @submit.prevent="submit">
           <validation-provider
             v-slot="{ errors }"
-            name="Username"
+            name="ইউজারনেম"
             rules="required"
           >
             <v-text-field
               v-model="username"
               :error-messages="errors"
-              label="Username"
+              label="ইউজারনেম"
               required
             ></v-text-field>
           </validation-provider>
 
           <validation-provider
             v-slot="{ errors }"
-            name="Password"
+            name="পাসওয়ার্ড"
             rules="required"
           >
             <v-text-field
               v-model="password"
               :error-messages="errors"
-              label="Password"
+              label="পাসওয়ার্ড"
               type="password"
               required
             ></v-text-field>
           </validation-provider>
           <v-btn class="mr-4" color="primary" type="submit" :disabled="invalid">
-            submit
+            লগ ইন করুন
           </v-btn>
-          <v-btn @click="clear"> clear </v-btn>
+          <v-btn @click="clear"> সব মুছে নতুন করে শুরু করুন </v-btn>
         </form>
       </validation-observer>
     </v-card>
@@ -56,7 +56,15 @@
 </style>
 
 <script>
+import { localize } from 'vee-validate';
 import { required } from "vee-validate/dist/rules";
+extend('required', {
+    ...required,
+    message: '{_field_} দিতেই হবে',
+})
+import bd from 'vee-validate/dist/locale/bd.json';
+localize('bd', bd);
+
 import {
   extend,
   ValidationObserver,
@@ -66,10 +74,6 @@ import {
 
 setInteractionMode("eager");
 
-extend("required", {
-  ...required,
-  message: "{_field_} can not be empty",
-});
 import { login } from "@/service/service";
 
 export default {
@@ -97,7 +101,7 @@ export default {
           roles: data.roles,
         };
         this.$store.dispatch("global/login", credentials);
-      }else{
+      } else {
         let data = await response.json();
         this.error = data.detail;
         this.snackbar = true;

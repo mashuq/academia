@@ -4,7 +4,7 @@
       <v-navigation-drawer permanent>
         <v-list-item>
           <v-list-item-content>
-            <v-list-item-title class="title"> Admin Panel </v-list-item-title>
+            <v-list-item-title class="title"> এডমিন প্যানেল </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list dense nav>
@@ -15,7 +15,7 @@
             v-on:click="listAction(link.link)"
           >
             <v-list-item-icon>
-              <v-icon>mdi-view-dashboard</v-icon>
+              <v-icon>{{link.icon}}</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title>{{ link.label }}</v-list-item-title>
@@ -63,15 +63,15 @@ export default {
   },
   data: () => ({
     links: [
-      { label: "Course Categories", link: "courseCategory" },
-      { label: "Courses", link: "course" },
-      { label: "Sections", link: "section" },
-      { label: "Sessions", link: "session" },
-      { label: "Question Bank", link: "questionBank" },
-      { label: "Section Visibility", link: "sessionVisibility" },
-      { label: "Student", link: "student" },
-      { label: "Teacher", link: "teacher" },
-      { label: "Section Teacher", link: "sectionTeacher" },
+      { label: "কোর্স ক্যাটেগরি", link: "courseCategory", icon : 'mdi-concourse-ci' },
+      { label: "কোর্স", link: "course", icon: 'mdi-compass-rose' },
+      { label: "সেকশন", link: "section", icon: 'mdi-tree' },
+      { label: "সেশন", link: "session", icon: 'mdi-turtle'  },
+      { label: "প্রশ্ন সম্ভার", link: "questionBank", icon: 'mdi-pulse'  },
+      { label: "সেশন দৃশ্যমানতা", link: "sessionVisibility", icon: 'mdi-drama-masks'  },
+      { label: "শিক্ষার্থী", link: "student", icon: 'mdi-sail-boat'  },
+      { label: "শিক্ষক/শিক্ষিকা", link: "teacher", icon: 'mdi-diamond-stone'  },
+      { label: "সেকশনের শিক্ষক/শিক্ষিকা", link: "sectionTeacher", icon: 'mdi-laptop'  },
     ],
     showCourseCategory: false,
     showCourse: false,

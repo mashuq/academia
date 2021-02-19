@@ -3,7 +3,7 @@
     <v-row>
       <v-col>
         <v-toolbar dense>
-          <v-toolbar-title>Sessions </v-toolbar-title>
+          <v-toolbar-title>সেশন</v-toolbar-title>
           <v-spacer></v-spacer>
 
           <v-btn icon @click="addSession" :disabled="disableAdd">
@@ -29,7 +29,7 @@
         <v-autocomplete
           v-model="course"
           :items="courses"
-          label="Course"
+          label="কোর্স"
           item-text="name"
           item-value="id"
         ></v-autocomplete>
@@ -38,8 +38,9 @@
     <v-row v-if="showForm">
       <v-col>
         <v-text-field v-model="sessionName" label="Session"></v-text-field>
-        <v-btn color="primary" @click="persistSession">Save</v-btn>
-        <v-btn @click="clearSession">Cancel</v-btn>
+        <v-btn text color="red darken-1" @click="hideSession">বাতিল</v-btn>
+        <v-btn text color="blue darken-1" @click="persistSession">সংরক্ষণ</v-btn>
+       
       </v-col>
     </v-row>
     <v-row>
@@ -143,13 +144,16 @@ export default {
       }
     },
     clearSession() {
-      this.showForm = false;
       this.sessionName = null;
       if (this.panel >= 0) {
         this.sessionId = this.sessions[this.panel].id;
       } else {
         this.sessionId = null;
       }
+    },
+    hideSession(){
+      this.showForm = false;
+      this.clearSession();
     },
     async persistSession() {
       if (this.sessionName && this.course) {

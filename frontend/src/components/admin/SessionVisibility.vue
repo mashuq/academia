@@ -3,7 +3,7 @@
     <v-row>
       <v-col>
         <v-toolbar dense>
-          <v-toolbar-title>Session Visibility </v-toolbar-title>
+          <v-toolbar-title>সেশন দৃশ্যমানতা</v-toolbar-title>
           <v-spacer></v-spacer>
         </v-toolbar>
       </v-col>
@@ -13,7 +13,7 @@
         <v-autocomplete
           v-model="course"
           :items="courses"
-          label="Course"
+          label="কোর্স"
           item-text="name"
           item-value="id"
         ></v-autocomplete>
@@ -22,7 +22,7 @@
         <v-autocomplete
           v-model="section"
           :items="sections"
-          label="Section"
+          label="সেকশন"
           item-text="name"
           item-value="id"
         ></v-autocomplete>
@@ -40,7 +40,7 @@
         </v-data-table>
         <v-layout v-if="showSave" class="d-flex justify-center">
           <v-btn class="mr-4" color="primary" @click="saveVisibility"
-            >Save Visibililtiy</v-btn
+            >সেশন দৃশ্যমানতা সংরক্ষণ করুন</v-btn
           >
         </v-layout>
       </v-col>
@@ -85,10 +85,10 @@ export default {
         section: this.section,
       });
       if (response.ok) {
-        this.message = "Visibility Save Succesfully";
+        this.message = "সেশন দৃশ্যমানতা সংরক্ষিত হয়েছে";
         this.snackbar = true;
       } else {
-        this.message = "Error Saving visibility, please try again";
+        this.message = "সেশন দৃশ্যমানতা সংরক্ষিত করতে সমস্যা হয়েছে, পুনরায় চেষ্টা করুন";
         this.snackbar = true;
       }
     },
@@ -143,12 +143,12 @@ export default {
     selected: [],
     headers: [
       {
-        text: "ID",
+        text: "আইডি",
         align: "start",
         sortable: false,
         value: "id",
       },
-      { text: "Session", value: "name" },
+      { text: "সেশন", value: "name" },
     ],
     message: null,
     snackbar: false,

@@ -8,18 +8,18 @@
       :loading="loading"
       class="elevation-1"
       :footer-props="{
-        disableItemsPerPage: true
+        disableItemsPerPage: true,
       }"
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>Courses</v-toolbar-title>
+          <v-toolbar-title>কোর্স</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="800px">
             <template v-slot:activator="{ on, attrs }">
               <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-                New Course
+                নতুন কোর্স
               </v-btn>
             </template>
             <v-card>
@@ -33,32 +33,32 @@
                     <v-col>
                       <v-text-field
                         v-model="editedItem.name"
-                        label="Course name"
+                        label="কোর্সের নাম"
                       ></v-text-field>
                     </v-col>
                     <v-col>
                       <v-text-field
                         v-model="editedItem.code"
-                        label="Code"
+                        label="কোড"
                       ></v-text-field>
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col>
-                      <label class="v-label">Description</label>
+                      <label class="v-label">পরিচিতি</label>
                       <tiptap-vuetify
                         v-model="editedItem.description"
-                        label="Description"
+                        label="পরিচিতি"
                         :extensions="extensions"
                       ></tiptap-vuetify>
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col>
-                      <label class="v-label">Curriculum</label>
+                      <label class="v-label">পাঠ্যসুচি</label>
                       <tiptap-vuetify
                         v-model="editedItem.curriculum"
-                        label="Description"
+                        label="পাঠ্যসুচি"
                         :extensions="extensions"
                       ></tiptap-vuetify>
                     </v-col>
@@ -67,7 +67,7 @@
                     <v-col>
                       <v-file-input
                         show-size
-                        label="Course Image"
+                        label="ছবি"
                         v-model="editedItem.image"
                         accept="image/*"
                       ></v-file-input>
@@ -83,14 +83,14 @@
                     <v-col>
                       <v-checkbox
                         v-model="editedItem.visible"
-                        label="Visible"
+                        label="দৃশ্যমান"
                       ></v-checkbox>
                     </v-col>
                     <v-col>
                       <v-select
                         v-model="editedItem.course_category"
                         :items="courseCategories"
-                        label="Category"
+                        label="ক্যাটেগরি"
                         item-text="name"
                         item-value="id"
                       ></v-select>
@@ -101,25 +101,25 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">
-                  Cancel
+                <v-btn color="red darken-1" text @click="close">
+                  বাতিল
                 </v-btn>
-                <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
+                <v-btn color="blue darken-1" text @click="save">
+                  সংরক্ষণ
+                </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
           <v-dialog v-model="dialogDelete" max-width="500px">
             <v-card>
               <v-card-title class="headline"
-                >Are you sure you want to delete this item?</v-card-title
+                >এটি আসলেই মুছে ফেলতে চান?</v-card-title
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="closeDelete"
-                  >Cancel</v-btn
-                >
+                <v-btn color="red darken-1" text @click="closeDelete">না</v-btn>
                 <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-                  >OK</v-btn
+                  >জী</v-btn
                 >
                 <v-spacer></v-spacer>
               </v-card-actions>
@@ -133,7 +133,7 @@
       </template>
     </v-data-table>
     <v-snackbar v-model="snackbar">
-      An error occurred. Please try again.
+      একটি সমস্যা হয়েছে, পুনরায় চেষ্টা করুন 
 
       <template v-slot:action="{ attrs }">
         <v-btn color="red" text v-bind="attrs" @click="snackbar = false">
@@ -145,8 +145,30 @@
 </template>
 
 <script>
-import { get, multipart_post, del, multipart_patch } from "@/service/service.js";
-import { TiptapVuetify, Heading, Bold, Italic, Strike, Underline, Code, Paragraph, BulletList, OrderedList, ListItem, Link, Blockquote, HardBreak, HorizontalRule, History } from 'tiptap-vuetify'
+import {
+  get,
+  multipart_post,
+  del,
+  multipart_patch,
+} from "@/service/service.js";
+import {
+  TiptapVuetify,
+  Heading,
+  Bold,
+  Italic,
+  Strike,
+  Underline,
+  Code,
+  Paragraph,
+  BulletList,
+  OrderedList,
+  ListItem,
+  Link,
+  Blockquote,
+  HardBreak,
+  HorizontalRule,
+  History,
+} from "tiptap-vuetify";
 export default {
   components: {
     TiptapVuetify,
@@ -162,16 +184,19 @@ export default {
       ListItem,
       BulletList,
       OrderedList,
-      [Heading, {
-        options: {
-          levels: [1, 2, 3]
-        }
-      }],
+      [
+        Heading,
+        {
+          options: {
+            levels: [1, 2, 3],
+          },
+        },
+      ],
       Bold,
       Code,
       HorizontalRule,
       Paragraph,
-      HardBreak
+      HardBreak,
     ],
     totalCourses: 0,
     loading: true,
@@ -182,15 +207,15 @@ export default {
     dialogDelete: false,
     headers: [
       {
-        text: "ID",
+        text: "আইডি",
         align: "start",
         sortable: false,
         value: "id",
       },
-      { text: "Code", value: "code" },
-      { text: "Name", value: "name" },
-      { text: "Category", value: "course_category" },
-      { text: "Actions", value: "actions", sortable: false },
+      { text: "কোড", value: "code" },
+      { text: "নাম", value: "name" },
+      { text: "ক্যাটেগরি", value: "course_category" },
+      { text: "সম্পাদনা", value: "actions", sortable: false },
     ],
     courses: [],
     editedIndex: -1,
@@ -218,7 +243,7 @@ export default {
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Course" : "Edit Course";
+      return this.editedIndex === -1 ? "নতুন কোর্স" : "কোর্স সম্পাদনা";
     },
   },
 
@@ -230,10 +255,10 @@ export default {
       val || this.closeDelete();
     },
     options: {
-        handler () {
-          this.initialize()
-        },
-        deep: true,
+      handler() {
+        this.initialize();
+      },
+      deep: true,
     },
   },
 
@@ -244,18 +269,20 @@ export default {
 
   methods: {
     async initialize() {
-      let response = await get(`/courses/?page=${this.options.page}`);
-      if (response.ok) {
-        let data = await response.json();
-        this.courses = data.results;
-        this.totalCourses = data.count;
-      } else {
-        this.snackbar = true;
-      }      
-      this.loading = false;
+      if (this.options && this.options.page) {
+        let response = await get(`/courses/?page=${this.options.page}`);
+        if (response.ok) {
+          let data = await response.json();
+          this.courses = data.results;
+          this.totalCourses = data.count;
+        } else {
+          this.snackbar = true;
+        }
+        this.loading = false;
+      }
     },
 
-    async initCourseCategory(){
+    async initCourseCategory() {
       let response = await get("/course_categories/");
       if (response.ok) {
         let data = await response.json();
@@ -310,7 +337,7 @@ export default {
 
     async save() {
       if (this.editedItem.id) {
-        if(!this.editedItem.image){
+        if (!this.editedItem.image) {
           delete this.editedItem.image;
         }
         let response = await multipart_patch(

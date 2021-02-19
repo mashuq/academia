@@ -47,7 +47,7 @@
     </v-row>
 
     <v-data-table
-      items-per-page="5"
+      items-per-page="10"
       :headers="headers"
       :items="sectionTeachers"
       :options.sync="options"
