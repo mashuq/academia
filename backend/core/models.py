@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
+from polymorphic.models import PolymorphicModel
 
 
 class Testimonial(models.Model):
@@ -80,20 +81,14 @@ class NoteLesson(Lesson):
 
 
 class Assessment(models.Model):
-    class AssessmentType(models.TextChoices):
-        QUIZ = 'QUIZ', _('Quiz')
-        EXAM = 'EXAM', _('Exam')
-        ASSIGNMENT = 'ASSIGNMENT', _('Assignment')
-
+    name = models.CharField(max_length=256)
     contribution = models.FloatField()
     section = models.ForeignKey('Section', on_delete=models.CASCADE)
-    after_session = models.ForeignKey(
-        'Session', on_delete=models.SET_NULL, null=True)
-    assessment_type = models.CharField(
-        choices=AssessmentType.choices, default=AssessmentType.QUIZ, max_length=32)
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
 
 
-class Question(models.Model):
+class Question(PolymorphicModel):
     session = models.ForeignKey('Session', on_delete=models.CASCADE)
     mark = models.FloatField()
 
@@ -102,8 +97,17 @@ class AssessmentQuestion(models.Model):
     assessment = models.ForeignKey('Assessment', on_delete=models.CASCADE)
     question = models.ForeignKey('Question', on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = [['assessment', 'question']]
+
+
+class AssessmentResult(models.Model):
+    assessment = models.ForeignKey('Assessment', on_delete=models.CASCADE)
+    total_mark = models.FloatField()
+    student = models.ForeignKey('Student', on_delete=models.CASCADE)
 
 class Answer(models.Model):
+    assessment = models.ForeignKey('Assessment', on_delete=models.CASCADE)
     mark = models.FloatField()
     student = models.ForeignKey('Student', on_delete=models.CASCADE)
 

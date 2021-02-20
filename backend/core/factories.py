@@ -49,10 +49,10 @@ class McqFactory(DjangoModelFactory):
         model = MultipleChoiceQuestion
 
     question = factory.Faker("sentence")
-    choice1 = factory.Faker("words")
-    choice2 = factory.Faker("words")
-    choice3 = factory.Faker("words")
-    choice4 = factory.Faker("words")
+    choice1 = factory.Faker("word")
+    choice2 = factory.Faker("word")
+    choice3 = factory.Faker("word")
+    choice4 = factory.Faker("word")
     correct_choice = random.choice([choice1, choice2, choice3, choice4])
     mark = 1
 

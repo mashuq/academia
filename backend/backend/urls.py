@@ -56,6 +56,17 @@ urlpatterns = [
     path('save_session_section_visibility/',
          views.save_session_section_visibility),
     path('register/', views.register),
-    path('appoint/', views.appoint)
+    path('appoint/', views.appoint),
+    path('list_sections_for_teacher/', views.list_sections_for_teacher),
+    path('list_assessment_for_teacher/', views.list_assessment_for_teacher),
+    path('save_assessment_for_teacher/', views.save_assessment_for_teacher),
+    path('save_assessment_question_for_teacher/',
+         views.save_assessment_question_for_teacher),
+    path('list_assessment_question_for_teacher/',
+         views.list_assessment_question_for_teacher),
+    path('delete_assessment_question_for_teacher/',
+         views.delete_assessment_question_for_teacher),
+
+
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,5 +1,5 @@
 <template>
   <v-alert text type="error">
-    Sorry you are not an admin user
+    দুঃখিত আপনি এডমিন নন
   </v-alert>
 </template>

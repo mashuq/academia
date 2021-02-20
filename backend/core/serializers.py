@@ -2,6 +2,7 @@ from core.models import *
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.validators import UniqueValidator
+from rest_polymorphic.serializers import PolymorphicSerializer
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -15,6 +16,9 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         student = len(Student.objects.filter(user=self.user))
         if student > 0:
             roles.append("student")
+        teacher = len(Teacher.objects.filter(user=self.user))
+        if teacher > 0:
+            roles.append("teacher")
         data.update({'roles': roles})
         return data
 
@@ -130,14 +134,15 @@ class BroadQuestionSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['email', 'date_joined']
+        fields = ['email', 'date_joined', 'username']
+
 
 class StudentSerializer(serializers.ModelSerializer):
     user = UserSerializer()
 
     class Meta:
         model = Student
-        fields = ['id', 'name', 'gender', 'date_of_birth', 'user'] 
+        fields = ['id', 'name', 'gender', 'date_of_birth', 'user']
 
 
 class TeacherSerializer(serializers.ModelSerializer):
@@ -170,3 +175,34 @@ class SectionTeacherListSerializer(serializers.ModelSerializer):
     class Meta:
         model = SectionTeacher
         fields = ['id', 'section', 'teacher']
+
+
+class AssessmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Assessment
+        fields = '__all__'
+
+
+class QuestionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Question
+        fields = '__all__'
+
+
+class QuestionPolymorpicSerializer(PolymorphicSerializer):
+    model_serializer_mapping = {
+        MultipleChoiceQuestion: MultipleChoiceQuestionSerializer,
+        ShortQuestion: ShortQuestionSerializer,
+        BroadQuestion: BroadQuestionSerializer,
+        Question: QuestionSerializer
+    }
+
+
+class AssessmentQuestionSerializer(serializers.ModelSerializer):
+    question = QuestionPolymorpicSerializer()
+    multipleChoiceQuestion = MultipleChoiceQuestionSerializer()
+
+    class Meta:
+        model = AssessmentQuestion
+        fields = ['question', 'multipleChoiceQuestion']

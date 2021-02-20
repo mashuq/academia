@@ -82,6 +82,7 @@ export default {
         value: "id",
       },
       { text: "Name", value: "name" },
+      { text: "ইউজারনেম", value: "user.username" },
       { text: "Email", value: "user.email" },
       { text: "Gender", value: "gender" },
       { text: "Date of Birth", value: "date_of_birth" },
@@ -99,11 +100,6 @@ export default {
   }),
 
   computed: {
-    formTitle() {
-      return this.editedIndex === -1
-        ? "New Course Category"
-        : "Edit Course Category";
-    },
   },
 
   watch: {

@@ -1,5 +1,5 @@
 <template>
   <v-alert text type="error">
-    Sorry you are not an student
+    দুঃখিত আপনি শিক্ষার্থী নন
   </v-alert>
 </template>

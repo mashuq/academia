@@ -15,6 +15,36 @@ from rest_framework import pagination
 from rest_framework.pagination import PageNumberPagination
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework import status
+from rest_framework.permissions import IsAdminUser, SAFE_METHODS, IsAuthenticated
+
+
+class IsAdminUserOrReadOnly(IsAdminUser):
+
+    def has_permission(self, request, view):
+        is_admin = super(
+            IsAdminUserOrReadOnly,
+            self).has_permission(request, view)
+
+        return request.method in SAFE_METHODS or is_admin
+
+
+class IsQuestionsAccessible(IsAdminUser):
+
+    def has_permission(self, request, view):
+        is_admin = super(
+            IsQuestionsAccessible,
+            self).has_permission(request, view)
+
+        is_teacher_of_section = False
+        session = Session.objects.get(pk=request.data['session'])
+        sections = Section.objects.all().filter(course=session.course)
+        section_teacher_list = SectionTeacher.objects.select_related(
+            "teacher", 'teacher__user').filter(teacher__user=request.user, section__in=sections)
+
+        if section_teacher_list.count() > 0:
+            is_teacher_of_section = True
+
+        return is_admin or is_teacher_of_section
 
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -32,6 +62,7 @@ class LargeResultsSetPagination(PageNumberPagination):
     page_size = 100
     page_size_query_param = 'page_size'
     max_page_size = 100
+
 
 class CustomTokenObtainPairView(jwt_views.TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
@@ -58,7 +89,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     queryset = Course.objects.all().select_related(
         'course_category').order_by('name')
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [IsAdminUserOrReadOnly]
     pagination_class = StandardResultsSetPagination
 
 
@@ -70,14 +101,14 @@ class SectionViewSet(viewsets.ModelViewSet):
 
     queryset = Section.objects.all().select_related(
         'course').order_by('name')
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [IsAdminUserOrReadOnly]
     pagination_class = StandardResultsSetPagination
 
 
 class SessionViewSet(viewsets.ModelViewSet):
     queryset = Session.objects.all().order_by('serial')
     serializer_class = SessionSerializer
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [IsAdminUserOrReadOnly]
 
 
 class AudioLessonViewSet(viewsets.ModelViewSet):
@@ -105,7 +136,7 @@ class LessonViewSet(viewsets.ModelViewSet):
 
 
 @api_view(['POST'])
-@permission_classes([permissions.IsAdminUser])
+@permission_classes([permissions.IsAuthenticated])
 def list_sessions_by_course(request):
     sessions = Session.objects.filter(
         course=request.data['course']).order_by('serial')
@@ -150,7 +181,7 @@ def list_note_lessons_by_session(request):
 
 
 @api_view(['POST'])
-@permission_classes([permissions.IsAdminUser])
+@permission_classes([IsQuestionsAccessible])
 def list_mcq_by_session(request):
     mcq_list = MultipleChoiceQuestion.objects.filter(
         session=request.data['session']).order_by('id')
@@ -168,7 +199,7 @@ def list_mcq_by_session(request):
 
 
 @api_view(['POST'])
-@permission_classes([permissions.IsAdminUser])
+@permission_classes([IsQuestionsAccessible])
 def list_sq_by_session(request):
     sq_list = ShortQuestion.objects.filter(
         session=request.data['session']).order_by('id')
@@ -186,7 +217,7 @@ def list_sq_by_session(request):
 
 
 @api_view(['POST'])
-@permission_classes([permissions.IsAdminUser])
+@permission_classes([IsQuestionsAccessible])
 def list_bq_by_session(request):
     bq_list = BroadQuestion.objects.filter(
         session=request.data['session']).order_by('id')
@@ -249,7 +280,7 @@ def list_session_section(request):
 
 
 @api_view(['POST'])
-@permission_classes([permissions.AllowAny])
+@permission_classes([permissions.IsAdminUser])
 @transaction.atomic
 def save_session_section_visibility(request):
     SessionSection.objects.filter(
@@ -339,3 +370,112 @@ class SectionTeacherViewSet(viewsets.ModelViewSet):
         'section', 'teacher', 'section__course').order_by('section')
     permission_classes = [permissions.IsAdminUser]
     pagination_class = StandardResultsSetPagination
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def list_sections_for_teacher(request):
+    section_list = SectionTeacher.objects.select_related(
+        "teacher", 'teacher__user').filter(teacher__user=request.user).order_by('section')
+    page = request.query_params['page']
+    paginator = Paginator(section_list, 10)
+    try:
+        sections = paginator.page(page)
+    except PageNotAnInteger:
+        sections = paginator.page(1)
+    except EmptyPage:
+        sections = paginator.page(paginator.num_pages)
+    serialized_data = SectionTeacherListSerializer(sections, many=True)
+    result = {'results': serialized_data.data, 'count': section_list.count()}
+    return Response(result)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def list_assessment_for_teacher(request):
+    section_teacher_list = SectionTeacher.objects.select_related(
+        "teacher", 'teacher__user').filter(teacher__user=request.user, section=request.data['section'])
+
+    if section_teacher_list.count() <= 0:
+        return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
+    assessments = Assessment.objects.filter(
+        section=request.data['section']).order_by('name')
+    serialized_data = AssessmentSerializer(assessments, many=True)
+    return Response(serialized_data.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def save_assessment_for_teacher(request):
+    section_teacher_list = SectionTeacher.objects.select_related(
+        "teacher", 'teacher__user').filter(teacher__user=request.user, section=request.data['section'])
+
+    if section_teacher_list.count() <= 0:
+        return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
+    assessment = Assessment(name=request.data['name'], start_date=request.data['start_date'], end_date=request.data['end_date'], section_id=request.data['section'],
+                            contribution=request.data['contribution'])
+    try:
+        assessment.save()
+        return Response(status=status.HTTP_200_OK)
+    except Exception as e:
+        print(e)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def save_assessment_question_for_teacher(request):
+    assessment = Assessment.objects.get(pk=request.data['assessment'])
+
+    section_teacher_list = SectionTeacher.objects.select_related(
+        "teacher", 'teacher__user').filter(teacher__user=request.user, section=assessment.section)
+
+    if section_teacher_list.count() <= 0:
+        return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
+    assessment_question = AssessmentQuestion(
+        assessment_id=assessment.id, question_id=request.data['question'])
+    try:
+        assessment_question.save()
+        return Response(status=status.HTTP_200_OK)
+    except Exception as e:
+        print(e)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def list_assessment_question_for_teacher(request):
+    assessment = Assessment.objects.get(pk=request.data['assessment'])
+
+    section_teacher_list = SectionTeacher.objects.select_related(
+        "teacher", 'teacher__user').filter(teacher__user=request.user, section=assessment.section)
+
+    if section_teacher_list.count() <= 0:
+        return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
+    questions = Question.objects.all().filter(
+
+        assessmentquestion__assessment=assessment)
+    serialized_data = QuestionPolymorpicSerializer(questions, many=True)
+    return Response(serialized_data.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def delete_assessment_question_for_teacher(request):
+
+    assessment_question = AssessmentQuestion.objects.filter(
+        assessment=request.data['assessment'], question=request.data['question']).get()
+    assessment = Assessment.objects.get(pk=assessment_question.assessment.id)
+
+    section_teacher_list = SectionTeacher.objects.select_related(
+        "teacher", 'teacher__user').filter(teacher__user=request.user, section=assessment.section)
+
+    try:
+        assessment_question.delete()
+        return Response(status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)

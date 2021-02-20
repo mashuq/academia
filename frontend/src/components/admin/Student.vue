@@ -82,6 +82,7 @@ export default {
         value: "id",
       },
       { text: "নাম", value: "name" },
+      { text: "ইউজারনেম", value: "user.username" },
       { text: "ইমেইল", value: "user.email" },
       { text: "লিঙ্গ", value: "gender" },
       { text: "জন্মতারিখ", value: "date_of_birth" },

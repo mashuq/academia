@@ -36,7 +36,7 @@
 `$ sudo yum install python3-devel mysql-devel`
 
 ## Pip Installs
-`$ pip3 install mysqlclient django djangorestframework markdown django-filter djangorestframework_simplejwt django-cors-headers factory_boy`
+`$ pip3 install mysqlclient django djangorestframework markdown django-filter djangorestframework_simplejwt django-cors-headers factory_boy polymorphic django-rest-polymorphic`
 
 ## Run Server
 `$ python manage.py runserver`
