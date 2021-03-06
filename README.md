@@ -36,7 +36,25 @@
 `$ sudo yum install python3-devel mysql-devel`
 
 ## Pip Installs
-`$ pip3 install mysqlclient django djangorestframework markdown django-filter djangorestframework_simplejwt django-cors-headers factory_boy polymorphic django-rest-polymorphic`
+`$ pip3 install mysqlclient django djangorestframework markdown django-filter djangorestframework_simplejwt django-cors-headers factory_boy django-polymorphic django-rest-polymorphic django-environ`
+
+## Migration
+`$ pip3 manage.py makemigrations core`
+
+`$ pip3 manage.py migrate`
 
 ## Run Server
 `$ python manage.py runserver`
+
+
+## Install vue cli
+`npm install -g @vue/cli`
+
+## recaptcha admin console
+https://www.google.com/recaptcha/admin
+
+## Localhost site key: 
+
+Site key: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
+
+Secret key: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe

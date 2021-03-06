@@ -16,6 +16,13 @@ from rest_framework.pagination import PageNumberPagination
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser, SAFE_METHODS, IsAuthenticated
+import environ
+import requests
+
+env = environ.Env(
+    DEBUG=(bool, False)
+)
+environ.Env.read_env()
 
 
 class IsAdminUserOrReadOnly(IsAdminUser):
@@ -241,14 +248,26 @@ def register(request):
     serializer = RegistrationSerializer(
         data=request.data)
     serializer.is_valid(raise_exception=True)
-    password = make_password(request.data['password'])
-    user = User(is_superuser=False, password=password,
-                email=request.data['email'], username=request.data['username'], is_active=True, is_staff=False)
-    user.save()
-    student = Student(date_of_birth=request.data['date_of_birth'],
-                      user=user, name=request.data['name'], gender=request.data['gender'])
-    student.save()
-    return HttpResponse(status=200)
+    
+    recaptcha_response = request.data['g-recaptcha-response']
+    data = {
+        'secret': env('RECAPTCHA_SECRET_KEY'), 
+        'response': recaptcha_response
+    }
+    r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+    result = r.json()
+
+    if result['success']:
+        password = make_password(request.data['password'])
+        user = User(is_superuser=False, password=password,
+                    email=request.data['email'], username=request.data['username'], is_active=True, is_staff=False)
+        user.save()
+        student = Student(date_of_birth=request.data['date_of_birth'],
+                        user=user, name=request.data['name'], gender=request.data['gender'])
+        student.save()
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=400)
 
 
 @api_view(['POST'])

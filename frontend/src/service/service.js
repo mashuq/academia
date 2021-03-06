@@ -18,7 +18,8 @@ export const register = async (
   name,
   email,
   gender,
-  date_of_birth
+  date_of_birth,
+  recpatcha_response
 ) => {
   let formData = new FormData();
   formData.append("username", username);
@@ -27,6 +28,7 @@ export const register = async (
   formData.append("email", email);
   formData.append("gender", gender);
   formData.append("date_of_birth", date_of_birth);
+  formData.append("g-recaptcha-response", recpatcha_response)
 
   return await fetch(`${process.env.VUE_APP_API_BASE_URL}/register/`, {
     method: "POST",

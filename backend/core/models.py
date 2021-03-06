@@ -187,6 +187,6 @@ class SectionTeacher(models.Model):
         unique_together = [['section', 'teacher']]
 
 
-class Admin(models.Model):
+class Admin(models.Model): 
     name = models.CharField(max_length=128)
     user = models.OneToOneField(User, on_delete=models.CASCADE)

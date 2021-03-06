@@ -22,17 +22,8 @@
               </v-col>
 
               <v-col>
-                <validation-provider
-                  v-slot="{ errors }"
-                  name="Email"
-                  rules="required|email"
-                >
-                  <v-text-field
-                    v-model="email"
-                    :error-messages="errors"
-                    label="Email"
-                    email
-                  ></v-text-field>
+                <validation-provider v-slot="{ errors }" name="Email" rules="required|email">
+                  <v-text-field v-model="email" :error-messages="errors" label="Email" email></v-text-field>
                 </validation-provider>
               </v-col>
             </v-row>
@@ -44,12 +35,7 @@
                   name="Name"
                   rules="required|max:128|alpha_spaces"
                 >
-                  <v-text-field
-                    v-model="name"
-                    :error-messages="errors"
-                    label="Name"
-                    required
-                  ></v-text-field>
+                  <v-text-field v-model="name" :error-messages="errors" label="Name" required></v-text-field>
                 </validation-provider>
               </v-col>
             </v-row>
@@ -72,11 +58,7 @@
                   min-width="auto"
                 >
                   <template v-slot:activator="{ on, attrs }">
-                    <validation-provider
-                      v-slot="{ errors }"
-                      name="Birthday"
-                      rules="required"
-                    >
+                    <validation-provider v-slot="{ errors }" name="Birthday" rules="required">
                       <v-text-field
                         v-model="formattedDate"
                         label="Birthday date"
@@ -117,11 +99,7 @@
                 </validation-provider>
               </v-col>
               <v-col>
-                <validation-provider
-                  v-slot="{ errors }"
-                  name="Confirm"
-                  rules="required|max:20"
-                >
+                <validation-provider v-slot="{ errors }" name="Confirm" rules="required|max:20">
                   <v-text-field
                     v-model="repassword"
                     :error-messages="errors"
@@ -132,15 +110,9 @@
                 </validation-provider>
               </v-col>
             </v-row>
-            <v-btn
-              class="mr-4"
-              color="primary"
-              type="submit"
-              :disabled="invalid"
-            >
-              submit
-            </v-btn>
-            <v-btn @click="clear"> clear </v-btn>
+            <vue-recaptcha @verify="verify" :sitekey="siteKey" :loadRecaptchaScript="true"></vue-recaptcha>
+            <v-btn class="mr-4" color="primary" type="submit" :disabled="invalid">submit</v-btn>
+            <v-btn @click="clear">clear</v-btn>
           </v-grid>
         </form>
       </validation-observer>
@@ -148,9 +120,7 @@
     <v-snackbar v-model="snackbar" timeout="-1">
       {{ error }}
       <template v-slot:action="{ attrs }">
-        <v-btn color="red" text v-bind="attrs" @click="snackbar = false">
-          Close
-        </v-btn>
+        <v-btn color="red" text v-bind="attrs" @click="snackbar = false">Close</v-btn>
       </template>
     </v-snackbar>
   </span>
@@ -162,18 +132,19 @@
 </style>
 
 <script>
+import VueRecaptcha from "vue-recaptcha";
 import {
   required,
   email,
   alpha_num,
   max,
-  alpha_spaces,
+  alpha_spaces
 } from "vee-validate/dist/rules";
 import {
   extend,
   ValidationObserver,
   ValidationProvider,
-  setInteractionMode,
+  setInteractionMode
 } from "vee-validate";
 import moment from "moment";
 import { register } from "@/service/service";
@@ -185,7 +156,7 @@ extend("alpha_num", alpha_num);
 extend("max", max);
 extend("required", {
   ...required,
-  message: "{_field_} can not be empty",
+  message: "{_field_} can not be empty"
 });
 extend("alpha_spaces", alpha_spaces);
 extend("password", {
@@ -193,17 +164,19 @@ extend("password", {
   validate(value, { target }) {
     return value === target;
   },
-  message: "Password confirmation does not match",
+  message: "Password confirmation does not match"
 });
 
 export default {
   components: {
     ValidationProvider,
     ValidationObserver,
+    VueRecaptcha
   },
   data: () => ({
     username: null,
     password: null,
+    repassword: null,
     name: null,
     email: null,
     gender: null,
@@ -211,6 +184,9 @@ export default {
     menu: false,
     error: null,
     snackbar: false,
+    recaptchaVerified: false,
+    recaptchaResponse: null,
+    siteKey: process.env.VUE_APP_RECAPTCHA_SITE_KEY
   }),
   computed: {
     formattedDate: function() {
@@ -218,11 +194,20 @@ export default {
         return moment(this.date).format("DD-MM-YYYY");
       }
       return null;
-    },
+    }
   },
   methods: {
+    verify(response) {
+      this.recaptchaVerified = true;
+      this.recaptchaResponse = response;
+    },
     async submit() {
       this.$refs.observer.validate();
+      if(!this.recaptchaVerified){
+        this.error = "দয়া করে 'I am not a robot' এ ক্লিক করুন";
+        this.snackbar = true;
+        return;
+      }
       let date = moment(this.date).toISOString();
       let response = await register(
         this.username,
@@ -230,7 +215,8 @@ export default {
         this.name,
         this.email,
         this.gender,
-        date
+        date,
+        this.recaptchaResponse
       );
       if (response.ok) {
         this.$emit("registrationComplete");
@@ -253,16 +239,21 @@ export default {
     clear() {
       this.username = null;
       this.password = null;
+      this.name = null;
+      this.email = null;
+      this.gender = null;
+      this.date = null;
+      this.repassword = null;
       this.$refs.observer.reset();
     },
     save(date) {
       this.$refs.menu.save(date);
-    },
+    }
   },
   watch: {
     menu(val) {
       val && setTimeout(() => (this.$refs.picker.activePicker = "YEAR"));
-    },
-  },
+    }
+  }
 };
 </script>
