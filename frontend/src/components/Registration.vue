@@ -2,7 +2,7 @@
   <span>
     <v-card elevation="5">
       <validation-observer ref="observer" v-slot="{ invalid }">
-        <v-card-title>রেজিস্টার করুন</v-card-title>
+        <v-card-title>রেজিস্ট্রেশন করুন</v-card-title>
         <form @submit.prevent="submit">
           <v-grid>
             <v-row>
@@ -111,7 +111,7 @@
               </v-col>
             </v-row>
             <vue-recaptcha @verify="verify" :sitekey="siteKey" :loadRecaptchaScript="true"></vue-recaptcha>
-            <v-btn class="mr-4" color="primary" type="submit" :disabled="invalid">রেজিস্টার করুন</v-btn>
+            <v-btn class="mr-4" color="primary" type="submit" :disabled="invalid">রেজিস্ট্রেশন করুন</v-btn>
             <v-btn @click="clear">সব মুছে নতুন করে শুরু করুন</v-btn>
           </v-grid>
         </form>

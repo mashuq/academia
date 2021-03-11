@@ -65,3 +65,13 @@ Secret key: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
 ## run with gunicorn
 
 gunicorn -b 0.0.0.0:8000 backend.wsgi > log.txt 2>&1 &
+
+
+
+
+curl -fsSL https://deb.nodesource.com/setup_15.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+
+sudo npm install -g serve
+sudo serve -s dist -l 80 > log.txt 2>&1 &
