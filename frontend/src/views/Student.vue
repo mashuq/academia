@@ -5,7 +5,7 @@
         <v-col></v-col>
         <v-col>
           <v-container>
-            শিক্ষার্থী হিসেবে রেজিস্টার করেন নি?<v-btn @click="showRegistrationDialog" color="success">রেজিস্টার করুন</v-btn>
+            শিক্ষার্থী হিসেবে রেজিস্ট্রেশন করেন নি?<v-btn @click="showRegistrationDialog" color="success">রেজিস্ট্রেশন করুন</v-btn>
           </v-container>
           <Login />
         </v-col>
