@@ -21,27 +21,29 @@
 
 `> ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';`
 
+`> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';`
+
 `> FLUSH PRIVILEGES;`
 
 `> exit;`
 
 ## Create root user (to call apis either modify postman environment or use: mashuq/star@wars)
 
-`python manage.py createsuperuser`
+`python3 manage.py createsuperuser`
 
 ## Pre-requisite for mysql
 ### Ubuntu
-`$ sudo apt-get install python3-dev default-libmysqlclient-dev build-essential`
+`$ sudo apt-get install python3-dev default-libmysqlclient-dev build-essential python3-pip gunicorn`
 ### Fedora
-`$ sudo yum install python3-devel mysql-devel`
+`$ sudo yum install python3-devel mysql-devel python3-pip`
 
 ## Pip Installs
-`$ pip3 install mysqlclient django djangorestframework markdown django-filter djangorestframework_simplejwt django-cors-headers factory_boy django-polymorphic django-rest-polymorphic django-environ`
+`$ pip3 install mysqlclient django djangorestframework markdown django-filter djangorestframework_simplejwt django-cors-headers factory_boy django-polymorphic django-rest-polymorphic django-environ gunicorn Pillow`
 
 ## Migration
-`$ pip3 manage.py makemigrations core`
+`$ python3 manage.py makemigrations core`
 
-`$ pip3 manage.py migrate`
+`$ python3 manage.py migrate`
 
 ## Run Server
 `$ python manage.py runserver`
@@ -58,3 +60,8 @@ https://www.google.com/recaptcha/admin
 Site key: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
 
 Secret key: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
+
+
+## run with gunicorn
+
+gunicorn -b 0.0.0.0:8000 backend.wsgi > log.txt 2>&1 &

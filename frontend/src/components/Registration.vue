@@ -2,28 +2,28 @@
   <span>
     <v-card elevation="5">
       <validation-observer ref="observer" v-slot="{ invalid }">
-        <v-card-title>Register</v-card-title>
+        <v-card-title>রেজিস্টার করুন</v-card-title>
         <form @submit.prevent="submit">
           <v-grid>
             <v-row>
               <v-col>
                 <validation-provider
                   v-slot="{ errors }"
-                  name="Username"
+                  name="ইউজারনেম"
                   rules="required|max:150|alpha_num"
                 >
                   <v-text-field
                     v-model="username"
                     :error-messages="errors"
-                    label="Username"
+                    label="ইউজারনেম"
                     required
                   ></v-text-field>
                 </validation-provider>
               </v-col>
 
               <v-col>
-                <validation-provider v-slot="{ errors }" name="Email" rules="required|email">
-                  <v-text-field v-model="email" :error-messages="errors" label="Email" email></v-text-field>
+                <validation-provider v-slot="{ errors }" name="ইমেইল" rules="required|email">
+                  <v-text-field v-model="email" :error-messages="errors" label="ইমেইল" email></v-text-field>
                 </validation-provider>
               </v-col>
             </v-row>
@@ -32,20 +32,20 @@
               <v-col>
                 <validation-provider
                   v-slot="{ errors }"
-                  name="Name"
+                  name="নাম"
                   rules="required|max:128|alpha_spaces"
                 >
-                  <v-text-field v-model="name" :error-messages="errors" label="Name" required></v-text-field>
+                  <v-text-field v-model="name" :error-messages="errors" label="নাম" required></v-text-field>
                 </validation-provider>
               </v-col>
             </v-row>
 
             <v-row>
               <v-col>
-                <v-label>Gender</v-label>
+                <v-label>লিঙ্গ</v-label>
                 <v-radio-group v-model="gender" mandatory>
-                  <v-radio label="Male" value="MALE"></v-radio>
-                  <v-radio label="Female" value="FEMALE"></v-radio>
+                  <v-radio label="পুরুষ" value="MALE"></v-radio>
+                  <v-radio label="মহিলা" value="FEMALE"></v-radio>
                 </v-radio-group>
               </v-col>
               <v-col>
@@ -58,10 +58,10 @@
                   min-width="auto"
                 >
                   <template v-slot:activator="{ on, attrs }">
-                    <validation-provider v-slot="{ errors }" name="Birthday" rules="required">
+                    <validation-provider v-slot="{ errors }" name="জন্ম তারিখ" rules="required">
                       <v-text-field
                         v-model="formattedDate"
-                        label="Birthday date"
+                        label="জন্ম তারিখ"
                         prepend-icon="mdi-calendar"
                         readonly
                         v-bind="attrs"
@@ -86,24 +86,24 @@
               <v-col>
                 <validation-provider
                   v-slot="{ errors }"
-                  name="Password"
+                  name="পাসওয়ার্ড"
                   rules="required|password:@Confirm|max:20"
                 >
                   <v-text-field
                     v-model="password"
                     :error-messages="errors"
-                    label="Password"
+                    label="পাসওয়ার্ড"
                     type="password"
                     required
                   ></v-text-field>
                 </validation-provider>
               </v-col>
               <v-col>
-                <validation-provider v-slot="{ errors }" name="Confirm" rules="required|max:20">
+                <validation-provider v-slot="{ errors }" name="কনফার্ম পাসওয়ার্ড" rules="required|max:20">
                   <v-text-field
                     v-model="repassword"
                     :error-messages="errors"
-                    label="Confirm Password"
+                    label="কনফার্ম পাসওয়ার্ড"
                     type="password"
                     required
                   ></v-text-field>
@@ -111,8 +111,8 @@
               </v-col>
             </v-row>
             <vue-recaptcha @verify="verify" :sitekey="siteKey" :loadRecaptchaScript="true"></vue-recaptcha>
-            <v-btn class="mr-4" color="primary" type="submit" :disabled="invalid">submit</v-btn>
-            <v-btn @click="clear">clear</v-btn>
+            <v-btn class="mr-4" color="primary" type="submit" :disabled="invalid">রেজিস্টার করুন</v-btn>
+            <v-btn @click="clear">সব মুছে নতুন করে শুরু করুন</v-btn>
           </v-grid>
         </form>
       </validation-observer>
