@@ -9,7 +9,7 @@
               <v-col>
                 <validation-provider
                   v-slot="{ errors }"
-                  name="ইউজারনেম"
+                  name="Username"
                   rules="required|max:150|alpha_num"
                 >
                   <v-text-field
@@ -32,7 +32,7 @@
               <v-col>
                 <validation-provider
                   v-slot="{ errors }"
-                  name="নাম"
+                  name="Name"
                   rules="required|max:128|alpha_spaces"
                 >
                   <v-text-field v-model="name" :error-messages="errors" label="নাম" required></v-text-field>
@@ -58,7 +58,7 @@
                   min-width="auto"
                 >
                   <template v-slot:activator="{ on, attrs }">
-                    <validation-provider v-slot="{ errors }" name="জন্ম তারিখ" rules="required">
+                    <validation-provider v-slot="{ errors }" name="Birthday" rules="required">
                       <v-text-field
                         v-model="formattedDate"
                         label="জন্ম তারিখ"
@@ -86,7 +86,7 @@
               <v-col>
                 <validation-provider
                   v-slot="{ errors }"
-                  name="পাসওয়ার্ড"
+                  name="Password"
                   rules="required|password:@Confirm|max:20"
                 >
                   <v-text-field
@@ -99,7 +99,7 @@
                 </validation-provider>
               </v-col>
               <v-col>
-                <validation-provider v-slot="{ errors }" name="কনফার্ম পাসওয়ার্ড" rules="required|max:20">
+                <validation-provider v-slot="{ errors }" name="Confirm" rules="required|max:20">
                   <v-text-field
                     v-model="repassword"
                     :error-messages="errors"
