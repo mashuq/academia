@@ -206,3 +206,9 @@ class AssessmentQuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = AssessmentQuestion
         fields = ['question', 'multipleChoiceQuestion']
+
+class EnrolmentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Enrolment
+        fields = '__all__'

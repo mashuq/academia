@@ -9,8 +9,8 @@
         <v-tab to="/">হোম</v-tab>
         <!-- <v-tab to="/About">কোর্স সমূহ</v-tab> -->
         <v-tab to="/Student">শিক্ষার্থী</v-tab>
-        <!-- <v-tab to="/Teacher">শিক্ষক/শিক্ষিকা</v-tab> -->
-        <!-- <v-tab to="/Admin">এডমিন</v-tab> -->
+        <v-tab to="/Teacher">শিক্ষক/শিক্ষিকা</v-tab>
+        <v-tab to="/Admin">এডমিন</v-tab>
         <!-- <v-tab to="/About">আমাদের সম্পর্কে</v-tab> -->
         <!-- <v-tab to="/About">যোগাযোগ করুন</v-tab> -->
       </v-tabs>

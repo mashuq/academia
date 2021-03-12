@@ -66,7 +66,13 @@ urlpatterns = [
          views.list_assessment_question_for_teacher),
     path('delete_assessment_question_for_teacher/',
          views.delete_assessment_question_for_teacher),
-
+    path('get_student_section/',
+         views.get_student_section),
+    path('save_enrolment/',
+         views.save_enrolment),
+    path('delete_enrolment/',
+         views.delete_enrolment),
+    
 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

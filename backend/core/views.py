@@ -498,3 +498,37 @@ def delete_assessment_question_for_teacher(request):
         return Response(status=status.HTTP_200_OK)
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAdminUser])
+@transaction.atomic
+def get_student_section(request):
+    enrollments = Enrolment.objects.filter(student__in=request.data['students'], section=request.data['section'])
+    serialized_data = EnrolmentSerializer(enrollments, many=True)
+    return Response(serialized_data.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAdminUser])
+@transaction.atomic
+def save_enrolment(request):
+    enrolment = Enrolment(section_id=request.data['section'], student_id=request.data['student'], final_grade=0.0)
+    try:
+        enrolment.save()
+        return Response(status=status.HTTP_200_OK)
+    except Exception as e:
+        print(e)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAdminUser])
+@transaction.atomic
+def delete_enrolment(request):
+    enrolment = Enrolment.objects.get(pk=request.data['enrolment'])
+    try:
+        enrolment.delete()
+        return Response(status=status.HTTP_200_OK)
+    except Exception as e:
+        print(e)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
