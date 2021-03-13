@@ -136,7 +136,7 @@ export default {
       this.showStudent = false;
       this.showTeacher = false;
       this.showSectionTeacher = false;
-      this.showStudentSection = true;
+      this.showStudentSection = false;
     },
   },
 };
