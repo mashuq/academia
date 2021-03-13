@@ -152,11 +152,14 @@ import { register } from "@/service/service";
 setInteractionMode("eager");
 
 extend("email", email);
-extend("alpha_num", alpha_num);
 extend("max", max);
 extend("required", {
   ...required,
   message: "{_field_} can not be empty"
+});
+extend("alpha_num", {
+  ...alpha_num,
+  message: "{_field_} স্পেস ছাড়া অক্ষর বা সংখ্যা হতে হবে"
 });
 extend("alpha_spaces", alpha_spaces);
 extend("password", {
@@ -164,7 +167,7 @@ extend("password", {
   validate(value, { target }) {
     return value === target;
   },
-  message: "Password confirmation does not match"
+  message: "পাসওয়ার্ড কনফার্মেশন ম্যাচ করতে হবে"
 });
 
 export default {
