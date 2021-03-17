@@ -9,6 +9,7 @@ class Testimonial(models.Model):
     name = models.CharField(max_length=64)
     identity = models.CharField(max_length=128)
     serial = models.IntegerField()
+    visible = models.BooleanField()
 
 
 class CourseCategory(models.Model):

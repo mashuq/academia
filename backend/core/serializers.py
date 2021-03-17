@@ -26,7 +26,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 class TestimonialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Testimonial
-        fields = ['testimonial', 'name', 'identity', 'serial']
+        fields = ['id', 'testimonial', 'name', 'identity', 'serial', 'visible']
 
 
 class CourseCategorySerializer(serializers.ModelSerializer):

@@ -35,6 +35,7 @@
       <Teacher v-if="showTeacher" />
       <SectionTeacher v-if="showSectionTeacher" />
       <StudentSection v-if="showStudentSection" />
+      <Testimonial v-if="showTestimonial" />
     </v-col>
   </v-row>
 </template>
@@ -50,6 +51,7 @@ import Student from "@/components/admin/Student.vue";
 import Teacher from "@/components/admin/Teacher.vue";
 import SectionTeacher from "@/components/admin/SectionTeacher.vue";
 import StudentSection from "@/components/admin/StudentSection.vue";
+import Testimonial from "@/components/admin/Testimonial.vue";
 
 export default {
   components: {
@@ -62,7 +64,8 @@ export default {
     Student,
     Teacher,
     SectionTeacher,
-    StudentSection
+    StudentSection,
+    Testimonial
   },
   data: () => ({
     links: [
@@ -76,6 +79,7 @@ export default {
       { label: "শিক্ষক/শিক্ষিকা", link: "teacher", icon: 'mdi-diamond-stone'  },
       { label: "সেকশনের শিক্ষক/শিক্ষিকা", link: "sectionTeacher", icon: 'mdi-laptop'  },
       { label: "শিক্ষার্থী কোর্স/সেকশন", link: "studentSection", icon: 'mdi-codepen'  },
+      { label: "শিক্কার্থীদের মন্তব্য", link: "testimonial", icon: 'mdi-star'  },
     ],
     showCourseCategory: false,
     showCourse: false,
@@ -87,6 +91,7 @@ export default {
     showTeacher: false,
     showSectionTeacher: false,
     showStudentSection: false,
+    showTestimonial: false,
   }),
   methods: {
     listAction(value) {
@@ -122,6 +127,9 @@ export default {
         case "studentSection":
           this.showStudentSection = true;
           break;
+        case "testimonial":
+          this.showTestimonial = true;
+          break;
         default:
           console.log(value);
       }
@@ -137,6 +145,7 @@ export default {
       this.showTeacher = false;
       this.showSectionTeacher = false;
       this.showStudentSection = false;
+      this.showTestimonial = false;
     },
   },
 };

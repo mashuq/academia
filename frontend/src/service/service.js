@@ -89,6 +89,14 @@ export const get = async (api_url) => {
   return response;
 };
 
+export const noauth_get = async (api_url) => {
+  let response = await fetch(`${process.env.VUE_APP_API_BASE_URL}${api_url}`, {
+    method: "GET",
+    mode: "cors",
+  });
+  return response;
+};
+
 export const del = async (api_url) => {
   let credentials = store.getters["global/getCredentials"];
   let response = await fetch(`${process.env.VUE_APP_API_BASE_URL}${api_url}`, {

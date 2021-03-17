@@ -1,9 +1,7 @@
 <template>
   <v-app>
     <v-app-bar dense app>
-      <v-app-bar-title style="width: 300px"
-        >নুরুল কুরআন একাডেমি</v-app-bar-title
-      >
+      <v-app-bar-title style="width: 300px">নূরুল কুরআন একাডেমি</v-app-bar-title>
       <v-spacer></v-spacer>
       <v-tabs>
         <v-tab to="/">হোম</v-tab>
@@ -25,7 +23,23 @@
     </v-main>
 
     <v-footer app>
-      <!-- -->
+      <v-col class="text-center" cols="12">
+        Copyright &copy; {{ new Date().getFullYear() }}
+        <strong>নূরুল কুরআন একাডেমি</strong>
+        <v-spacer></v-spacer>
+        <v-btn icon target="_blank" href="https://www.facebook.com/NLQURAN">
+          <v-icon size="24px">mdi-facebook</v-icon>
+        </v-btn>
+        <v-btn icon target="_blank" href="https://www.youtube.com/c/NurulQuran887">
+          <v-icon size="24px">mdi-youtube</v-icon>
+        </v-btn>
+        <v-btn icon href="mailto:nurulquran887@gmail.com">
+          <v-icon size="24px">mdi-email</v-icon>
+        </v-btn>
+         <v-btn icon href="tel:+8801700946569">
+          <v-icon size="24px">mdi-phone</v-icon>
+        </v-btn>
+      </v-col>
     </v-footer>
   </v-app>
 </template>
@@ -44,19 +58,18 @@ export default {
     //
   }),
   methods: {
-    logout: function () {
-      this.$store.dispatch("global/logout")
-
+    logout: function() {
+      this.$store.dispatch("global/logout");
     }
   },
   computed: {
-    showLogout: function () {
+    showLogout: function() {
       let credentials = this.$store.getters["global/getCredentials"];
       if (credentials) {
         return true;
       }
       return false;
-    },
-  },
+    }
+  }
 };
 </script>

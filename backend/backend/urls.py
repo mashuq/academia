@@ -72,6 +72,9 @@ urlpatterns = [
          views.save_enrolment),
     path('delete_enrolment/',
          views.delete_enrolment),
+    path('home_testimonials/',
+         views.home_testimonials), 
+
     
 
 ]

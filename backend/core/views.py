@@ -79,6 +79,7 @@ class TestimonialViewSet(viewsets.ModelViewSet):
     queryset = Testimonial.objects.all().order_by('serial')
     serializer_class = TestimonialSerializer
     permission_classes = [permissions.IsAdminUser]
+    pagination_class = StandardResultsSetPagination
 
 
 class CourseCategoryViewSet(viewsets.ModelViewSet):
@@ -532,3 +533,11 @@ def delete_enrolment(request):
     except Exception as e:
         print(e)
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def home_testimonials(request):
+    testimonials = Testimonial.objects.filter(visible=True).order_by('serial')
+    serialized_data = TestimonialSerializer(testimonials, many=True)
+    return Response(serialized_data.data)
