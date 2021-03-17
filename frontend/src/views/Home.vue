@@ -3,7 +3,7 @@
     <v-row>
       <v-col>
         <v-card>
-          <v-parallax src="https://nlquran.b-cdn.net/heroimage.jpg">
+          <v-parallax src="https://nlquran.b-cdn.net/hero2.jpg">
             <v-container fill-height fluid>
               <v-row align="center" justify="center">
                 <h2 class="quote">
@@ -16,6 +16,45 @@
         </v-card>
       </v-col>
     </v-row>
+
+     <v-row>
+      <v-col>
+        <h2 class="text-center" >একাডেমির বৈশিষ্ট্য</h2>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-list>
+          <v-list-item v-for="(characteristics, i) in characteristics1" :key="i" class="dark">
+            <v-list-item-avatar>
+              <v-icon>mdi-star</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-content>{{characteristics}}</v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-col>
+      <v-col>
+        <v-list>
+          <v-list-item v-for="(characteristics, i) in characteristics2" :key="i" class="dark">
+            <v-list-item-avatar>
+              <v-icon>mdi-star</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-content>{{characteristics}}</v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-col>
+      <v-col>
+        <v-list>
+          <v-list-item v-for="(characteristics, i) in characteristics3" :key="i" class="dark">
+            <v-list-item-avatar>
+              <v-icon>mdi-star</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-content>{{characteristics}}</v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-col>
+    </v-row>
+
     <v-row>
       <v-col cols="16" sm="6">
         <h2>একাডেমির উদ্দেশ্য</h2>
@@ -26,9 +65,7 @@
               <v-icon>mdi-book-open-variant</v-icon>
             </v-list-item-action>
 
-            <v-list-item-content>
-              <v-list-item-title>কুরআনের প্রতি মানুষদের আগ্রহী করে তোলা।</v-list-item-title>
-            </v-list-item-content>
+            <v-list-item-content>কুরআনের প্রতি মানুষদের আগ্রহী করে তোলা।</v-list-item-content>
           </v-list-item>
 
           <v-list-item>
@@ -36,9 +73,7 @@
               <v-icon>mdi-abjad-arabic</v-icon>
             </v-list-item-action>
 
-            <v-list-item-content>
-              <v-list-item-title>আরবীভাষার চর্চাকে ব্যাপক ও সহজতর করা।</v-list-item-title>
-            </v-list-item-content>
+            <v-list-item-content>আরবীভাষার চর্চাকে ব্যাপক ও সহজতর করা।</v-list-item-content>
           </v-list-item>
 
           <v-list-item>
@@ -46,9 +81,7 @@
               <v-icon>mdi-school</v-icon>
             </v-list-item-action>
 
-            <v-list-item-content>
-              <v-list-item-title>জেনারেল শিক্ষিত ভাই-বোনদের কাছে দ্বীনের প্রয়োজনীয় ইলম পৌঁছে দেওয়া।</v-list-item-title>
-            </v-list-item-content>
+            <v-list-item-content>জেনারেল শিক্ষিত ভাই-বোনদের কাছে দ্বীনের প্রয়োজনীয় ইলম পৌঁছে দেওয়া।</v-list-item-content>
           </v-list-item>
         </v-list>
       </v-col>
@@ -107,37 +140,8 @@
         </v-list>
       </v-col>
     </v-row>
+   
     <v-row class="dark">
-      <v-col>
-        <h2 class="text-center">একাডেমির বৈশিষ্ট্য</h2>
-      </v-col>
-    </v-row>
-    <v-row class="dark">
-      <v-col>
-        <v-timeline>
-          <v-timeline-item small>শিক্ষার্থীদের প্রতি সবিশেষ যত্ন প্রদান</v-timeline-item>
-          <v-timeline-item small class="text-right">প্রতিটি ক্লাস সাজানো-গোছানো</v-timeline-item>
-          <v-timeline-item small>প্রতিটি বিষয়ে সুন্দর শিট প্রদান</v-timeline-item>
-          <v-timeline-item small class="text-right">নিয়মিত পরীক্ষার ব্যবস্থা</v-timeline-item>
-          <v-timeline-item small>যোগ্য শিক্ষক-শিক্ষিকাদের তত্ত্বাবধান</v-timeline-item>
-          <v-timeline-item small class="text-right">পর্দা নিশ্চিত করতে নারী-পুরুষ আলাদা সেকশন</v-timeline-item>
-        </v-timeline>
-      </v-col>
-      <v-col>
-        <v-timeline>
-          <v-timeline-item small>নারীদের জন্য নারী শিক্ষিকা</v-timeline-item>
-          <v-timeline-item small class="text-right">আমল-আখলাক গঠনের প্রতিও গুরুত্বদান</v-timeline-item>
-          <v-timeline-item small>মাঝেমাঝে আত্মশুদ্ধিমূলক মজলিসের ব্যবস্থা</v-timeline-item>
-          <v-timeline-item small class="text-right">কোর্স শেষে সার্টিফিকেট প্রদান</v-timeline-item>
-          <v-timeline-item small>পেইড ও ফ্রি দুই ধরনের কোর্সের ব্যবস্থা</v-timeline-item>
-          <v-timeline-item
-            small
-            class="text-right"
-          >অর্থনৈতিকভাবে দুর্বলদের জন্য হাফ/ফুল স্কলারশিপের ব্যবস্থা</v-timeline-item>
-        </v-timeline>
-      </v-col>
-    </v-row>
-    <v-row>
       <v-col cols="12" sm="4" fill-height fluid>
         <v-img align="center" justify="center" src="https://nlquran.b-cdn.net/main_ustadh.jpg"></v-img>
       </v-col>
@@ -259,11 +263,11 @@
     <v-row>
       <v-col>
         <v-carousel class="dark" light cycle hide-delimiters height="400">
-          <v-carousel-item v-for="(testimonial, i) in testimonials" :key="i" >
+          <v-carousel-item v-for="(testimonial, i) in testimonials" :key="i">
             <v-sheet tile class="testimonial">
-                <blockquote>{{testimonial.testimonial}}</blockquote>
-                <h2>- {{testimonial.name}}</h2>
-                <div>{{testimonial.identity}}</div>
+              <blockquote>{{testimonial.testimonial}}</blockquote>
+              <h2>- {{testimonial.name}}</h2>
+              <div>{{testimonial.identity}}</div>
             </v-sheet>
           </v-carousel-item>
         </v-carousel>
@@ -285,52 +289,69 @@
   background-color: #f5f5f5;
 }
 
-.testimonial{
-    margin: 50px;
-    background-color: #f5f5f5;
-    padding:50px;
+.testimonial {
+  margin: 50px;
+  background-color: #f5f5f5;
+  padding: 50px;
 }
 
 blockquote {
-    font-family: Georgia, serif;
-    font-size: 20px;
-    font-style: italic;
-    margin: 0.25em 0;
-    padding: 0.35em 40px;
-    line-height: 1.45;
-    position: relative;
-    color: #383838;
+  font-family: Georgia, serif;
+  font-size: 20px;
+  font-style: italic;
+  margin: 0.25em 0;
+  padding: 0.35em 40px;
+  line-height: 1.45;
+  position: relative;
+  color: #383838;
 }
 
 blockquote:before {
-    display: block;
-    padding-left: 10px;
-    content: "\201C";
-    font-size: 80px;
-    position: absolute;
-    left: -20px;
-    top: -20px;
-    color: #7a7a7a;
+  display: block;
+  padding-left: 10px;
+  content: "\201C";
+  font-size: 80px;
+  position: absolute;
+  left: -20px;
+  top: -20px;
+  color: #7a7a7a;
 }
 
 blockquote cite {
-    color: #999999;
-    font-size: 14px;
-    display: block;
-    margin-top: 5px;
+  color: #999999;
+  font-size: 14px;
+  display: block;
+  margin-top: 5px;
 }
 
 blockquote cite:before {
-    content: "\2014 \2009";
+  content: "\2014 \2009";
 }
-
 </style>
 
 <script>
 import { noauth_get } from "@/service/service.js";
 export default {
   data: () => ({
-    testimonials: []
+    testimonials: [],
+    characteristics1: [
+      "শিক্ষার্থীদের প্রতি সবিশেষ যত্ন প্রদান",
+      "প্রতিটি ক্লাস সাজানো-গোছানো",
+      "প্রতিটি বিষয়ে সুন্দর শিট প্রদান",
+      "নিয়মিত পরীক্ষার ব্যবস্থা"
+    ],
+    characteristics2: [
+      "যোগ্য শিক্ষক-শিক্ষিকাদের তত্ত্বাবধান",
+      "পর্দা নিশ্চিত করতে নারী-পুরুষ আলাদা সেকশন",
+      "নারীদের জন্য নারী শিক্ষিকা",
+      "আমল-আখলাক গঠনের প্রতিও গুরুত্বদান"
+    ],
+    characteristics3: [
+      "মাঝেমাঝে আত্মশুদ্ধিমূলক মজলিসের ব্যবস্থা",
+      "কোর্স শেষে সার্টিফিকেট প্রদান",
+      "পেইড ও ফ্রি দুই ধরনের কোর্সের ব্যবস্থা",
+      "অর্থনৈতিকভাবে দুর্বলদের জন্য হাফ/ফুল স্কলারশিপের ব্যবস্থা"
+    ]
   }),
   created() {
     this.initialize();
