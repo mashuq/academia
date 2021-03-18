@@ -17,9 +17,9 @@
       </v-col>
     </v-row>
 
-     <v-row>
+    <v-row>
       <v-col>
-        <h2 class="text-center" >একাডেমির বৈশিষ্ট্য</h2>
+        <h2 class="text-center">একাডেমির বৈশিষ্ট্য</h2>
       </v-col>
     </v-row>
     <v-row>
@@ -140,7 +140,7 @@
         </v-list>
       </v-col>
     </v-row>
-   
+
     <v-row class="dark">
       <v-col cols="12" sm="4" fill-height fluid>
         <v-img align="center" justify="center" src="https://nlquran.b-cdn.net/main_ustadh.jpg"></v-img>
@@ -160,101 +160,37 @@
     </v-row>
     <v-row>
       <v-col>
-        <v-card class="mx-auto" outlined>
+        <v-card class="mx-auto" outlined v-for="(teacher, i) in teachers1" :key="i">
           <v-list-item three-line>
             <v-list-item-content>
-              <div class="overline mb-4">সহকারী শিক্ষক</div>
-              <v-list-item-title class="headline">হাফেজ মাওলানা মুফতি হাফিজুর রহমান</v-list-item-title>
-              <v-list-item-subtitle>পড়াশোনা : দাওরা হাদীস ও উচ্চতর ইসলামী আইন ও গবেষণা বিভাগ (ইফতা) জামিয়া ইসলামিয়া দারুল উলুম মাদানিয়া, যাত্রাবাড়ি ঢাকা।</v-list-item-subtitle>
+              <div class="overline mb-4">{{teacher.title}}</div>
+              <div class="headline">{{teacher.name}}</div>
+              <sub>{{teacher.education}}</sub>
             </v-list-item-content>
             <v-list-item-avatar tile size="80" color="grey">
-              <img src="https://nlquran.b-cdn.net/male_teacher.jpg" alt="John" />
-            </v-list-item-avatar>
-          </v-list-item>
-        </v-card>
-        <v-card class="mx-auto" outlined>
-          <v-list-item three-line>
-            <v-list-item-content>
-              <div class="overline mb-4">সহকারী শিক্ষক</div>
-              <v-list-item-title class="headline">মাওলানা শরীফুল ইসলাম</v-list-item-title>
-              <v-list-item-subtitle>পড়াশোনা : দাওরা হাদীস ও উচ্চতর হাদীস বিভাগ (তাখাসসুস ফি উলুমিল হাদীস) জামিয়া ইসলামিয়া দারুল উলুম মাদানিয়া, যাত্রাবাড়ি ঢাকা।</v-list-item-subtitle>
-            </v-list-item-content>
-            <v-list-item-avatar tile size="80" color="grey">
-              <img src="https://nlquran.b-cdn.net/male_teacher.jpg" alt="John" />
-            </v-list-item-avatar>
-          </v-list-item>
-        </v-card>
-        <v-card class="mx-auto" outlined>
-          <v-list-item three-line>
-            <v-list-item-content>
-              <div class="overline mb-4">সহকারী শিক্ষিকা</div>
-              <v-list-item-title class="headline">হাফেজা আলেমা তাওহীদা মাহমুদ</v-list-item-title>
-              <v-list-item-subtitle>পড়াশোনা : দাওরা হাদীস, রামপুরা জাতীয় মহিলা মাদরাসা</v-list-item-subtitle>
-            </v-list-item-content>
-            <v-list-item-avatar tile size="80" color="grey">
-              <img src="https://nlquran.b-cdn.net/female_teacher.jpg" alt="John" />
-            </v-list-item-avatar>
-          </v-list-item>
-        </v-card>
-        <v-card class="mx-auto" outlined>
-          <v-list-item three-line>
-            <v-list-item-content>
-              <div class="overline mb-4">সহকারী শিক্ষিকা</div>
-              <v-list-item-title class="headline">হাফেজা জান্নাতুল ফিরদাউস</v-list-item-title>
-              <v-list-item-subtitle>পড়াশোনা : হিফজ, মিফতাহুল জান্নাত হিফজুল কুরআন মাদরাসা, গাইবান্ধা। HSC, গাইবান্ধা মহিলা কলেজ, গাইবান্ধা।</v-list-item-subtitle>
-            </v-list-item-content>
-            <v-list-item-avatar tile size="80" color="grey">
-              <img src="https://nlquran.b-cdn.net/female_teacher.jpg" alt="John" />
+              <img src="https://nlquran.b-cdn.net/male_teacher.jpg" v-if="teacher.gender == 'male'" />
+              <img
+                src="https://nlquran.b-cdn.net/female_teacher.jpg"
+                v-if="teacher.gender == 'female'"
+              />
             </v-list-item-avatar>
           </v-list-item>
         </v-card>
       </v-col>
       <v-col>
-        <v-card class="mx-auto" outlined>
+        <v-card class="mx-auto" outlined v-for="(teacher, i) in teachers2" :key="i">
           <v-list-item three-line>
             <v-list-item-content>
-              <div class="overline mb-4">সহকারী শিক্ষক</div>
-              <v-list-item-title class="headline">হাফেজ মাওলানা মুফতি ইকবাল হুসাইন</v-list-item-title>
-              <v-list-item-subtitle>পড়াশোনা : দাওরা হাদীস ও উচ্চতর ইসলামী আইন ও গবেষণা বিভাগ (ইফতা) জামিয়া ইসলামিয়া দারুল উলুম মাদানিয়া, যাত্রাবাড়ি ঢাকা।</v-list-item-subtitle>
+              <div class="overline mb-4">{{teacher.title}}</div>
+              <div class="headline">{{teacher.name}}</div>
+              <sub>{{teacher.education}}</sub>
             </v-list-item-content>
             <v-list-item-avatar tile size="80" color="grey">
-              <img src="https://nlquran.b-cdn.net/male_teacher.jpg" alt="John" />
-            </v-list-item-avatar>
-          </v-list-item>
-        </v-card>
-        <v-card class="mx-auto" outlined>
-          <v-list-item three-line>
-            <v-list-item-content>
-              <div class="overline mb-4">সহকারী শিক্ষিকা</div>
-              <v-list-item-title class="headline">আলেমা আসমা ইসরাত</v-list-item-title>
-              <v-list-item-subtitle>পড়াশোনা : দাওরা হাদীস, ১৫ পারা হিফজ মাদরাসা খাদিজা বিনতে খুয়াইলিদ (রা.), মানিকগঞ্জ।</v-list-item-subtitle>
-            </v-list-item-content>
-            <v-list-item-avatar tile size="80" color="grey">
-              <img src="https://nlquran.b-cdn.net/female_teacher.jpg" alt="John" />
-            </v-list-item-avatar>
-          </v-list-item>
-        </v-card>
-        <v-card class="mx-auto" outlined>
-          <v-list-item three-line>
-            <v-list-item-content>
-              <div class="overline mb-4">সহকারী শিক্ষিকা</div>
-              <v-list-item-title class="headline">যাইনাব জামীলা</v-list-item-title>
-              <v-list-item-subtitle>ডিপ্লোমা, আর্কিটেকচার টেকনোলোজি, ঢাকা পলিটেকনিক ইন্সটিটিউট। এরাবিক ল্যাঙ্গুয়েজ, আসলাফ এরাবিক একাডেমি ও উলুমুল কুরআন একাডেমি।</v-list-item-subtitle>
-            </v-list-item-content>
-            <v-list-item-avatar tile size="80" color="grey">
-              <img src="https://nlquran.b-cdn.net/female_teacher.jpg" alt="John" />
-            </v-list-item-avatar>
-          </v-list-item>
-        </v-card>
-        <v-card class="mx-auto" outlined>
-          <v-list-item three-line>
-            <v-list-item-content>
-              <div class="overline mb-4">সহকারী শিক্ষিকা</div>
-              <v-list-item-title class="headline">হাফেজা উম্মে মুমতাহিনা</v-list-item-title>
-              <v-list-item-subtitle>হিফজ, সাওদা বিনতে জামআ মহিলা মাদরাসা, নারিন্দা, ঢাকা। কিতাব বিভাগ, জামিয়া ইসলামিয়া মহিলা মাদরাসা, কামরাঙ্গিরচর, ঢাকা।</v-list-item-subtitle>
-            </v-list-item-content>
-            <v-list-item-avatar tile size="80" color="grey">
-              <img src="https://nlquran.b-cdn.net/female_teacher.jpg" alt="John" />
+              <img src="https://nlquran.b-cdn.net/male_teacher.jpg" v-if="teacher.gender == 'male'" />
+              <img
+                src="https://nlquran.b-cdn.net/female_teacher.jpg"
+                v-if="teacher.gender == 'female'"
+              />
             </v-list-item-avatar>
           </v-list-item>
         </v-card>
@@ -262,19 +198,29 @@
     </v-row>
     <v-row>
       <v-col>
-        <v-carousel class="dark" light cycle hide-delimiters height="400">
-          <v-carousel-item v-for="(testimonial, i) in testimonials" :key="i">
-            <v-sheet tile class="testimonial">
-              <blockquote>{{testimonial.testimonial}}</blockquote>
-              <h2>- {{testimonial.name}}</h2>
-              <div>{{testimonial.identity}}</div>
-            </v-sheet>
-          </v-carousel-item>
-        </v-carousel>
+        <vueper-slides
+          autoplay
+         :bullets="false"
+          :visible-slides="1"
+          slide-multiple
+          :slide-ratio="1 / 4"
+          fixed-height="420px"
+          :arrows-outside="true"
+          >
+          <vueper-slide
+            v-for="(slide, i) in testimonials"
+            :key="i"
+            :title="'<b>' + slide.name + '</b><br /><b>' + slide.identity +'</b>'"
+            :content=" '<br/><i>' + slide.testimonial + '</i>' "
+          />
+        </vueper-slides>
       </v-col>
     </v-row>
   </v-container>
 </template>
+
+         
+
 
 <style scoped>
 .quote {
@@ -331,7 +277,10 @@ blockquote cite:before {
 
 <script>
 import { noauth_get } from "@/service/service.js";
+import { VueperSlides, VueperSlide } from "vueperslides";
+import "vueperslides/dist/vueperslides.css";
 export default {
+  components: { VueperSlides, VueperSlide },
   data: () => ({
     testimonials: [],
     characteristics1: [
@@ -351,8 +300,68 @@ export default {
       "কোর্স শেষে সার্টিফিকেট প্রদান",
       "পেইড ও ফ্রি দুই ধরনের কোর্সের ব্যবস্থা",
       "অর্থনৈতিকভাবে দুর্বলদের জন্য হাফ/ফুল স্কলারশিপের ব্যবস্থা"
+    ],
+    teachers1: [
+      {
+        name: "হাফেজ মাওলানা মুফতি হাফিজুর রহমান",
+        education:
+          "পড়াশোনা : দাওরা হাদীস ও উচ্চতর ইসলামী আইন ও গবেষণা বিভাগ (ইফতা) জামিয়া ইসলামিয়া দারুল উলুম মাদানিয়া, যাত্রাবাড়ি ঢাকা।",
+        gender: "male",
+        title: "সহকারী শিক্ষক"
+      },
+      {
+        name: "মাওলানা শরীফুল ইসলাম",
+        education:
+          "পড়াশোনা : দাওরা হাদীস ও উচ্চতর হাদীস বিভাগ (তাখাসসুস ফি উলুমিল হাদীস) জামিয়া ইসলামিয়া দারুল উলুম মাদানিয়া, যাত্রাবাড়ি ঢাকা।",
+        gender: "male",
+        title: "সহকারী শিক্ষক"
+      },
+      {
+        name: "হাফেজ মাওলানা মুফতি ইকবাল হুসাইন",
+        education:
+          "পড়াশোনা : দাওরা হাদীস ও উচ্চতর ইসলামী আইন ও গবেষণা বিভাগ (ইফতা) জামিয়া ইসলামিয়া দারুল উলুম মাদানিয়া, যাত্রাবাড়ি ঢাকা।",
+        gender: "male",
+        title: "সহকারী শিক্ষক"
+      },
+      {
+        name: "আলেমা আসমা ইসরাত",
+        education:
+          "পড়াশোনা : দাওরা হাদীস, ১৫ পারা হিফজ মাদরাসা খাদিজা বিনতে খুয়াইলিদ (রা.), মানিকগঞ্জ।",
+        gender: "female",
+        title: "সহকারী শিক্ষিকা"
+      }
+    ],
+    teachers2: [
+      {
+        name: "যাইনাব জামীলা",
+        education:
+          "ডিপ্লোমা, আর্কিটেকচার টেকনোলোজি, ঢাকা পলিটেকনিক ইন্সটিটিউট। এরাবিক ল্যাঙ্গুয়েজ, আসলাফ এরাবিক একাডেমি ও উলুমুল কুরআন একাডেমি।",
+        gender: "female",
+        title: "সহকারী শিক্ষিকা"
+      },
+      {
+        name: "হাফেজা আলেমা তাওহীদা মাহমুদ",
+        education: "পড়াশোনা : দাওরা হাদীস, রামপুরা জাতীয় মহিলা মাদরাসা",
+        gender: "female",
+        title: "সহকারী শিক্ষিকা"
+      },
+      {
+        name: "হাফেজা জান্নাতুল ফিরদাউস",
+        education:
+          "পড়াশোনা : হিফজ, মিফতাহুল জান্নাত হিফজুল কুরআন মাদরাসা, গাইবান্ধা। HSC, গাইবান্ধা মহিলা কলেজ, গাইবান্ধা।",
+        gender: "female",
+        title: "সহকারী শিক্ষিকা"
+      },
+      {
+        name: "হাফেজা উম্মে মুমতাহিনা",
+        education:
+          "হিফজ, সাওদা বিনতে জামআ মহিলা মাদরাসা, নারিন্দা, ঢাকা। কিতাব বিভাগ, জামিয়া ইসলামিয়া মহিলা মাদরাসা, কামরাঙ্গিরচর, ঢাকা।",
+        gender: "female",
+        title: "সহকারী শিক্ষিকা"
+      }
     ]
   }),
+
   created() {
     this.initialize();
   },
