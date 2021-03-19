@@ -54,7 +54,7 @@ class SectionListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Section
-        fields = ['id', 'name', 'course']
+        fields = ['id', 'name', 'course', 'course_id']
 
 
 class SectionRetrieveSerializer(serializers.ModelSerializer):
@@ -160,6 +160,12 @@ class TeacherListSerializer(serializers.ModelSerializer):
         model = Teacher
         fields = ['id', 'name']
 
+class StudentListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Student
+        fields = ['id', 'name']
+
 
 class SectionTeacherSerializer(serializers.ModelSerializer):
 
@@ -175,6 +181,14 @@ class SectionTeacherListSerializer(serializers.ModelSerializer):
     class Meta:
         model = SectionTeacher
         fields = ['id', 'section', 'teacher']
+
+class EnrolmentListSerializer(serializers.ModelSerializer):
+    section = SectionListSerializer()
+    student = StudentListSerializer()
+
+    class Meta:
+        model = Enrolment
+        fields = ['id', 'section', 'student']
 
 
 class AssessmentSerializer(serializers.ModelSerializer):

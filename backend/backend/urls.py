@@ -74,8 +74,17 @@ urlpatterns = [
          views.delete_enrolment),
     path('home_testimonials/',
          views.home_testimonials), 
+    path('list_sections_for_student/',
+         views.list_sections_for_student), 
+    path('sessions_by_course_student/',
+         views.sessions_by_course_student), 
+    path('audio_lessons_by_session_student/',
+         views.audio_lessons_by_session_student), 
+    path('video_lessons_by_session_student/',
+         views.video_lessons_by_session_student), 
+    path('note_lessons_by_session_student/',
+         views.note_lessons_by_session_student),
 
-    
 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

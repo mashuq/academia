@@ -144,7 +144,7 @@ class LessonViewSet(viewsets.ModelViewSet):
 
 
 @api_view(['POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.IsAdminUser])
 def list_sessions_by_course(request):
     sessions = Session.objects.filter(
         course=request.data['course']).order_by('serial')
@@ -541,3 +541,80 @@ def home_testimonials(request):
     testimonials = Testimonial.objects.filter(visible=True).order_by('serial')
     serialized_data = TestimonialSerializer(testimonials, many=True)
     return Response(serialized_data.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def list_sections_for_student(request):
+    enrolments = Enrolment.objects.select_related(
+        "student", 'student__user').filter(student__user=request.user)
+
+    serialized_data = EnrolmentListSerializer(enrolments, many=True)
+    return Response(serialized_data.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def list_sessions_by_course(request):
+    sessions = Session.objects.filter(
+        course=request.data['course']).order_by('serial')
+    serialized_data = SessionSerializer(sessions, many=True)
+    return Response(serialized_data.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def sessions_by_course_student(request):
+    sections = Section.objects.all().filter(course=request.data['course'])
+    enrolment_list = Enrolment.objects.select_related(
+            "student", 'student__user').filter(student__user=request.user, section__in=sections)
+    if enrolment_list.count() <= 0:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    sessions = Session.objects.filter(
+        course=request.data['course']).order_by('serial')
+    serialized_data = SessionSerializer(sessions, many=True)
+    return Response(serialized_data.data)
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def audio_lessons_by_session_student(request):
+    if not is_session_allowed_student(request.data['session'], request.user):
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    lessons = AudioLesson.objects.filter(
+        session=request.data['session'])
+    serialized_data = AudioLessonSerializer(lessons, many=True)
+    return Response(serialized_data.data)
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def video_lessons_by_session_student(request):
+    if not is_session_allowed_student(request.data['session'], request.user):
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    lessons = VideoLesson.objects.filter(
+        session=request.data['session'])
+    serialized_data = VideoLessonSerializer(lessons, many=True)
+    return Response(serialized_data.data)
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def note_lessons_by_session_student(request):
+    if not is_session_allowed_student(request.data['session'], request.user):
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    lessons = NoteLesson.objects.filter(
+        session=request.data['session'])
+    serialized_data = NoteLessonSerializer(lessons, many=True)
+    return Response(serialized_data.data)
+
+def is_session_allowed_student(session, user):
+    session = Session.objects.get(pk=session)
+    sections = Section.objects.all().filter(course=session.course)
+    enrolment_list = Enrolment.objects.select_related(
+        "student", 'student__user').filter(student__user=user, section__in=sections)
+    if enrolment_list.count() > 0:
+        return True
+    else:
+        return False
