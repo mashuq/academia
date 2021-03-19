@@ -33,6 +33,7 @@ import Lessons from "@/components/student/Lessons.vue";
 
 export default {
   props: {
+    section: { type: Number, required: true },
     course: { type: Number, required: true },
     courseName: { type: String, required: true },
     sectionName: { type: String, required: true },
@@ -44,6 +45,7 @@ export default {
     async initSessions() {
       let response = await post("/sessions_by_course_student/", {
         course: this.course,
+        section: this.section
       });
       if (response.ok) {
         let data = await response.json();

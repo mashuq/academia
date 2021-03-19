@@ -33,6 +33,7 @@
     </v-col>
     <v-col :cols="10">
       <Course 
+      v-bind:section="section" 
       v-bind:course="course" 
       v-bind:sectionName="sectionName"
       v-bind:courseName="courseName"
@@ -51,6 +52,7 @@ export default {
   },
   data: () => ({
     courses: [],
+    section: null,
     course: null,
     courseName: null,
     sectionName: null,
@@ -58,6 +60,7 @@ export default {
   }),
   methods: {
     courseAction(value) {
+      this.section = value.sectionId;
       this.course = value.courseId;
       this.courseName = value.courseName;
       this.sectionName = value.sectionName;
@@ -73,6 +76,7 @@ export default {
         this.courses = [];
         data.forEach(element => {
           this.courses.push({
+            sectionId: element["section"]["id"],
             courseId: element["section"]["course_id"],
             courseName: element["section"]["course"],
             sectionName: element["section"]["name"],

@@ -66,9 +66,9 @@ Secret key: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
 
 gunicorn -b 0.0.0.0:8000 backend.wsgi > log.txt 2>&1 &
 
-gunicorn --workers 8 --threads 8 -b 0.0.0.0:8000 backend.wsgi > log.txt 2>&1 &
+sudo gunicorn --workers 8 --threads 8 -b 0.0.0.0:443 backend.wsgi > log.txt 2>&1 &
 
-
+sudo gunicorn backend.wsgi > log.txt 2>&1 &
 
 
 curl -fsSL https://deb.nodesource.com/setup_15.x | sudo -E bash -

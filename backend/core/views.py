@@ -571,8 +571,13 @@ def sessions_by_course_student(request):
     if enrolment_list.count() <= 0:
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
+    session_sections = SessionSection.objects.filter(section=request.data['section'], visible=True)
+    sessions = []
+    for session_section in session_sections:
+        sessions.append(session_section.session.id)
+
     sessions = Session.objects.filter(
-        course=request.data['course']).order_by('serial')
+        course=request.data['course'], id__in=sessions).order_by('serial')
     serialized_data = SessionSerializer(sessions, many=True)
     return Response(serialized_data.data)
 
