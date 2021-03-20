@@ -1,9 +1,30 @@
 <template>
-  <span>
+  <span v-if="isMobile()">
+    <v-expansion-panels focusable popout v-model="panel">
+      <draggable v-model="sessions" tag="span" style="width:100%">
+        <v-expansion-panel v-for="session in sessions" :key="session.id">
+          <v-expansion-panel-header>
+            {{
+            session.name
+            }}
+          </v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <Lessons v-bind:sessionId="session.id" />
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </draggable>
+    </v-expansion-panels>
+  </span>
+  <span v-else>
     <v-row>
       <v-col>
         <v-toolbar dense>
-          <v-toolbar-title><b>{{courseName}}, <i>{{sectionName}}</i></b></v-toolbar-title>
+          <v-toolbar-title>
+            <b>
+              {{courseName}},
+              <i>{{sectionName}}</i>
+            </b>
+          </v-toolbar-title>
           <v-spacer></v-spacer>
         </v-toolbar>
       </v-col>
@@ -13,16 +34,19 @@
         <v-expansion-panels focusable popout v-model="panel">
           <draggable v-model="sessions" tag="span" style="width:100%">
             <v-expansion-panel v-for="session in sessions" :key="session.id">
-              <v-expansion-panel-header>{{
+              <v-expansion-panel-header>
+                {{
                 session.name
-              }}</v-expansion-panel-header>
+                }}
+              </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <Lessons v-bind:sessionId="session.id" />
               </v-expansion-panel-content>
             </v-expansion-panel>
           </draggable>
-        </v-expansion-panels> </v-col
-    ></v-row>
+        </v-expansion-panels>
+      </v-col>
+    </v-row>
   </span>
 </template>
 
@@ -36,12 +60,21 @@ export default {
     section: { type: Number, required: true },
     course: { type: Number, required: true },
     courseName: { type: String, required: true },
-    sectionName: { type: String, required: true },
+    sectionName: { type: String, required: true }
   },
-  computed: {
-    
-  },
+  computed: {},
   methods: {
+    isMobile() {
+      if (
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     async initSessions() {
       let response = await post("/sessions_by_course_student/", {
         course: this.course,
@@ -51,23 +84,21 @@ export default {
         let data = await response.json();
         this.sessions = data;
       }
-    },
+    }
   },
   components: {
     draggable,
-    Lessons,
+    Lessons
   },
   data: () => ({
     sessionId: 0,
     sessionName: null,
     sessions: [],
-    panel: [],
+    panel: []
   }),
   created() {
     this.initSessions();
   },
-  watch: {
-    
-  },
+  watch: {}
 };
 </script>

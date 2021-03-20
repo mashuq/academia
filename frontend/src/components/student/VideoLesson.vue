@@ -1,5 +1,15 @@
 <template>
-  <v-card class="mx-auto">
+  <span v-if="isMobile()">
+    <p class="display-1 text--primary">
+        {{ videoLesson.name }}
+      </p>
+      <youtube
+        player-width="360"
+        player-height="202"
+        :video-id="youtubeUrl"
+      ></youtube>
+  </span>
+  <v-card class="mx-auto" v-else>
     <v-card-text>
       <div>{{ videoLesson.video_type }}</div>
       <p class="display-1 text--primary">
@@ -28,6 +38,17 @@ export default {
   },
   created() {},
   methods: {
+    isMobile() {
+      if (
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
 };
 </script>
