@@ -1,18 +1,16 @@
 <template>
   <span v-if="isMobile()">
     <v-expansion-panels focusable popout v-model="panel">
-      <draggable v-model="sessions" tag="span" style="width:100%">
-        <v-expansion-panel v-for="session in sessions" :key="session.id">
-          <v-expansion-panel-header>
-            {{
-            session.name
-            }}
-          </v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <Lessons v-bind:sessionId="session.id" />
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </draggable>
+      <v-expansion-panel v-for="session in sessions" :key="session.id">
+        <v-expansion-panel-header>
+          {{
+          session.name
+          }}
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <Lessons v-bind:sessionId="session.id" />
+        </v-expansion-panel-content>
+      </v-expansion-panel>
     </v-expansion-panels>
   </span>
   <span v-else>
@@ -32,18 +30,16 @@
     <v-row>
       <v-col>
         <v-expansion-panels focusable popout v-model="panel">
-          <draggable v-model="sessions" tag="span" style="width:100%">
-            <v-expansion-panel v-for="session in sessions" :key="session.id">
-              <v-expansion-panel-header>
-                {{
-                session.name
-                }}
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <Lessons v-bind:sessionId="session.id" />
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </draggable>
+          <v-expansion-panel v-for="session in sessions" :key="session.id">
+            <v-expansion-panel-header>
+              {{
+              session.name
+              }}
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <Lessons v-bind:sessionId="session.id" />
+            </v-expansion-panel-content>
+          </v-expansion-panel>
         </v-expansion-panels>
       </v-col>
     </v-row>
@@ -51,7 +47,6 @@
 </template>
 
 <script>
-import draggable from "vuedraggable";
 import { post } from "@/service/service.js";
 import Lessons from "@/components/student/Lessons.vue";
 
@@ -87,7 +82,6 @@ export default {
     }
   },
   components: {
-    draggable,
     Lessons
   },
   data: () => ({

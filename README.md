@@ -38,7 +38,7 @@
 `$ sudo yum install python3-devel mysql-devel python3-pip`
 
 ## Pip Installs
-`$ pip3 install mysqlclient django djangorestframework markdown django-filter djangorestframework_simplejwt django-cors-headers factory_boy django-polymorphic django-rest-polymorphic django-environ gunicorn Pillow Faker`
+`$ pip3 install mysqlclient django djangorestframework markdown django-filter djangorestframework_simplejwt django-cors-headers factory_boy django-polymorphic django-rest-polymorphic django-environ gunicorn Pillow Faker requests gunicorn psycopg2-binary`
 
 ## Migration
 `$ python3 manage.py makemigrations core`
@@ -77,3 +77,16 @@ sudo apt-get install -y nodejs
 
 sudo npm install -g serve
 sudo serve -s dist -l 80 > log.txt 2>&1 &
+
+
+
+`> CREATE USER 'nlquran'@'167.99.68.235' IDENTIFIED WITH mysql_native_password BY 'root';`
+
+`> GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT on academia.* TO 'nlquran'@'167.99.68.235';`
+
+`> FLUSH PRIVILEGES;`
+
+`> exit;`
+
+
+./manage.py collectstatic
