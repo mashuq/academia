@@ -370,7 +370,7 @@ export default {
       if (response.ok) {
         this.initMcq();
         this.hideMcqDialog();
-        this.msq = {
+        this.mcq = {
           mark: 1,
           question: null,
           choice1: null,
