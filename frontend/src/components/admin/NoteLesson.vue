@@ -4,6 +4,7 @@
       <p class="display-1 text--primary">
         {{ noteLesson.name }}
       </p>
+      <p v-html="noteLesson.description"></p>
       <h4><a target="_blank" rel="noopener noreferrer" :href="src">View / Download Note</a></h4>
       <pdf v-if="showPreview" :src="src" style="display: inline-block; width: 360px;"></pdf>
       

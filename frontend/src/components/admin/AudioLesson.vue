@@ -5,6 +5,7 @@
       <p class="display-1 text--primary">
         {{ audioLesson.name }}
       </p>
+      <p v-html="audioLesson.description"></p>
       <span v-html="this.audioLesson.embed"></span>
     </v-card-text>
     <v-card-actions>

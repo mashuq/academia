@@ -5,6 +5,7 @@
       <p class="display-1 text--primary">
         {{ videoLesson.name }}
       </p>
+      <p v-html="videoLesson.description"></p>
       <youtube
         player-width="360"
         player-height="202"
