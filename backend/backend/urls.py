@@ -38,12 +38,15 @@ router.register(r'students', views.StudentViewSet)
 router.register(r'teachers', views.TeacherViewSet)
 router.register(r'section_teachers', views.SectionTeacherViewSet)
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('api/token/', views.CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/', views.CustomTokenObtainPairView.as_view(),
+         name='token_obtain_pair'),
+    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(),
+         name='token_refresh'),
     path('sessions_by_course/', views.list_sessions_by_course),
     path('sections_by_course/', views.list_sections_by_course),
     path('audio_lessons_by_session/', views.list_audio_lessons_by_session),
@@ -73,17 +76,19 @@ urlpatterns = [
     path('delete_enrolment/',
          views.delete_enrolment),
     path('home_testimonials/',
-         views.home_testimonials), 
+         views.home_testimonials),
     path('list_sections_for_student/',
-         views.list_sections_for_student), 
+         views.list_sections_for_student),
     path('sessions_by_course_student/',
-         views.sessions_by_course_student), 
+         views.sessions_by_course_student),
     path('audio_lessons_by_session_student/',
-         views.audio_lessons_by_session_student), 
+         views.audio_lessons_by_session_student),
     path('video_lessons_by_session_student/',
-         views.video_lessons_by_session_student), 
+         views.video_lessons_by_session_student),
     path('note_lessons_by_session_student/',
          views.note_lessons_by_session_student),
+    path('search_student/',
+         views.search_student),
 
 
 ]

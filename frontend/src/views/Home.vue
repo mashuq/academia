@@ -1,6 +1,12 @@
 <template>
   <v-container>
-    <v-row>
+    <v-row v-if="isMobile()">
+      <blockquote>
+        কুরআন বোঝার প্রতি মানুষকে উদ্বুদ্ধ করা ও কুরআন কেন্দ্রিক বিভিন্ন ধরনের জ্ঞান সমাজের বুকে ও ভার্চুয়াল জগতে ছড়িয়ে দেওয়ার মানসে প্রতিষ্ঠিত হয়েছে
+        <b>‘নূরুল কুরআন’</b>। নানাবিধ কর্মসূচির পাশাপাশি এর রয়েছে একাডেমিক কার্যক্রম। যেখানে আরবীভাষা ও সাহিত্যসহ কুরআন-হাদীস-ফিকহ-আকীদা ইত্যাদী শরীয়তের বিভিন্ন বিষয়ে রয়েছে পেইড ও ফ্রি কোর্সসমূহ।
+      </blockquote>
+    </v-row>
+    <v-row v-else>
       <v-col>
         <v-card>
           <v-parallax src="https://nlquran.b-cdn.net/hero2.jpg">
@@ -16,6 +22,7 @@
         </v-card>
       </v-col>
     </v-row>
+
 
     <v-row>
       <v-col>
@@ -200,13 +207,13 @@
       <v-col>
         <vueper-slides
           autoplay
-         :bullets="false"
+          :bullets="false"
           :visible-slides="1"
           slide-multiple
           :slide-ratio="1 / 4"
           fixed-height="420px"
           :arrows-outside="true"
-          >
+        >
           <vueper-slide
             v-for="(slide, i) in testimonials"
             :key="i"
@@ -371,6 +378,17 @@ export default {
       if (response.ok) {
         let data = await response.json();
         this.testimonials = data;
+      }
+    },
+    isMobile() {
+      if (
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
+      ) {
+        return true;
+      } else {
+        return false;
       }
     }
   }

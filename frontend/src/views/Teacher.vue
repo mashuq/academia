@@ -1,6 +1,11 @@
 <template>
   <span>
-    <template v-if="showLogin">
+    <template v-if="showLogin && isMobile()">
+      <v-row no-gutters>
+        <v-col><Login /></v-col>
+      </v-row>
+    </template>
+    <template v-if="showLogin && !isMobile()">
       <v-row no-gutters>
         <v-col></v-col>
         <v-col><Login /></v-col>
@@ -37,6 +42,19 @@ export default {
       greeting: "Hello",
     };
   },
+  methods: {
+    isMobile() {
+      if (
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+  },
   computed: {
     showLogin: function () {
       let credentials = this.$store.getters["global/getCredentials"];
@@ -59,6 +77,7 @@ export default {
       }
       return false;
     },
+    
   },
 };
 </script>

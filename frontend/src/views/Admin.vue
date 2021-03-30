@@ -1,9 +1,18 @@
 <template>
   <span>
-    <template v-if="showLogin">
+    <template v-if="showLogin && isMobile()">
+      <v-row no-gutters>
+        <v-col>
+          <Login />
+        </v-col>
+      </v-row>
+    </template>
+    <template v-if="showLogin && !isMobile()">
       <v-row no-gutters>
         <v-col></v-col>
-        <v-col><Login /></v-col>
+        <v-col>
+          <Login />
+        </v-col>
         <v-col></v-col>
       </v-row>
     </template>
@@ -13,7 +22,9 @@
     <template v-if="showNonAdmin">
       <v-row no-gutters>
         <v-col></v-col>
-        <v-col><NonAdmin /></v-col>
+        <v-col>
+          <NonAdmin />
+        </v-col>
         <v-col></v-col>
       </v-row>
     </template>
@@ -30,36 +41,49 @@ export default {
   components: {
     Login,
     NonAdmin,
-    Admin,
+    Admin
   },
   data() {
     return {
-      greeting: "Hello",
+      greeting: "Hello"
     };
   },
+  methods: {
+    isMobile() {
+      if (
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  },
   computed: {
-    showLogin: function () {
+    showLogin: function() {
       let credentials = this.$store.getters["global/getCredentials"];
       if (credentials) {
         return false;
       }
       return true;
     },
-    showAdmin: function () {
+    showAdmin: function() {
       let credentials = this.$store.getters["global/getCredentials"];
       if (credentials && _.includes(credentials.roles, "admin")) {
         return true;
       }
       return false;
     },
-    showNonAdmin: function () {
+    showNonAdmin: function() {
       let credentials = this.$store.getters["global/getCredentials"];
       if (credentials && !_.includes(credentials.roles, "admin")) {
         return true;
       }
       return false;
-    },
-  },
+    }
+  }
 };
 </script>
 

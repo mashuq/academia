@@ -18,6 +18,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAdminUser, SAFE_METHODS, IsAuthenticated
 import environ
 import requests
+from rest_framework import generics
 
 env = environ.Env(
     DEBUG=(bool, False)
@@ -623,3 +624,11 @@ def is_session_allowed_student(session, user):
         return True
     else:
         return False
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAdminUser])
+def search_student(request):
+    students = Student.objects.select_related('user').filter(user__email=request.data['email'])
+    serialized_data = StudentSerializer(students, many=True)
+    return Response(serialized_data.data)

@@ -78,7 +78,7 @@ class SessionSectionSerializer(serializers.ModelSerializer):
 class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
-        fields = ['id', 'name', 'session']
+        fields = ['id', 'name', 'description', 'session']
 
 
 class AudioLessonSerializer(serializers.ModelSerializer):

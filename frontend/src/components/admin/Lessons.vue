@@ -3,25 +3,15 @@
     <v-container>
       <v-btn @click="showVideoDialog" color="red" class="ma-2 white--text">
         New Video Lesson
-        <v-icon right dark>
-          mdi-youtube
-        </v-icon>
+        <v-icon right dark>mdi-youtube</v-icon>
       </v-btn>
       <v-btn @click="showAudioDialog" color="orange" class="ma-2 white--text">
         New Audio Lesson
-        <v-icon right dark>
-          mdi-soundcloud
-        </v-icon>
+        <v-icon right dark>mdi-soundcloud</v-icon>
       </v-btn>
-      <v-btn
-        @click="showNoteDialog"
-        color="red darken-4"
-        class="ma-2 white--text"
-      >
+      <v-btn @click="showNoteDialog" color="red darken-4" class="ma-2 white--text">
         New Note
-        <v-icon right dark>
-          mdi-file-pdf-box
-        </v-icon>
+        <v-icon right dark>mdi-file-pdf-box</v-icon>
       </v-btn>
     </v-container>
     <AudioLesson
@@ -48,17 +38,11 @@
 
     <v-dialog v-model="dialogDeleteLesson" max-width="500px">
       <v-card>
-        <v-card-title class="headline"
-          >Are you sure you want to delete this item?</v-card-title
-        >
+        <v-card-title class="headline">Are you sure you want to delete this item?</v-card-title>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="closeDeleteLesson"
-            >Cancel</v-btn
-          >
-          <v-btn color="blue darken-1" text @click="deleteLessonConfirm"
-            >OK</v-btn
-          >
+          <v-btn color="blue darken-1" text @click="closeDeleteLesson">Cancel</v-btn>
+          <v-btn color="blue darken-1" text @click="deleteLessonConfirm">OK</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -74,18 +58,21 @@
           <v-container>
             <v-row>
               <v-col>
-                <v-text-field
-                  v-model="videoLesson.name"
-                  label="Lesson Name"
-                ></v-text-field>
+                <v-text-field v-model="videoLesson.name" label="Lesson Name"></v-text-field>
               </v-col>
             </v-row>
             <v-row>
               <v-col>
-                <v-text-field
-                  v-model="videoLesson.link"
-                  label="Link"
-                ></v-text-field>
+                <v-text-field v-model="videoLesson.link" label="Link"></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <tiptap-vuetify
+                  v-model="videoLesson.description"
+                  label="Description"
+                  :extensions="extensions"
+                ></tiptap-vuetify>
               </v-col>
             </v-row>
             <v-row>
@@ -104,12 +91,8 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="red darken-1" text @click="hideVideoDialog">
-            Cancel
-          </v-btn>
-          <v-btn color="blue darken-1" text @click="saveVideoLesson">
-            Save
-          </v-btn>
+          <v-btn color="red darken-1" text @click="hideVideoDialog">Cancel</v-btn>
+          <v-btn color="blue darken-1" text @click="saveVideoLesson">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -124,18 +107,21 @@
           <v-container>
             <v-row>
               <v-col>
-                <v-text-field
-                  v-model="audioLesson.name"
-                  label="Lesson Name"
-                ></v-text-field>
+                <v-text-field v-model="audioLesson.name" label="Lesson Name"></v-text-field>
               </v-col>
             </v-row>
             <v-row>
               <v-col>
-                <v-textarea
-                  v-model="audioLesson.embed"
-                  label="Embed Code"
-                ></v-textarea>
+                <v-textarea v-model="audioLesson.embed" label="Embed Code"></v-textarea>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <tiptap-vuetify
+                  v-model="audioLesson.description"
+                  label="Description"
+                  :extensions="extensions"
+                ></tiptap-vuetify>
               </v-col>
             </v-row>
             <v-row>
@@ -154,12 +140,8 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="red darken-1" text @click="hideAudioDialog">
-            Cancel
-          </v-btn>
-          <v-btn color="blue darken-1" text @click="saveAudioLesson">
-            Save
-          </v-btn>
+          <v-btn color="red darken-1" text @click="hideAudioDialog">Cancel</v-btn>
+          <v-btn color="blue darken-1" text @click="saveAudioLesson">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -173,10 +155,7 @@
           <v-container>
             <v-row>
               <v-col>
-                <v-text-field
-                  v-model="noteLesson.name"
-                  label="Lesson Name"
-                ></v-text-field>
+                <v-text-field v-model="noteLesson.name" label="Lesson Name"></v-text-field>
               </v-col>
             </v-row>
             <v-row>
@@ -189,17 +168,22 @@
                 ></v-file-input>
               </v-col>
             </v-row>
+            <v-row>
+              <v-col>
+                <tiptap-vuetify
+                  v-model="noteLesson.description"
+                  label="Description"
+                  :extensions="extensions"
+                ></tiptap-vuetify>
+              </v-col>
+            </v-row>
           </v-container>
         </v-card-text>
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="red darken-1" text @click="hideNoteDialog">
-            Cancel
-          </v-btn>
-          <v-btn color="blue darken-1" text @click="saveNoteLesson">
-            Save
-          </v-btn>
+          <v-btn color="red darken-1" text @click="hideNoteDialog">Cancel</v-btn>
+          <v-btn color="blue darken-1" text @click="saveNoteLesson">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -211,36 +195,82 @@ import AudioLesson from "@/components/admin/AudioLesson.vue";
 import VideoLesson from "@/components/admin/VideoLesson.vue";
 import NoteLesson from "@/components/admin/NoteLesson.vue";
 import { post, del, multipart_post } from "@/service/service.js";
+import {
+  TiptapVuetify,
+  Heading,
+  Bold,
+  Italic,
+  Strike,
+  Underline,
+  Code,
+  Paragraph,
+  BulletList,
+  OrderedList,
+  ListItem,
+  Link,
+  Blockquote,
+  HardBreak,
+  HorizontalRule,
+  History
+} from "tiptap-vuetify";
 export default {
   props: {
-    sessionId: Number,
+    sessionId: Number
   },
   components: {
     AudioLesson,
     VideoLesson,
     NoteLesson,
+    TiptapVuetify
   },
   data: function() {
     return {
+      extensions: [
+        History,
+        Blockquote,
+        Link,
+        Underline,
+        Strike,
+        Italic,
+        ListItem,
+        BulletList,
+        OrderedList,
+        [
+          Heading,
+          {
+            options: {
+              levels: [1, 2, 3]
+            }
+          }
+        ],
+        Bold,
+        Code,
+        HorizontalRule,
+        Paragraph,
+        HardBreak
+      ],
       audioLessons: [],
       videoLessons: [],
       noteLessons: [],
       videoLesson: {
         name: "",
         link: "",
+        description: "",
         video_type: "YOUTUBE",
-        session: this.sessionId,
+        session: this.sessionId
       },
       audioLesson: {
         name: "",
         embed: "",
+        description: "",
         audio_type: "SOUNDCLOUD",
-        session: this.sessionId,
+        session: this.sessionId
       },
       noteLesson: {
         name: "",
         note: "",
-        session: this.sessionId,
+        description: "",
+        session: this.sessionId
       },
       videoTypes: [{ key: "Youtube", value: "YOUTUBE" }],
       audioTypes: [{ key: "SoundCloud", value: "SOUNDCLOUD" }],
@@ -248,7 +278,7 @@ export default {
       dialogDeleteLesson: false,
       videoDialog: false,
       audioDialog: false,
-      noteDialog: false,
+      noteDialog: false
     };
   },
   methods: {
@@ -267,7 +297,7 @@ export default {
     },
     async init_audio() {
       let response = await post("/audio_lessons_by_session/", {
-        session: this.sessionId,
+        session: this.sessionId
       });
       if (response.ok) {
         let data = await response.json();
@@ -276,7 +306,7 @@ export default {
     },
     async init_video() {
       let response = await post("/video_lessons_by_session/", {
-        session: this.sessionId,
+        session: this.sessionId
       });
       if (response.ok) {
         let data = await response.json();
@@ -285,7 +315,7 @@ export default {
     },
     async init_note() {
       let response = await post("/note_lessons_by_session/", {
-        session: this.sessionId,
+        session: this.sessionId
       });
       if (response.ok) {
         let data = await response.json();
@@ -345,10 +375,10 @@ export default {
         this.noteLesson.note = "";
       }
       this.hideNoteDialog();
-    },
+    }
   },
   created() {
     this.init();
-  },
+  }
 };
 </script>

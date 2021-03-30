@@ -16,13 +16,8 @@
         </v-list-item-content>
       </v-list-item>
     </v-list>
-    <Course
-      v-bind:section="section"
-      v-bind:course="course"
-      v-bind:sectionName="sectionName"
-      v-bind:courseName="courseName"
-      v-if="showCourse"
-    />
+    <v-divider/>
+    <Course v-bind:courseInformation="courseInformation" v-if="showCourse" />
   </v-row>
   <v-row no-gutters v-else>
     <v-col :cols="2">
@@ -57,13 +52,7 @@
       </v-navigation-drawer>
     </v-col>
     <v-col :cols="10">
-      <Course
-        v-bind:section="section"
-        v-bind:course="course"
-        v-bind:sectionName="sectionName"
-        v-bind:courseName="courseName"
-        v-if="showCourse"
-      />
+      <Course v-bind:courseInformation="courseInformation" v-if="showCourse" />
     </v-col>
   </v-row>
 </template>
@@ -77,6 +66,7 @@ export default {
     Course
   },
   data: () => ({
+    courseObj: {},
     courses: [],
     section: null,
     course: null,
@@ -97,10 +87,12 @@ export default {
       }
     },
     courseAction(value) {
-      this.section = value.sectionId;
-      this.course = value.courseId;
-      this.courseName = value.courseName;
-      this.sectionName = value.sectionName;
+      let courseObj = {};
+      courseObj.section = value.sectionId;
+      courseObj.course = value.courseId;
+      courseObj.courseName = value.courseName;
+      courseObj.sectionName = value.sectionName;
+      this.courseObj = courseObj;
       this.showCourse = true;
     },
     hideAll() {
@@ -124,6 +116,11 @@ export default {
   },
   created() {
     this.initCourses();
+  },
+  computed: {
+    courseInformation: function() {
+      return this.courseObj;
+    }
   }
 };
 </script>

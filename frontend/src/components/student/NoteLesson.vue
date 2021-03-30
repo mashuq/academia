@@ -1,6 +1,7 @@
 <template>
   <span v-if="isMobile()">
     <p class="display-1 text--primary">{{ noteLesson.name }}</p>
+    <small v-html="noteLesson.description"></small>
     <h4>
       <a target="_blank" rel="noopener noreferrer" :href="src">View / Download Note</a>
     </h4>
@@ -8,6 +9,7 @@
   <v-card class="mx-auto" v-else>
     <v-card-text>
       <p class="display-1 text--primary">{{ noteLesson.name }}</p>
+      <p v-html="noteLesson.description"></p>
       <h4>
         <a target="_blank" rel="noopener noreferrer" :href="src">View / Download Note</a>
       </h4>

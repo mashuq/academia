@@ -1,6 +1,19 @@
 <template>
   <v-app>
-    <v-app-bar dense app>
+    <v-app-bar dense app v-if="isMobile()">
+      <v-tabs>
+        <v-tab to="/">হোম</v-tab>
+        <!-- <v-tab to="/About">কোর্স সমূহ</v-tab> -->
+        <v-tab to="/Student">শিক্ষার্থী</v-tab>
+        <v-tab to="/Teacher">শিক্ষক/শিক্ষিকা</v-tab>
+        <v-tab to="/Admin">এডমিন</v-tab>
+        <v-tab v-on:click="logout" v-if="showLogout">লগ আউট করুন</v-tab>
+        <!-- <v-tab to="/About">আমাদের সম্পর্কে</v-tab> -->
+        <!-- <v-tab to="/About">যোগাযোগ করুন</v-tab> -->
+      </v-tabs>
+    </v-app-bar>
+
+    <v-app-bar dense app v-else>
       <v-app-bar-title style="width: 300px">নূরুল কুরআন একাডেমি</v-app-bar-title>
       <v-spacer></v-spacer>
       <v-tabs>
@@ -60,7 +73,18 @@ export default {
   methods: {
     logout: function() {
       this.$store.dispatch("global/logout");
-    }
+    },
+    isMobile() {
+      if (
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
   computed: {
     showLogout: function() {

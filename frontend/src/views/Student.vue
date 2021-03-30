@@ -1,6 +1,6 @@
 <template>
   <span>
-    <template v-if="showLogin">
+    <template v-if="showLogin && !isMobile()">
       <v-row no-gutters>
         <v-col></v-col>
         <v-col>
@@ -12,7 +12,17 @@
         <v-col></v-col>
       </v-row>
     </template>
-    <template v-if="showRegistration">
+    <template v-if="showLogin && isMobile()">
+      <v-row no-gutters>
+        <v-col>
+          <v-container>
+            শিক্ষার্থী হিসেবে রেজিস্ট্রেশন করেন নি?<v-btn @click="showRegistrationDialog" color="success">রেজিস্ট্রেশন করুন</v-btn>
+          </v-container>
+          <Login />
+        </v-col>
+      </v-row>
+    </template>
+    <template v-if="showRegistration && !isMobile()">
       <v-row no-gutters>
         <v-col></v-col>
         <v-col>
@@ -22,6 +32,16 @@
           <Registration @registrationComplete="showRegistrationCompleteDialog"/>
         </v-col>
         <v-col></v-col>
+      </v-row>
+    </template>
+    <template v-if="showRegistration && isMobile()">
+      <v-row no-gutters>
+        <v-col>
+          <v-container>
+           শিক্ষার্থী হিসেবে রেজিস্টার করে ফেলেছেন?<v-btn @click="hideRegistrationDialog" color="success">লগইন করুন</v-btn>
+          </v-container>
+          <Registration @registrationComplete="showRegistrationCompleteDialog"/>
+        </v-col>
       </v-row>
     </template>
     <template v-if="showStudent"> 
@@ -108,7 +128,18 @@ export default {
     hideAllRegistration: function(){
       this.showRegistrationComplete = false;
       this.showRegistration = false;
-    }
+    },
+    isMobile() {
+      if (
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   }
 };
 </script>

@@ -58,6 +58,7 @@ class SessionSection(models.Model):
 
 class Lesson(models.Model):
     name = models.CharField(max_length=512)
+    description = models.TextField(null=True, blank=True)
     session = models.ForeignKey('Session', on_delete=models.CASCADE)
 
 

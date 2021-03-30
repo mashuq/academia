@@ -1,5 +1,9 @@
 <template>
   <span v-if="isMobile()">
+    <h4 class="text-center">
+      {{courseInformation.courseName}},
+      <i>{{courseInformation.sectionName}}</i>
+    </h4>
     <v-expansion-panels focusable popout v-model="panel">
       <v-expansion-panel v-for="session in sessions" :key="session.id">
         <v-expansion-panel-header>
@@ -19,8 +23,8 @@
         <v-toolbar dense>
           <v-toolbar-title>
             <b>
-              {{courseName}},
-              <i>{{sectionName}}</i>
+              {{courseInformation.courseName}},
+              <i>{{courseInformation.sectionName}}</i>
             </b>
           </v-toolbar-title>
           <v-spacer></v-spacer>
@@ -52,10 +56,7 @@ import Lessons from "@/components/student/Lessons.vue";
 
 export default {
   props: {
-    section: { type: Number, required: true },
-    course: { type: Number, required: true },
-    courseName: { type: String, required: true },
-    sectionName: { type: String, required: true }
+    courseInformation: { type: Object, required: true }
   },
   computed: {},
   methods: {
@@ -72,8 +73,8 @@ export default {
     },
     async initSessions() {
       let response = await post("/sessions_by_course_student/", {
-        course: this.course,
-        section: this.section
+        course: this.courseInformation.course,
+        section: this.courseInformation.section
       });
       if (response.ok) {
         let data = await response.json();
@@ -93,6 +94,10 @@ export default {
   created() {
     this.initSessions();
   },
-  watch: {}
+  watch: {
+    courseInformation() {
+      this.initSessions();
+    }
+  }
 };
 </script>
