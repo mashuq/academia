@@ -29,6 +29,7 @@
       </v-col>
       <v-col>
         <v-data-table
+          items-per-page=1000
           v-model="selected"
           :headers="headers"
           :items="sessions"
