@@ -1,7 +1,14 @@
 <template>
   <v-container>
-    
-    <v-row>
+    <v-row v-if="isMobile()">
+      <v-col>
+        <v-img src="https://nlquran.b-cdn.net/mobile-hero-3.jpg">
+            
+          </v-img>
+      </v-col>
+    </v-row>
+
+    <v-row v-else>
       <v-col>
         <v-card>
           <v-img src="https://nlquran.b-cdn.net/hero3.jpg">
