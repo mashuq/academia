@@ -4,6 +4,7 @@
       <v-tabs>
         <v-tab to="/">হোম</v-tab>
         <!-- <v-tab to="/About">কোর্স সমূহ</v-tab> -->
+        <v-tab to="/Syllabus">পাঠ্যক্রম</v-tab>
         <v-tab to="/Student">শিক্ষার্থী</v-tab>
         <v-tab to="/Teacher">শিক্ষক/শিক্ষিকা</v-tab>
         <v-tab to="/Admin">এডমিন</v-tab>
@@ -19,6 +20,7 @@
       <v-tabs>
         <v-tab to="/">হোম</v-tab>
         <!-- <v-tab to="/About">কোর্স সমূহ</v-tab> -->
+        <v-tab to="/Syllabus">পাঠ্যক্রম</v-tab>
         <v-tab to="/Student">শিক্ষার্থী</v-tab>
         <v-tab to="/Teacher">শিক্ষক/শিক্ষিকা</v-tab>
         <v-tab to="/Admin">এডমিন</v-tab>

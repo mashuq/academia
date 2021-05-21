@@ -14,10 +14,13 @@ const routes = [
     }
   },
   {
-    path: "/about",
-    name: "About",
+    path: "/syllabus",
+    name: "Syllabus",
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue"),
+      import(/* webpackChunkName: "about" */ "../views/Syllabus.vue"),
+      meta: {
+        title: 'পাঠ্যক্রম',
+      }
   },
   {
     path: "/admin",
