@@ -66,7 +66,7 @@
       v-if="isMobile()"
       style="margin:20px 0px 20px 0px"
     >এডভান্স স্টাডিজ ইন ইসলামী শরীয়াহ</h2>
-    <h2 class="red darken-2 text-center white--text" v-else>ইন্টারমিডিয়েট স্টাডিজ ইন ইসলামী শরীয়াহ</h2>
+    <h2 class="red darken-2 text-center white--text" v-else>এডভান্স স্টাডিজ ইন ইসলামী শরীয়াহ</h2>
     <Year year="৪র্থ বর্ষ" v-bind:syllabus="fourth_year" bgcolor="#ead1dc" />
     <Year year="৫ম বর্ষ" v-bind:syllabus="fifth_year" bgcolor="#f4cccc" />
   </v-container>
