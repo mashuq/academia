@@ -137,6 +137,11 @@ class NoteLessonViewSet(viewsets.ModelViewSet):
     serializer_class = NoteLessonSerializer
     permission_classes = [permissions.IsAdminUser]
 
+class LinkLessonViewSet(viewsets.ModelViewSet):
+    queryset = LinkLesson.objects.all().order_by('id')
+    serializer_class = LinkLessonSerializer
+    permission_classes = [permissions.IsAdminUser]
+
 
 class LessonViewSet(viewsets.ModelViewSet):
     queryset = Lesson.objects.all().order_by('id')
@@ -188,6 +193,14 @@ def list_note_lessons_by_session(request):
     serialized_data = NoteLessonSerializer(lessons, many=True)
     return Response(serialized_data.data)
 
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAdminUser])
+def list_link_lessons_by_session(request):
+    lessons = LinkLesson.objects.filter(
+        session=request.data['session'])
+    serialized_data = LinkLessonSerializer(lessons, many=True)
+    return Response(serialized_data.data)
 
 @api_view(['POST'])
 @permission_classes([IsQuestionsAccessible])
@@ -613,6 +626,17 @@ def note_lessons_by_session_student(request):
     lessons = NoteLesson.objects.filter(
         session=request.data['session'])
     serialized_data = NoteLessonSerializer(lessons, many=True)
+    return Response(serialized_data.data)
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def link_lessons_by_session_student(request):
+    if not is_session_allowed_student(request.data['session'], request.user):
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    lessons = LinkLesson.objects.filter(
+        session=request.data['session'])
+    serialized_data = LinkLessonSerializer(lessons, many=True)
     return Response(serialized_data.data)
 
 def is_session_allowed_student(session, user):

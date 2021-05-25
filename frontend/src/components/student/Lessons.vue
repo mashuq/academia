@@ -18,6 +18,12 @@
       v-bind:index="index"
       v-bind:key="item.id"
     ></NoteLesson>
+    <LinkLesson
+      v-for="(item, index) in linkLessons"
+      v-bind:lesson="item"
+      v-bind:index="index"
+      v-bind:key="item.id"
+    ></LinkLesson>
   </span>
 </template>
 
@@ -25,6 +31,7 @@
 import AudioLesson from "@/components/student/AudioLesson.vue";
 import VideoLesson from "@/components/student/VideoLesson.vue";
 import NoteLesson from "@/components/student/NoteLesson.vue";
+import LinkLesson from "@/components/student/LinkLesson.vue";
 import { post} from "@/service/service.js";
 export default {
   props: {
@@ -34,12 +41,14 @@ export default {
     AudioLesson,
     VideoLesson,
     NoteLesson,
+    LinkLesson,
   },
   data: function() {
     return {
       audioLessons: [],
       videoLessons: [],
       noteLessons: [],
+      linkLessons: [],
       videoLesson: {
         name: "",
         link: "",
@@ -57,13 +66,14 @@ export default {
         note: "",
         session: this.sessionId,
       },
+      linkLesson: {
+        name: "",
+        title: "",
+        link: "",
+        session: this.sessionId,
+      },
       videoTypes: [{ key: "Youtube", value: "YOUTUBE" }],
       audioTypes: [{ key: "SoundCloud", value: "SOUNDCLOUD" }],
-      removeId: null,
-      dialogDeleteLesson: false,
-      videoDialog: false,
-      audioDialog: false,
-      noteDialog: false,
     };
   },
   methods: {
@@ -94,10 +104,20 @@ export default {
         this.noteLessons = data;
       }
     },
+    async init_link() {
+      let response = await post("/link_lessons_by_session_student/", {
+        session: this.sessionId,
+      });
+      if (response.ok) {
+        let data = await response.json();
+        this.linkLessons = data;
+      }
+    },
     async init() {
       this.init_audio();
       this.init_video();
-      this.init_note(); 
+      this.init_note();
+      this.init_link(); 
     },
   },
   created() {

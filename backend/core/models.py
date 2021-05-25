@@ -82,6 +82,11 @@ class NoteLesson(Lesson):
     note = models.FileField(upload_to="course_files/")
 
 
+class LinkLesson(Lesson):
+    title = models.CharField(max_length=512)
+    link = models.CharField(max_length=512)
+
+
 class Assessment(models.Model):
     name = models.CharField(max_length=256)
     contribution = models.FloatField()

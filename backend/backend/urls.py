@@ -30,6 +30,7 @@ router.register(r'sessions', views.SessionViewSet)
 router.register(r'audio_lessons', views.AudioLessonViewSet)
 router.register(r'video_lessons', views.VideoLessonViewSet)
 router.register(r'note_lessons', views.NoteLessonViewSet)
+router.register(r'link_lessons', views.LinkLessonViewSet)
 router.register(r'lessons', views.LessonViewSet)
 router.register(r'mcq', views.MultipleChoiceQuestionViewSet)
 router.register(r'bq', views.BroadQuestionViewSet)
@@ -52,6 +53,7 @@ urlpatterns = [
     path('audio_lessons_by_session/', views.list_audio_lessons_by_session),
     path('video_lessons_by_session/', views.list_video_lessons_by_session),
     path('note_lessons_by_session/', views.list_note_lessons_by_session),
+    path('link_lessons_by_session/', views.list_link_lessons_by_session),
     path('list_mcq_by_session/', views.list_mcq_by_session),
     path('list_sq_by_session/', views.list_sq_by_session),
     path('list_bq_by_session/', views.list_bq_by_session),
@@ -87,6 +89,8 @@ urlpatterns = [
          views.video_lessons_by_session_student),
     path('note_lessons_by_session_student/',
          views.note_lessons_by_session_student),
+    path('link_lessons_by_session_student/',
+         views.link_lessons_by_session_student),
     path('search_student/',
          views.search_student),
 

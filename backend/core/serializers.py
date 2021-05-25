@@ -98,6 +98,11 @@ class NoteLessonSerializer(serializers.ModelSerializer):
         model = NoteLesson
         fields = ['note'] + LessonSerializer.Meta.fields
 
+class LinkLessonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LinkLesson
+        fields = ['title', 'link'] + LessonSerializer.Meta.fields
+
 
 class RegistrationSerializer(serializers.Serializer):
     username = serializers.CharField(

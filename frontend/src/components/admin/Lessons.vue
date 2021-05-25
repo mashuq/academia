@@ -13,6 +13,10 @@
         New Note
         <v-icon right dark>mdi-file-pdf-box</v-icon>
       </v-btn>
+      <v-btn @click="showLinkDialog" color="blue darken-4" class="ma-2 white--text">
+        New Link
+        <v-icon right dark>mdi-link</v-icon>
+      </v-btn>
     </v-container>
     <AudioLesson
       @remove="removeLesson"
@@ -35,6 +39,13 @@
       v-bind:index="index"
       v-bind:key="item.id"
     ></NoteLesson>
+    <LinkLesson
+      @remove="removeLesson"
+      v-for="(item, index) in linkLessons"
+      v-bind:lesson="item"
+      v-bind:index="index"
+      v-bind:key="item.id"
+    ></LinkLesson>
 
     <v-dialog v-model="dialogDeleteLesson" max-width="500px">
       <v-card>
@@ -187,6 +198,49 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="linkDialog" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">New Link Lesson</span>
+        </v-card-title>
+
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col>
+                <v-text-field v-model="linkLesson.name" label="Lesson Name"></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <v-text-field v-model="linkLesson.title" label="Link Title"></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <v-text-field v-model="linkLesson.link" label="Link"></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <tiptap-vuetify
+                  v-model="linkLesson.description"
+                  label="Description"
+                  :extensions="extensions"
+                ></tiptap-vuetify>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red darken-1" text @click="hideLinkDialog">Cancel</v-btn>
+          <v-btn color="blue darken-1" text @click="saveLinkLesson">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </span>
 </template>
 
@@ -194,6 +248,7 @@
 import AudioLesson from "@/components/admin/AudioLesson.vue";
 import VideoLesson from "@/components/admin/VideoLesson.vue";
 import NoteLesson from "@/components/admin/NoteLesson.vue";
+import LinkLesson from "@/components/admin/LinkLesson.vue";
 import { post, del, multipart_post } from "@/service/service.js";
 import {
   TiptapVuetify,
@@ -221,6 +276,7 @@ export default {
     AudioLesson,
     VideoLesson,
     NoteLesson,
+    LinkLesson,
     TiptapVuetify
   },
   data: function() {
@@ -252,6 +308,7 @@ export default {
       audioLessons: [],
       videoLessons: [],
       noteLessons: [],
+      linkLessons: [],
       videoLesson: {
         name: "",
         link: "",
@@ -272,13 +329,21 @@ export default {
         description: "",
         session: this.sessionId
       },
+      linkLesson: {
+        name: "",
+        title: "",
+        link: "",
+        description: "",
+        session: this.sessionId
+      },
       videoTypes: [{ key: "Youtube", value: "YOUTUBE" }],
       audioTypes: [{ key: "SoundCloud", value: "SOUNDCLOUD" }],
       removeId: null,
       dialogDeleteLesson: false,
       videoDialog: false,
       audioDialog: false,
-      noteDialog: false
+      noteDialog: false,
+      linkDialog: false
     };
   },
   methods: {
@@ -322,10 +387,20 @@ export default {
         this.noteLessons = data;
       }
     },
+    async init_link() {
+      let response = await post("/link_lessons_by_session/", {
+        session: this.sessionId
+      });
+      if (response.ok) {
+        let data = await response.json();
+        this.linkLessons = data;
+      }
+    },
     async init() {
       this.init_audio();
       this.init_video();
       this.init_note();
+      this.init_link();
     },
     async removeLesson(id) {
       this.removeId = id;
@@ -343,6 +418,7 @@ export default {
         this.init();
         this.videoLesson.name = "";
         this.videoLesson.link = "";
+        this.videoLesson.description = "";
       }
       this.hideVideoDialog();
     },
@@ -358,6 +434,7 @@ export default {
         this.init();
         this.audioLesson.name = "";
         this.audioLesson.embed = "";
+        this.audioLesson.description = "";
       }
       this.hideAudioDialog();
     },
@@ -373,8 +450,26 @@ export default {
         this.init();
         this.noteLesson.name = "";
         this.noteLesson.note = "";
+        this.noteLesson.description = "";
       }
       this.hideNoteDialog();
+    },
+    showLinkDialog() {
+      this.linkDialog = true;
+    },
+    hideLinkDialog() {
+      this.linkDialog = false;
+    },
+    async saveLinkLesson() {
+      let response = await post("/link_lessons/", this.linkLesson);
+      if (response.ok) {
+        this.init();
+        this.linkLesson.name = "";
+        this.linkLesson.link = "";
+        this.linkLesson.title = "";
+        this.linkLesson.description = "";
+      }
+      this.hideLinkDialog();
     }
   },
   created() {
