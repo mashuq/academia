@@ -1,6 +1,11 @@
 <template>
   <v-row v-if="isMobile()">
-    <v-list dense nav>
+    <template v-if="!courses.length">
+      <v-container>
+        <v-alert dense type="warning">আপনি কোন কোর্স এনরোলড নন</v-alert>
+      </v-container>
+    </template>
+    <v-list v-else dense nav>
       <v-list-item
         v-for="course in courses"
         :key="course.id"
@@ -16,7 +21,7 @@
         </v-list-item-content>
       </v-list-item>
     </v-list>
-    <v-divider/>
+    <v-divider />
     <Course v-bind:courseInformation="courseInformation" v-if="showCourse" />
   </v-row>
   <v-row no-gutters v-else>
@@ -32,7 +37,12 @@
             <v-list-item-subtitle class="subtitle">আমার কোর্সসমূহ</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
-        <v-list dense nav>
+        <template v-if="!courses.length">
+          <v-container>
+            <v-alert dense outlined type="warning">আপনি কোন কোর্সে এনরোলড নন</v-alert>
+          </v-container>
+        </template>
+        <v-list v-else dense nav>
           <v-list-item
             v-for="course in courses"
             :key="course.id"
