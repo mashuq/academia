@@ -179,6 +179,15 @@ class SectionTeacherSerializer(serializers.ModelSerializer):
         fields = ['section', 'teacher']
 
 
+class SectionTeacherDetailSerializer(serializers.ModelSerializer):
+    section = SectionListSerializer()
+    teacher = TeacherListSerializer()
+
+    class Meta:
+        model = SectionTeacher
+        fields = ['section', 'teacher']
+
+
 class SectionTeacherListSerializer(serializers.ModelSerializer):
     section = SectionListSerializer()
     teacher = TeacherListSerializer()

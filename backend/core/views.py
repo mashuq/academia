@@ -566,6 +566,15 @@ def list_sections_for_student(request):
     serialized_data = EnrolmentListSerializer(enrolments, many=True)
     return Response(serialized_data.data)
 
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def list_detailed_sections_for_teacher(request):
+    course_instructor_list = SectionTeacher.objects.select_related(
+        "teacher", 'teacher__user').filter(teacher__user=request.user)
+
+    serialized_data = SectionTeacherDetailSerializer(course_instructor_list, many=True)
+    return Response(serialized_data.data)
+
 
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
@@ -582,6 +591,25 @@ def sessions_by_course_student(request):
     sections = Section.objects.all().filter(course=request.data['course'])
     enrolment_list = Enrolment.objects.select_related(
             "student", 'student__user').filter(student__user=request.user, section__in=sections)
+    if enrolment_list.count() <= 0:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    session_sections = SessionSection.objects.filter(section=request.data['section'], visible=True)
+    sessions = []
+    for session_section in session_sections:
+        sessions.append(session_section.session.id)
+
+    sessions = Session.objects.filter(
+        course=request.data['course'], id__in=sessions).order_by('serial')
+    serialized_data = SessionSerializer(sessions, many=True)
+    return Response(serialized_data.data)
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def sessions_by_course_teacher(request):
+    sections = Section.objects.all().filter(course=request.data['course'])
+    enrolment_list = SectionTeacher.objects.select_related(
+            "teacher", 'teacher__user').filter(teacher__user=request.user, section__in=sections)
     if enrolment_list.count() <= 0:
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
@@ -639,12 +667,66 @@ def link_lessons_by_session_student(request):
     serialized_data = LinkLessonSerializer(lessons, many=True)
     return Response(serialized_data.data)
 
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def audio_lessons_by_session_teacher(request):
+    if not is_session_allowed_teacher(request.data['session'], request.user):
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    lessons = AudioLesson.objects.filter(
+        session=request.data['session'])
+    serialized_data = AudioLessonSerializer(lessons, many=True)
+    return Response(serialized_data.data)
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def video_lessons_by_session_teacher(request):
+    if not is_session_allowed_teacher(request.data['session'], request.user):
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    lessons = VideoLesson.objects.filter(
+        session=request.data['session'])
+    serialized_data = VideoLessonSerializer(lessons, many=True)
+    return Response(serialized_data.data)
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def note_lessons_by_session_teacher(request):
+    if not is_session_allowed_teacher(request.data['session'], request.user):
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    lessons = NoteLesson.objects.filter(
+        session=request.data['session'])
+    serialized_data = NoteLessonSerializer(lessons, many=True)
+    return Response(serialized_data.data)
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def link_lessons_by_session_teacher(request):
+    if not is_session_allowed_teacher(request.data['session'], request.user):
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    lessons = LinkLesson.objects.filter(
+        session=request.data['session'])
+    serialized_data = LinkLessonSerializer(lessons, many=True)
+    return Response(serialized_data.data)
+
 def is_session_allowed_student(session, user):
     session = Session.objects.get(pk=session)
     sections = Section.objects.all().filter(course=session.course)
     enrolment_list = Enrolment.objects.select_related(
         "student", 'student__user').filter(student__user=user, section__in=sections)
     if enrolment_list.count() > 0:
+        return True
+    else:
+        return False
+
+def is_session_allowed_teacher(session, user):
+    session = Session.objects.get(pk=session)
+    sections = Section.objects.all().filter(course=session.course)
+    course_instructor_list = SectionTeacher.objects.select_related(
+        "teacher", 'teacher__user').filter(teacher__user=user, section__in=sections)
+    if course_instructor_list.count() > 0:
         return True
     else:
         return False

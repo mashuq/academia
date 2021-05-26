@@ -84,6 +84,8 @@ sudo serve -s dist -l 80 > log.txt 2>&1 &
 
 `> GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT on academia.* TO 'nlquran'@'167.99.68.235';`
 
+`> GRANT REFERENCES on academia.* TO 'nlquran'@'167.99.68.235';`
+
 `> FLUSH PRIVILEGES;`
 
 `> exit;`
