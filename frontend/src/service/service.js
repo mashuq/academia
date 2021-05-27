@@ -119,6 +119,18 @@ export const del = async (api_url) => {
   return response;
 };
 
+export const noauth_post = async (api_url, data) => {
+  let response = await fetch(`${process.env.VUE_APP_API_BASE_URL}${api_url}`, {
+    body: JSON.stringify(data),
+    method: "POST",
+    mode: "cors",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return response;
+};
+
 export const post = async (api_url, data) => {
   let credentials = store.getters["global/getCredentials"];
   let response = await fetch(`${process.env.VUE_APP_API_BASE_URL}${api_url}`, {

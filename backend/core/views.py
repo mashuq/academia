@@ -19,6 +19,10 @@ from rest_framework.permissions import IsAdminUser, SAFE_METHODS, IsAuthenticate
 import environ
 import requests
 from rest_framework import generics
+import smtplib
+from django.utils.crypto import get_random_string
+from django.contrib.auth.hashers import make_password
+from faker import Faker
 
 env = environ.Env(
     DEBUG=(bool, False)
@@ -284,6 +288,45 @@ def register(request):
     else:
         return HttpResponse(status=400)
 
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def password_reset(request):
+    template1 = "From: NQA Support <support@nlquran.com>\r\nTo: {email}\r\nSubject: Password Reset at Nurul Quran Academy\n\n{body}"
+    template2 = "Please login as student: <a href='http://school.nlquran.com/#/Student'>http://school.nlquran.com/#/Student</a>\nUsername : {username}\nPassword : {password}"
+    recaptcha_response = request.data['g-recaptcha-response']
+    data = {
+        'secret': env('RECAPTCHA_SECRET_KEY'), 
+        'response': recaptcha_response
+    }
+    r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+    result = r.json()
+    if result['success']:
+        try:
+            fake = Faker()
+            email = request.data['email']
+            user = User.objects.get(email=email)
+            random_password =  fake.password(length=10, special_chars=False, digits=True, upper_case=True, lower_case=True)
+            password = make_password(random_password)
+            user.password = password
+            user.save()
+            body = template2.format(username=user.username, password=random_password)
+            message = template1.format(email=email, body=body)
+            sender = 'support@nlquran.com'
+        except Exception as e:
+            print(e)
+            return HttpResponse(status=406)
+        try:
+            with smtplib.SMTP('{}:{}'.format(env("SMTP_HOST"), env("SMTP_PORT"))) as smtpObj:
+                smtpObj.login(env("SMTP_LOGIN"), env("SMTP_PASS"))
+                smtpObj.sendmail(sender, email, message)         
+                print ("Successfully sent email")
+                return HttpResponse(status=200)
+        except Exception as e:
+            print (e)
+            return HttpResponse(status=503) 
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=400)
 
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])

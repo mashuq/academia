@@ -1,11 +1,26 @@
 <template>
   <span>
+
+    
     <template v-if="showLogin && !isMobile()">
       <v-row no-gutters>
         <v-col></v-col>
         <v-col>
           <v-container>
-            শিক্ষার্থী হিসেবে রেজিস্ট্রেশন করেন নি?<v-btn @click="showRegistrationDialog" color="success">রেজিস্ট্রেশন করুন</v-btn>
+            <v-grid>
+              <v-row>
+                <v-col class="text-right">শিক্ষার্থী হিসেবে রেজিস্ট্রেশন করেন নি?</v-col>
+                <v-col>
+                  <v-btn @click="showRegistrationDialog" color="primary">রেজিস্ট্রেশন করুন</v-btn>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col class="text-right">পাসওয়ার্ড ভুলে গিয়েছেন?</v-col>
+                <v-col>
+                  <v-btn @click="showPasswordResetDialog" color="warning">পাসওয়ার্ড রিসেট করুন</v-btn>
+                </v-col>
+              </v-row>
+            </v-grid>
           </v-container>
           <Login />
         </v-col>
@@ -16,20 +31,48 @@
       <v-row no-gutters>
         <v-col>
           <v-container>
-            শিক্ষার্থী হিসেবে রেজিস্ট্রেশন করেন নি?<v-btn @click="showRegistrationDialog" color="success">রেজিস্ট্রেশন করুন</v-btn>
+            <v-grid>
+              <v-row>
+                <v-col class="text-right">শিক্ষার্থী হিসেবে রেজিস্ট্রেশন করেন নি?</v-col>
+                <v-col>
+                  <v-btn @click="showRegistrationDialog" color="primary">রেজিস্ট্রেশন করুন</v-btn>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col class="text-right">পাসওয়ার্ড ভুলে গিয়েছেন?</v-col>
+                <v-col>
+                  <v-btn @click="showPasswordResetDialog" color="warning">পাসওয়ার্ড রিসেট করুন</v-btn>
+                </v-col>
+              </v-row>
+            </v-grid>
           </v-container>
           <Login />
         </v-col>
       </v-row>
     </template>
+
+
     <template v-if="showRegistration && !isMobile()">
       <v-row no-gutters>
         <v-col></v-col>
         <v-col>
           <v-container>
-           শিক্ষার্থী হিসেবে রেজিস্টার করে ফেলেছেন?<v-btn @click="hideRegistrationDialog" color="success">লগইন করুন</v-btn>
+            <v-grid>
+              <v-row>
+                <v-col class="text-right">শিক্ষার্থী হিসেবে রেজিস্টার করে ফেলেছেন?</v-col>
+                <v-col>
+                  <v-btn @click="showLoginDialog" color="success">লগইন করুন</v-btn>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col class="text-right">পাসওয়ার্ড ভুলে গিয়েছেন?</v-col>
+                <v-col>
+                  <v-btn @click="showPasswordResetDialog" color="warning">পাসওয়ার্ড রিসেট করুন</v-btn>
+                </v-col>
+              </v-row>
+            </v-grid>
           </v-container>
-          <Registration @registrationComplete="showRegistrationCompleteDialog"/>
+          <Registration @registrationComplete="showRegistrationCompleteDialog" />
         </v-col>
         <v-col></v-col>
       </v-row>
@@ -38,26 +81,103 @@
       <v-row no-gutters>
         <v-col>
           <v-container>
-           শিক্ষার্থী হিসেবে রেজিস্টার করে ফেলেছেন?<v-btn @click="hideRegistrationDialog" color="success">লগইন করুন</v-btn>
+            <v-grid>
+              <v-row>
+                <v-col class="text-right">শিক্ষার্থী হিসেবে রেজিস্টার করে ফেলেছেন?</v-col>
+                <v-col>
+                  <v-btn @click="showLoginDialog" color="success">লগইন করুন</v-btn>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col class="text-right">পাসওয়ার্ড ভুলে গিয়েছেন?</v-col>
+                <v-col>
+                  <v-btn @click="showPasswordResetDialog" color="warning">পাসওয়ার্ড রিসেট করুন</v-btn>
+                </v-col>
+              </v-row>
+            </v-grid>
           </v-container>
-          <Registration @registrationComplete="showRegistrationCompleteDialog"/>
+          <Registration @registrationComplete="showRegistrationCompleteDialog" />
         </v-col>
       </v-row>
     </template>
-    <template v-if="showStudent"> 
+
+    <template v-if="showPasswordReset && !isMobile()">
+      <v-row no-gutters>
+        <v-col></v-col>
+        <v-col>
+          <v-container>
+            <v-grid>
+              <v-row>
+                <v-col class="text-right">শিক্ষার্থী হিসেবে রেজিস্টার করে ফেলেছেন?</v-col>
+                <v-col>
+                  <v-btn @click="showLoginDialog" color="success">লগইন করুন</v-btn>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col class="text-right">শিক্ষার্থী হিসেবে রেজিস্ট্রেশন করেন নি?</v-col>
+                <v-col>
+                  <v-btn @click="showRegistrationDialog" color="primary">রেজিস্ট্রেশন করুন</v-btn>
+                </v-col>
+              </v-row>
+            </v-grid>
+          </v-container>
+          <PasswordReset @passwordResetComplete="showPasswordResetCompleteDialog" />
+        </v-col>
+        <v-col></v-col>
+      </v-row>
+    </template>
+    <template v-if="showPasswordReset && isMobile()">
+      <v-row no-gutters>
+        <v-col>
+          <v-container>
+            <v-grid>
+              <v-row>
+                <v-col class="text-right">শিক্ষার্থী হিসেবে রেজিস্টার করে ফেলেছেন?</v-col>
+                <v-col>
+                  <v-btn @click="showLoginDialog" color="success">লগইন করুন</v-btn>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col class="text-right">শিক্ষার্থী হিসেবে রেজিস্ট্রেশন করেন নি?</v-col>
+                <v-col>
+                  <v-btn @click="showRegistrationDialog" color="primary">রেজিস্ট্রেশন করুন</v-btn>
+                </v-col>
+              </v-row>
+            </v-grid>
+          </v-container>
+          <PasswordReset @passwordResetComplete="showPasswordResetCompleteDialog" />
+        </v-col>
+      </v-row>
+    </template>
+
+
+    <template v-if="showStudent">
       <Student />
     </template>
     <template v-if="showNonStudent">
       <v-row no-gutters>
         <v-col></v-col>
-        <v-col><NonStudent /></v-col>
+        <v-col>
+          <NonStudent />
+        </v-col>
         <v-col></v-col>
       </v-row>
     </template>
     <template v-if="showRegistrationComplete">
       <v-row no-gutters>
         <v-col></v-col>
-        <v-col><RegistrationComplete @hideRegistration="hideAllRegistration"/></v-col>
+        <v-col>
+          <RegistrationComplete @hideAll="hideAll" />
+        </v-col>
+        <v-col></v-col>
+      </v-row>
+    </template>
+    <template v-if="showPasswordResetComplete">
+      <v-row no-gutters>
+        <v-col></v-col>
+        <v-col>
+          <PasswordResetComplete @hideAll="hideAll"/>
+        </v-col>
         <v-col></v-col>
       </v-row>
     </template>
@@ -69,8 +189,10 @@ import Login from "@/components/Login.vue";
 import NonStudent from "@/components/student/NonStudent.vue";
 import Student from "@/components/student/Student.vue";
 import _ from "lodash";
-import Registration from '@/components/Registration.vue';
-import RegistrationComplete from '@/components/RegistrationComplete.vue'
+import Registration from "@/components/Registration.vue";
+import RegistrationComplete from "@/components/RegistrationComplete.vue";
+import PasswordReset from "@/components/PasswordReset.vue";
+import PasswordResetComplete from "@/components/PasswordResetComplete.vue";
 export default {
   components: {
     Login,
@@ -78,11 +200,15 @@ export default {
     Student,
     Registration,
     RegistrationComplete,
+    PasswordReset,
+    PasswordResetComplete
   },
   data() {
     return {
       showRegistration: false,
-      showRegistrationComplete: false
+      showRegistrationComplete: false,
+      showPasswordReset: false,
+      showPasswordResetComplete: false
     };
   },
   computed: {
@@ -91,7 +217,7 @@ export default {
       if (credentials) {
         return false;
       }
-      if (this.showRegistration || this.showRegistrationComplete) {
+      if (this.showRegistration || this.showPasswordReset || this.showRegistrationComplete || this.showPasswordResetComplete) {
         return false;
       }
 
@@ -110,24 +236,36 @@ export default {
         return true;
       }
       return false;
-    },
+    }
   },
   methods: {
-    showRegistrationDialog: function(){
+    hideAll: function(){
+      this.showRegistration = false;
+      this.showRegistrationComplete = false;
+      this.showPasswordReset = false;
+      this.showPasswordResetComplete = false;
+    },
+    showRegistrationDialog: function() {
+      this.hideAll();
       this.showRegistration = true;
-      this.showRegistrationComplete = false;
     },
-    hideRegistrationDialog: function(){
-      this.showRegistration = false;
-      this.showRegistrationComplete = false;
+    showLoginDialog: function() {
+      this.hideAll();
     },
-    showRegistrationCompleteDialog: function(){
+    showRegistrationCompleteDialog: function() {
+      this.hideAll();
       this.showRegistrationComplete = true;
-      this.showRegistration = false;
     },
-    hideAllRegistration: function(){
-      this.showRegistrationComplete = false;
-      this.showRegistration = false;
+    hideAllRegistration: function() {
+      this.hideAll();
+    },
+    showPasswordResetDialog: function(){
+      this.hideAll();
+      this.showPasswordReset = true;
+    },
+    showPasswordResetCompleteDialog: function(){
+      this.hideAll();
+      this.showPasswordResetComplete = true;
     },
     isMobile() {
       if (
@@ -139,7 +277,7 @@ export default {
       } else {
         return false;
       }
-    },
+    }
   }
 };
 </script>
