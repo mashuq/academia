@@ -158,6 +158,9 @@ class Student(models.Model):
     gender = models.CharField(choices=Gender.choices, max_length=6)
     date_of_birth = models.DateTimeField()
 
+    def __str__(self):
+        return name
+
 
 class Enrolment(models.Model):
     section = models.ForeignKey('Section', on_delete=models.CASCADE)

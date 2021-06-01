@@ -781,3 +781,37 @@ def search_student(request):
     students = Student.objects.select_related('user').filter(user__email=request.data['email'])
     serialized_data = StudentSerializer(students, many=True)
     return Response(serialized_data.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAdminUser])
+def enrolled_students(request):
+    enrolments = Enrolment.objects.select_related("section").filter(section__id=request.query_params['section']).order_by('student__name') 
+    page = request.query_params['page']
+    paginator = Paginator(enrolments, 10)
+    try:
+        students = paginator.page(page)
+    except PageNotAnInteger:
+        students = paginator.page(1)
+    except EmptyPage:
+        students = paginator.page(paginator.num_pages)
+    serialized_data = EnrolmentStudentSerializer(students, many=True)
+    result = {'results': serialized_data.data, 'count': enrolments.count()}
+    return Response(result)
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAdminUser])
+def not_enrolled_students(request):
+    enrolments = Enrolment.objects.select_related("section").filter(section__id=request.query_params['section'])
+    enrolled_student_ids = [enrolment.student.id for enrolment in enrolments]
+    non_enrolled_students_list = Student.objects.all().exclude(id__in=enrolled_student_ids).order_by('name')
+    page = request.query_params['page']
+    paginator = Paginator(non_enrolled_students_list, 10)
+    try:
+        students = paginator.page(page)
+    except PageNotAnInteger:
+        students = paginator.page(1)
+    except EmptyPage:
+        students = paginator.page(paginator.num_pages)
+    serialized_data = StudentLiteSerializer(students, many=True)
+    result = {'results': serialized_data.data, 'count': non_enrolled_students_list.count()}
+    return Response(result)

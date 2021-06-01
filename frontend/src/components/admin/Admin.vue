@@ -34,7 +34,8 @@
       <Student v-if="showStudent" />
       <Teacher v-if="showTeacher" />
       <SectionTeacher v-if="showSectionTeacher" />
-      <StudentSection v-if="showStudentSection" />
+      <StudentSection1 v-if="showStudentSection1" />
+      <StudentSection2 v-if="showStudentSection2" />
       <Testimonial v-if="showTestimonial" />
     </v-col>
   </v-row>
@@ -50,7 +51,8 @@ import SessionVisibility from "@/components/admin/SessionVisibility.vue";
 import Student from "@/components/admin/Student.vue";
 import Teacher from "@/components/admin/Teacher.vue";
 import SectionTeacher from "@/components/admin/SectionTeacher.vue";
-import StudentSection from "@/components/admin/StudentSection.vue";
+import StudentSection1 from "@/components/admin/StudentSection1.vue";
+import StudentSection2 from "@/components/admin/StudentSection2.vue";
 import Testimonial from "@/components/admin/Testimonial.vue";
 
 export default {
@@ -64,7 +66,8 @@ export default {
     Student,
     Teacher,
     SectionTeacher,
-    StudentSection,
+    StudentSection1,
+    StudentSection2,
     Testimonial
   },
   data: () => ({
@@ -78,7 +81,8 @@ export default {
       { label: "শিক্ষার্থী", link: "student", icon: 'mdi-sail-boat'  },
       { label: "শিক্ষক/শিক্ষিকা", link: "teacher", icon: 'mdi-diamond-stone'  },
       { label: "সেকশনের শিক্ষক/শিক্ষিকা", link: "sectionTeacher", icon: 'mdi-laptop'  },
-      { label: "শিক্ষার্থী কোর্স/সেকশন", link: "studentSection", icon: 'mdi-codepen'  },
+      { label: "শিক্ষার্থী কোর্স/সেকশন ১", link: "studentSection1", icon: 'mdi-codepen'  },
+      { label: "শিক্ষার্থী কোর্স/সেকশন ২", link: "studentSection2", icon: 'mdi-umbrella'  },
       { label: "শিক্কার্থীদের মন্তব্য", link: "testimonial", icon: 'mdi-star'  },
     ],
     showCourseCategory: false,
@@ -90,7 +94,8 @@ export default {
     showStudent: false,
     showTeacher: false,
     showSectionTeacher: false,
-    showStudentSection: false,
+    showStudentSection1: false,
+    showStudentSection2: false,
     showTestimonial: false,
   }),
   methods: {
@@ -124,8 +129,11 @@ export default {
         case "sectionTeacher":
           this.showSectionTeacher = true;
           break;
-        case "studentSection":
-          this.showStudentSection = true;
+        case "studentSection1":
+          this.showStudentSection1 = true;
+          break;
+        case "studentSection2":
+          this.showStudentSection2 = true;
           break;
         case "testimonial":
           this.showTestimonial = true;
@@ -144,7 +152,8 @@ export default {
       this.showStudent = false;
       this.showTeacher = false;
       this.showSectionTeacher = false;
-      this.showStudentSection = false;
+      this.showStudentSection1 = false;
+      this.showStudentSection2 = false;
       this.showTestimonial = false;
     },
   },

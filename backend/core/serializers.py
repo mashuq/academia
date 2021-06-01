@@ -149,6 +149,11 @@ class StudentSerializer(serializers.ModelSerializer):
         model = Student
         fields = ['id', 'name', 'gender', 'date_of_birth', 'user']
 
+class StudentLiteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = ['id', 'name', 'gender', 'date_of_birth']
+
 
 class TeacherSerializer(serializers.ModelSerializer):
     user = UserSerializer()
@@ -203,6 +208,13 @@ class EnrolmentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Enrolment
         fields = ['id', 'section', 'student']
+
+class EnrolmentStudentSerializer(serializers.ModelSerializer):
+    student = StudentSerializer()
+
+    class Meta:
+        model = Enrolment
+        fields = ['id', 'student']
 
 
 class AssessmentSerializer(serializers.ModelSerializer):

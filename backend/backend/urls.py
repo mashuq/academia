@@ -108,6 +108,10 @@ urlpatterns = [
          views.link_lessons_by_session_teacher), 
     path('search_student/',
          views.search_student),
+    path('enrolled_students/',
+         views.enrolled_students),
+    path('not_enrolled_students/',
+         views.not_enrolled_students),
 
 
 ]
