@@ -14,11 +14,7 @@
             <v-icon color="green darken-2">mdi-pencil</v-icon>
           </v-btn>
 
-          <v-btn
-            icon
-            @click="showSessionDeleteDialog"
-            :disabled="disableEditDelete"
-          >
+          <v-btn icon @click="showSessionDeleteDialog" :disabled="disableEditDelete">
             <v-icon color="red darken-2">mdi-delete</v-icon>
           </v-btn>
         </v-toolbar>
@@ -37,10 +33,15 @@
     </v-row>
     <v-row v-if="showForm">
       <v-col>
-        <v-text-field v-model="sessionName" label="Session"></v-text-field>
-        <v-btn text color="red darken-1" @click="hideSession">বাতিল</v-btn>
-        <v-btn text color="blue darken-1" @click="persistSession">সংরক্ষণ</v-btn>
-       
+        <v-card>
+          <v-card-title>Add/Edit Session</v-card-title>
+          <v-card-text>
+            <v-text-field v-model="sessionName" label="Session"></v-text-field>
+            <v-textarea v-model="sessionDescription" label="Description"></v-textarea>
+            <v-btn text color="red darken-1" @click="hideSession">বাতিল</v-btn>
+            <v-btn text color="blue darken-1" @click="persistSession">সংরক্ষণ</v-btn>
+          </v-card-text>
+        </v-card>
       </v-col>
     </v-row>
     <v-row>
@@ -48,29 +49,35 @@
         <v-expansion-panels focusable popout v-model="panel">
           <draggable v-model="sessions" tag="span" style="width:100%">
             <v-expansion-panel v-for="session in sessions" :key="session.id">
-              <v-expansion-panel-header>{{
+              <v-expansion-panel-header>
+                {{
                 session.name
-              }}</v-expansion-panel-header>
+                }}
+              </v-expansion-panel-header>
               <v-expansion-panel-content>
+                <v-spacer></v-spacer>
+                <template v-if="session.description">
+                  <v-alert
+                    border="top"
+                    colored-border
+                    type="info"
+                    elevation="1"
+                  >{{session.description}}</v-alert>
+                </template>
                 <Lessons v-bind:sessionId="session.id" />
               </v-expansion-panel-content>
             </v-expansion-panel>
           </draggable>
-        </v-expansion-panels> </v-col
-    ></v-row>
+        </v-expansion-panels>
+      </v-col>
+    </v-row>
     <v-dialog v-model="dialogDeleteSession" max-width="500px">
       <v-card>
-        <v-card-title class="headline"
-          >Are you sure you want to delete this item?</v-card-title
-        >
+        <v-card-title class="headline">Are you sure you want to delete this item?</v-card-title>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="closeDeleteSession"
-            >Cancel</v-btn
-          >
-          <v-btn color="blue darken-1" text @click="deleteSessionConfirm"
-            >OK</v-btn
-          >
+          <v-btn color="blue darken-1" text @click="closeDeleteSession">Cancel</v-btn>
+          <v-btn color="blue darken-1" text @click="deleteSessionConfirm">OK</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -98,7 +105,7 @@ export default {
       } else {
         return true;
       }
-    },
+    }
   },
   methods: {
     async deleteSessionConfirm() {
@@ -116,7 +123,7 @@ export default {
     },
     async initSessions() {
       let response = await post("/sessions_by_course/", {
-        course: this.course,
+        course: this.course
       });
       if (response.ok) {
         let data = await response.json();
@@ -138,6 +145,7 @@ export default {
       let response = await get(`/sessions/${this.sessionId}/`);
       if (response.ok) {
         let data = await response.json();
+        this.sessionDescription = data.description;
         this.sessionName = data.name;
         this.serial = data.serial;
         this.showForm = true;
@@ -145,13 +153,14 @@ export default {
     },
     clearSession() {
       this.sessionName = null;
+      this.sessionDescription = null;
       if (this.panel >= 0) {
         this.sessionId = this.sessions[this.panel].id;
       } else {
         this.sessionId = null;
       }
     },
-    hideSession(){
+    hideSession() {
       this.showForm = false;
       this.clearSession();
     },
@@ -160,8 +169,9 @@ export default {
         if (this.sessionId) {
           let response = await put(`/sessions/${this.sessionId}/`, {
             name: this.sessionName,
+            description: this.sessionDescription,
             course: this.course,
-            serial: this.serial,
+            serial: this.serial
           });
           if (response.ok) {
             this.initSessions();
@@ -170,8 +180,9 @@ export default {
         } else {
           let response = await post("/sessions/", {
             name: this.sessionName,
+            description: this.sessionDescription,
             course: this.course,
-            serial: 9999,
+            serial: 9999
           });
           if (response.ok) {
             this.initSessions();
@@ -179,11 +190,11 @@ export default {
           }
         }
       }
-    },
+    }
   },
   components: {
     draggable,
-    Lessons,
+    Lessons
   },
   data: () => ({
     showForm: false,
@@ -191,9 +202,10 @@ export default {
     courses: [],
     sessionId: 0,
     sessionName: null,
+    sessionDescription: null,
     sessions: [],
     panel: [],
-    dialogDeleteSession: false,
+    dialogDeleteSession: false
   }),
   created() {
     this.initCourses();
@@ -201,7 +213,7 @@ export default {
   watch: {
     sessions: function(val) {
       val.forEach(function(item, index) {
-        patch(`/sessions/${item.id}/`, {id: item.id, serial: (index+1)})
+        patch(`/sessions/${item.id}/`, { id: item.id, serial: index + 1 });
       });
     },
     panel: function(val) {
@@ -215,7 +227,7 @@ export default {
       if (val) {
         this.initSessions();
       }
-    },
-  },
+    }
+  }
 };
 </script>

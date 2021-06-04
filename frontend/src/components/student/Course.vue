@@ -12,6 +12,9 @@
           }}
         </v-expansion-panel-header>
         <v-expansion-panel-content>
+          <template v-if="session.description">
+            <v-alert border="top" colored-border type="info" elevation="1">{{session.description}}</v-alert>
+          </template>
           <Lessons v-bind:sessionId="session.id" />
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -41,6 +44,14 @@
               }}
             </v-expansion-panel-header>
             <v-expansion-panel-content>
+              <template v-if="session.description">
+                <v-alert
+                  border="top"
+                  colored-border
+                  type="info"
+                  elevation="1"
+                >{{session.description}}</v-alert>
+              </template>
               <Lessons v-bind:sessionId="session.id" />
             </v-expansion-panel-content>
           </v-expansion-panel>

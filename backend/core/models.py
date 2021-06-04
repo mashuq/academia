@@ -44,6 +44,7 @@ class Section(models.Model):
 class Session(models.Model):
     name = models.CharField(max_length=512)
     serial = models.IntegerField()
+    description = models.TextField(null=True, blank=True)
     course = models.ForeignKey('Course', on_delete=models.CASCADE)
 
 
