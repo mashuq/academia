@@ -68,11 +68,8 @@
 <script>
 import { get, post } from "@/service/service.js";
 import moment from "moment";
+import _ from "lodash";
 
-function validateEmail(email) {
-  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(email).toLowerCase());
-}
 
 export default {
   components: {},
@@ -114,28 +111,9 @@ export default {
   }),
 
   watch: {
-    async search(val) {
-      if (this.searched && val === "") {
-        this.searched = false;
-        this.initStudent();
-      }
-
-      if (validateEmail(val)) {
-        this.searched = true;
-        let response = await post("/search_student/", {
-          email: val
-        });
-        if (response.ok) {
-          let data = await response.json();
-          data.forEach(function(item) {
-            item.enrolled = "NOT_KNOWN";
-          });
-          this.students = data;
-          this.totalStudents = data.length;
-          if (this.section) this.initEnrollment();
-        }
-      }
-    },
+    search: _.debounce(function(newVal) {
+      this.searchData(newVal);
+    }, 1000),
     options: {
       handler() {
         this.initStudent();
@@ -173,6 +151,20 @@ export default {
   },
 
   methods: {
+    async searchData(searchString) {
+      let response = await post("/search_student/", {
+        search_term: searchString
+      });
+      if (response.ok) {
+        let data = await response.json();
+        data.forEach(function(item) {
+          item.enrolled = "NOT_KNOWN";
+        });
+        this.students = data;
+        this.totalStudents = data.length;
+        if (this.section) this.initEnrollment();
+      }
+    },
     async enrol(student) {
       let response = await post("/save_enrolment/", {
         section: this.section,

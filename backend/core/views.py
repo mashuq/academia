@@ -23,6 +23,7 @@ import smtplib
 from django.utils.crypto import get_random_string
 from django.contrib.auth.hashers import make_password
 from faker import Faker
+from django.db.models import Q
 
 env = environ.Env(
     DEBUG=(bool, False)
@@ -778,7 +779,8 @@ def is_session_allowed_teacher(session, user):
 @api_view(['POST'])
 @permission_classes([permissions.IsAdminUser])
 def search_student(request):
-    students = Student.objects.select_related('user').filter(user__email=request.data['email'])
+    search_term = request.data['search_term']
+    students = Student.objects.select_related('user').filter(Q(user__email__contains=search_term) | Q(name__contains=search_term) | Q(user__username__contains=search_term))
     serialized_data = StudentSerializer(students, many=True)
     return Response(serialized_data.data)
 
