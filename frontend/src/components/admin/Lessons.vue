@@ -1,25 +1,26 @@
 <template>
   <span>
     <v-container>
-      <v-btn @click="showVideoDialog" color="red" class="ma-2 white--text">
+      <v-btn @click="showCreateVideoDialog" color="red" class="ma-2 white--text">
         New Video Lesson
         <v-icon right dark>mdi-youtube</v-icon>
       </v-btn>
-      <v-btn @click="showAudioDialog" color="orange" class="ma-2 white--text">
+      <v-btn @click="showCreateAudioDialog" color="orange" class="ma-2 white--text">
         New Audio Lesson
         <v-icon right dark>mdi-soundcloud</v-icon>
       </v-btn>
-      <v-btn @click="showNoteDialog" color="red darken-4" class="ma-2 white--text">
+      <v-btn @click="showCreateNoteDialog" color="red darken-4" class="ma-2 white--text">
         New Note
         <v-icon right dark>mdi-file-pdf-box</v-icon>
       </v-btn>
-      <v-btn @click="showLinkDialog" color="blue darken-4" class="ma-2 white--text">
+      <v-btn @click="showCreateLinkDialog" color="blue darken-4" class="ma-2 white--text">
         New Link
         <v-icon right dark>mdi-link</v-icon>
       </v-btn>
     </v-container>
     <AudioLesson
       @remove="removeLesson"
+      @editAudio="editAudio"
       v-for="(item, index) in audioLessons"
       v-bind:lesson="item"
       v-bind:index="index"
@@ -27,6 +28,7 @@
     ></AudioLesson>
     <VideoLesson
       @remove="removeLesson"
+      @editVideo="editVideo"
       v-for="(item, index) in videoLessons"
       v-bind:lesson="item"
       v-bind:index="index"
@@ -34,6 +36,7 @@
     ></VideoLesson>
     <NoteLesson
       @remove="removeLesson"
+      @editNote="editNote"
       v-for="(item, index) in noteLessons"
       v-bind:lesson="item"
       v-bind:index="index"
@@ -41,6 +44,7 @@
     ></NoteLesson>
     <LinkLesson
       @remove="removeLesson"
+      @editLink="editLink"
       v-for="(item, index) in linkLessons"
       v-bind:lesson="item"
       v-bind:index="index"
@@ -249,7 +253,7 @@ import AudioLesson from "@/components/admin/AudioLesson.vue";
 import VideoLesson from "@/components/admin/VideoLesson.vue";
 import NoteLesson from "@/components/admin/NoteLesson.vue";
 import LinkLesson from "@/components/admin/LinkLesson.vue";
-import { post, del, multipart_post } from "@/service/service.js";
+import { get, post, del, multipart_post, put, multipart_patch } from "@/service/service.js";
 import {
   TiptapVuetify,
   Heading,
@@ -310,6 +314,7 @@ export default {
       noteLessons: [],
       linkLessons: [],
       videoLesson: {
+        id: null,
         name: "",
         link: "",
         description: "",
@@ -317,6 +322,7 @@ export default {
         session: this.sessionId
       },
       audioLesson: {
+        id: null,
         name: "",
         embed: "",
         description: "",
@@ -324,12 +330,14 @@ export default {
         session: this.sessionId
       },
       noteLesson: {
+        id: null,
         name: "",
         note: "",
         description: "",
         session: this.sessionId
       },
       linkLesson: {
+        id: null,
         name: "",
         title: "",
         link: "",
@@ -406,68 +414,156 @@ export default {
       this.removeId = id;
       this.showLessonDeleteDialog();
     },
-    showVideoDialog() {
+    // Video
+    async editVideo(id) {
+      let response = await get(`/video_lessons/${id}/`);
+      if (response.ok) {
+        this.videoLesson = await response.json();
+      }
+      this.showEditVideoDialog();
+    },
+    showEditVideoDialog() {
+      this.videoDialog = true;
+    },
+    showCreateVideoDialog() {
+      this.clearVideo();
       this.videoDialog = true;
     },
     hideVideoDialog() {
       this.videoDialog = false;
     },
     async saveVideoLesson() {
-      let response = await post("/video_lessons/", this.videoLesson);
+      let response = null;
+      if (null == this.videoLesson.id) {
+        response = await post("/video_lessons/", this.videoLesson);
+      } else {
+        response = await put(`/video_lessons/${this.videoLesson.id}/`, this.videoLesson);
+      }
       if (response.ok) {
-        this.init();
-        this.videoLesson.name = "";
-        this.videoLesson.link = "";
-        this.videoLesson.description = "";
+        this.init_video();
+        this.clearVideo();
       }
       this.hideVideoDialog();
     },
-    showAudioDialog() {
+    clearVideo() {
+      this.videoLesson.id = null;
+      this.videoLesson.name = "";
+      this.videoLesson.link = "";
+      this.videoLesson.description = "";
+    },
+    // Audio
+    async editAudio(id) {
+      let response = await get(`/audio_lessons/${id}/`);
+      if (response.ok) {
+        this.audioLesson = await response.json();
+      }
+      this.showEditAudioDialog();
+    },
+    showEditAudioDialog() {
+      this.audioDialog = true;
+    },
+    showCreateAudioDialog() {
+      this.clearAudio();
       this.audioDialog = true;
     },
     hideAudioDialog() {
       this.audioDialog = false;
     },
     async saveAudioLesson() {
-      let response = await post("/audio_lessons/", this.audioLesson);
+      let response = null;
+      if (null == this.audioLesson.id) {
+        response = await post("/audio_lessons/", this.audioLesson);
+      } else {
+        response = await put(`/audio_lessons/${this.audioLesson.id}/`, this.audioLesson);
+      }
       if (response.ok) {
-        this.init();
-        this.audioLesson.name = "";
-        this.audioLesson.embed = "";
-        this.audioLesson.description = "";
+        this.init_audio();
+        this.clearAudio();
       }
       this.hideAudioDialog();
     },
-    showNoteDialog() {
+    clearAudio() {
+      this.audioLesson.id = null;
+      this.audioLesson.name = "";
+      this.audioLesson.embed = "";
+      this.audioLesson.description = "";
+    },
+    //Note
+    async editNote(id) {
+      let response = await get(`/note_lessons/${id}/`);
+      if (response.ok) {
+        this.noteLesson = await response.json();
+      }
+      this.noteLesson.note = null;
+      this.showEditNoteDialog();
+    },
+    showEditNoteDialog() {
+      this.noteDialog = true;
+    },
+    showCreateNoteDialog() {
+      this.clearNote();
       this.noteDialog = true;
     },
     hideNoteDialog() {
       this.noteDialog = false;
     },
     async saveNoteLesson() {
-      let response = await multipart_post("/note_lessons/", this.noteLesson);
+      let response = null;
+      if (null == this.noteLesson.id) {
+        response = await multipart_post("/note_lessons/", this.noteLesson);
+      } else {
+        if (!this.noteLesson.note) {
+          delete this.noteLesson.note;
+        }
+        response = await multipart_patch(`/note_lessons/${this.noteLesson.id}/`, this.noteLesson);
+      }
       if (response.ok) {
-        this.init();
-        this.noteLesson.name = "";
-        this.noteLesson.note = "";
-        this.noteLesson.description = "";
+        this.init_note();
+        this.clearNote();
       }
       this.hideNoteDialog();
     },
-    showLinkDialog() {
+    clearNote() {
+      this.noteLesson.id = null;
+      this.noteLesson.name = "";
+      this.noteLesson.note = "";
+      this.noteLesson.description = "";
+    },
+    //Link
+    async editLink(id) {
+      let response = await get(`/link_lessons/${id}/`);
+      if (response.ok) {
+        this.linkLesson = await response.json();
+      }
+      this.showEditLinkDialog();
+    },
+    showEditLinkDialog() {
+      this.linkDialog = true;
+    },
+    showCreateLinkDialog() {
+      this.clearLink();
       this.linkDialog = true;
     },
     hideLinkDialog() {
       this.linkDialog = false;
     },
+    clearLink() {
+      this.linkLesson.id = null;
+      this.linkLesson.name = "";
+      this.linkLesson.link = "";
+      this.linkLesson.title = "";
+      this.linkLesson.description = "";
+    },
     async saveLinkLesson() {
-      let response = await post("/link_lessons/", this.linkLesson);
+      let response = null;
+      if (null == this.linkLesson.id) {
+        response = await post("/link_lessons/", this.linkLesson);
+      } else {
+        response = await put(`/link_lessons/${this.linkLesson.id}/`, this.linkLesson);
+      }
       if (response.ok) {
-        this.init();
-        this.linkLesson.name = "";
-        this.linkLesson.link = "";
-        this.linkLesson.title = "";
-        this.linkLesson.description = "";
+        this.init_link();
+        this.clearLink();
       }
       this.hideLinkDialog();
     }
