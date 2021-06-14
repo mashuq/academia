@@ -88,6 +88,9 @@ urlpatterns = [
      path('not_enrolled_students/', views.not_enrolled_students),
      path('admin_get_quiz/', views.admin_get_quiz),
      path('search_mcq/', views.search_mcq),
+     path('admin_save_quiz/', views.admin_save_quiz),
+     path('session_all_mcq/', views.session_all_mcq),
 
+     
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

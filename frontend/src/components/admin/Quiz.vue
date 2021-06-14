@@ -2,7 +2,7 @@
   <span>
     <v-container>
       <v-btn
-        @click="showCreateQuizDialog"
+        @click="showQuizDialog"
         v-if="showCreateQuizButton"
         color="green"
         class="ma-2 white--text"
@@ -10,10 +10,27 @@
         New Quiz
         <v-icon right dark>mdi-comment-question</v-icon>
       </v-btn>
-      <v-btn @click="showEditQuizDialog" v-else color="green" class="ma-2 white--text">
+      <v-btn @click="showQuizDialog" v-else color="green" class="ma-2 white--text">
         Edit Quiz
         <v-icon right dark>mdi-comment-question</v-icon>
       </v-btn>
+
+     <v-card  v-if="quiz.id">
+       <v-card-text>
+      <v-row>
+        <v-col>
+          <h3>{{quiz.name}}</h3>
+          <template v-for="(item, index) in selectedMcqs">
+            <v-list-item :key="item.id">
+              <v-list-item-content>
+                <v-list-item-title>{{index+1}}. {{item.question}}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </template>
+        </v-col>
+      </v-row>
+       </v-card-text>
+     </v-card>
 
       <v-dialog v-model="showForm" max-width="500px">
         <v-card>
@@ -105,19 +122,24 @@ export default {
   },
   watch: {
     mcq(val) {
-      if(val){
-      this.selectedMcqs.push(val);
+      if (val) {
+        let alreadyAdded = this.selectedMcqs.filter(mcq => mcq.id === val.id);
+        if (alreadyAdded && alreadyAdded.length) {
+          return;
+        }
+        this.selectedMcqs.push(val);
       }
     },
     async search(val) {
-      if(!val){
+      if (!val) {
         return;
       }
       if (val.length < 3) {
         return;
       }
       let response = await post(`/search_mcq/`, {
-        question: val
+        question: val,
+        session_id: this.sessionId,
       });
       if (response.ok) {
         this.mcqs = await response.json();
@@ -125,11 +147,25 @@ export default {
     }
   },
   methods: {
-    deleteMcq(id){
-      this.selectedMcqs = this.selectedMcqs.filter(mcq => {return mcq.id!==id});
+    async saveQuiz() {
+      let response = await post(`/admin_save_quiz/`, {
+        quiz_id: this.quiz.id,
+        session_id: this.sessionId,
+        quiz_name: this.quiz.name,
+        contribution: this.quiz.contribution,
+        questions: this.selectedMcqs.map(item => item.id)
+      });
+      if (response.ok) {
+        this.initQuiz();
+        this.showForm = false;
+      }
     },
-    saveQuiz() {},
-    showCreateQuizDialog() {
+    deleteMcq(id) {
+      this.selectedMcqs = this.selectedMcqs.filter(mcq => {
+        return mcq.id !== id;
+      });
+    },
+    async showQuizDialog() {
       this.showForm = true;
     },
     hideDialog() {
@@ -142,11 +178,12 @@ export default {
       if (response.ok) {
         let data = await response.json();
         this.showCreateQuizButton = false;
-        console.log(data);
+        this.quiz = data.quiz;
+        this.selectedMcqs = data.questions;
       } else {
         this.showCreateQuizButton = true;
       }
-    }
+    },
   }
 };
 </script>

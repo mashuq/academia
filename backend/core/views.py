@@ -826,17 +826,53 @@ def admin_get_quiz(request):
         return HttpResponse(status=417)
     else:
         quiz = quizzes[0]
-        quiz_questions = quizQuizQuestion.objects.filter(quiz=quiz)
+        questions = Question.objects.all().filter(quizquestion__quiz=quiz)
         quiz_data = QuizSerializer(quiz)
-        quiz_questions_data = QuizQuestionSerializer(quiz_questions)
-        quiz_data.quiz_questions = quiz_questions_data
-        return quiz_data
-
+        questions_data = QuestionPolymorpicSerializer(questions, many=True)
+        result = {'quiz': quiz_data.data, 'questions': questions_data.data}
+        return Response(result)
 
 @api_view(['POST'])
 @permission_classes([permissions.IsAdminUser])
 def search_mcq(request):
-    mcqs = MultipleChoiceQuestion.objects.filter(question__contains=request.data['question'])
-    serialized_data = MultipleChoiceQuestionSerializer(mcqs, many=True)
+    mcqs = Question.objects.filter(multiplechoicequestion__question__contains=request.data['question'], multiplechoicequestion__session_id=request.data['session_id'])
+    serialized_data = QuestionPolymorpicSerializer(mcqs, many=True)
+    return Response(serialized_data.data)
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAdminUser])
+def session_all_mcq(request):
+    mcqs = Question.objects.filter(quizquestion__quiz__session_id=request.data['session_id'])
+    serialized_data = QuestionPolymorpicSerializer(mcqs, many=True)
     return Response(serialized_data.data)
     
+@api_view(['POST'])
+@permission_classes([permissions.IsAdminUser])
+@transaction.atomic
+def admin_save_quiz(request):
+    if 'quiz_id' in request.data:
+        quiz = Quiz.objects.get(pk=request.data['quiz_id'])
+        quiz.name = request.data['quiz_name']
+        quiz.contribution = request.data['contribution']
+        quiz.save()
+        questions = QuizQuestion.objects.all().filter(quiz=quiz)
+        for quiz_question in questions:
+            quiz_question.delete()
+        for questionId in request.data['questions']:
+            quiz_question = QuizQuestion(quiz_id=quiz.id, question_id=questionId)
+            quiz_question.save()
+        return HttpResponse(status=200)
+    else:
+        quizzes = Quiz.objects.filter(session_id=request.data['session_id'])
+        if quizzes:
+            return HttpResponse(status=400)
+        else: 
+            quiz = Quiz(name=request.data['quiz_name'], contribution=request.data['contribution'], session_id=request.data['session_id'])
+            quiz.save()
+            for questionId in request.data['questions']:
+                quiz_questions = QuizQuestion(quiz_id=quiz.id, question_id=questionId)
+                quiz_questions.save()
+            return HttpResponse(status=200)
+
+
+

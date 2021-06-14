@@ -262,6 +262,8 @@ class QuizSerializer(serializers.ModelSerializer):
 class QuizQuestionSerializer(serializers.ModelSerializer):
     question = QuestionPolymorpicSerializer()
     multipleChoiceQuestion = MultipleChoiceQuestionSerializer()
+
     class Meta:
-        model = Enrolment
+        model = QuizQuestion
         fields = ['question', 'multipleChoiceQuestion']
+ 
