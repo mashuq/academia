@@ -87,19 +87,22 @@ class LinkLesson(Lesson):
     title = models.CharField(max_length=512)
     link = models.CharField(max_length=512)
 
-
 class Assessment(models.Model):
     name = models.CharField(max_length=256)
     contribution = models.FloatField()
     section = models.ForeignKey('Section', on_delete=models.CASCADE)
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
+    start_date = models.DateTimeField(null=True, blank=True)
+    end_date = models.DateTimeField(null=True, blank=True)
+    quiz = models.ForeignKey('Quiz', null=True, blank=True, on_delete=models.CASCADE)
 
+class Quiz(models.Model):
+    name = models.CharField(max_length=256)
+    session = models.ForeignKey('Session', on_delete=models.CASCADE)
+    contribution = models.FloatField()
 
 class Question(PolymorphicModel):
     session = models.ForeignKey('Session', on_delete=models.CASCADE)
     mark = models.FloatField()
-
 
 class AssessmentQuestion(models.Model):
     assessment = models.ForeignKey('Assessment', on_delete=models.CASCADE)
@@ -108,6 +111,12 @@ class AssessmentQuestion(models.Model):
     class Meta:
         unique_together = [['assessment', 'question']]
 
+class QuizQuestion(models.Model):
+    quiz = models.ForeignKey('Quiz', on_delete=models.CASCADE)
+    question = models.ForeignKey('Question', on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = [['quiz', 'question']]
 
 class AssessmentResult(models.Model):
     assessment = models.ForeignKey('Assessment', on_delete=models.CASCADE)

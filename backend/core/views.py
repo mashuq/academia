@@ -817,3 +817,26 @@ def not_enrolled_students(request):
     serialized_data = StudentLiteSerializer(students, many=True)
     result = {'results': serialized_data.data, 'count': non_enrolled_students_list.count()}
     return Response(result)
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAdminUser])
+def admin_get_quiz(request):
+    quizzes = Quiz.objects.filter(session_id=request.data['session_id'])
+    if not quizzes:
+        return HttpResponse(status=417)
+    else:
+        quiz = quizzes[0]
+        quiz_questions = quizQuizQuestion.objects.filter(quiz=quiz)
+        quiz_data = QuizSerializer(quiz)
+        quiz_questions_data = QuizQuestionSerializer(quiz_questions)
+        quiz_data.quiz_questions = quiz_questions_data
+        return quiz_data
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAdminUser])
+def search_mcq(request):
+    mcqs = MultipleChoiceQuestion.objects.filter(question__contains=request.data['question'])
+    serialized_data = MultipleChoiceQuestionSerializer(mcqs, many=True)
+    return Response(serialized_data.data)
+    

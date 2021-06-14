@@ -252,3 +252,16 @@ class EnrolmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Enrolment
         fields = '__all__'
+
+class QuizSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Quiz
+        fields = '__all__'
+
+class QuizQuestionSerializer(serializers.ModelSerializer):
+    question = QuestionPolymorpicSerializer()
+    multipleChoiceQuestion = MultipleChoiceQuestionSerializer()
+    class Meta:
+        model = Enrolment
+        fields = ['question', 'multipleChoiceQuestion']

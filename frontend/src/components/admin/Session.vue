@@ -65,6 +65,7 @@
                   >{{session.description}}</v-alert>
                 </template>
                 <Lessons v-bind:sessionId="session.id" />
+                <Quiz v-bind:sessionId="session.id" />
               </v-expansion-panel-content>
             </v-expansion-panel>
           </draggable>
@@ -89,6 +90,7 @@
 import draggable from "vuedraggable";
 import { get, post, put, del, patch } from "@/service/service.js";
 import Lessons from "@/components/admin/Lessons.vue";
+import Quiz from "@/components/admin/Quiz.vue";
 
 export default {
   computed: {
@@ -194,7 +196,8 @@ export default {
   },
   components: {
     draggable,
-    Lessons
+    Lessons,
+    Quiz
   },
   data: () => ({
     showForm: false,
